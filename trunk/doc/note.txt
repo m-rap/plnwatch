@@ -1,0 +1,24 @@
+			GM
+			|
+		<--------------->
+Man. SDM	Niaga	Ren	KHA	Keu	Dist
+			|
+		       DMTI	NUS	xnsdbis
+			|
+		<--------------->
+SPV Infra struktur	SPV APP		SPV Data Centre
+
+=======================================================
+
+Distribusi
+     |
+   Area
+     |
+   Rayon
+
+=======================================================
+
+ftp://10.5.1.43
+user,pass dilsorek
+
+pak alexks 081 315 919 810
