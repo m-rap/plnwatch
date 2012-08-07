@@ -14,6 +14,7 @@ MySQL - 5.5.8 : Database - plnwatch
 
 CREATE TABLE `DIL` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `BLTH` varchar(6) DEFAULT NULL,
   `JENIS_MK` varchar(20) DEFAULT NULL,
   `IDPEL` int(11) DEFAULT NULL,
   `NAMA` varchar(25) DEFAULT NULL,
