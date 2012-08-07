@@ -1,0 +1,6 @@
+- BLTH
+- IDPEL
+- NAMA
+- DAYA
+- TGLBACA
+- PEMKWH
