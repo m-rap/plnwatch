@@ -1,0 +1,9 @@
+- jenis_mk (ft.1)
+- idpel
+- nama
+- tarif (ft.4)
+- daya (ft.2)
+- kdgardu
+- notiang
+- tglpasang (ft.1)
+- merek_kwh
