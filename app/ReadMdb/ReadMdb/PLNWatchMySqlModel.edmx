@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="plnwatchModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="plnwatchModelStoreContainer">
+          <EntitySet Name="dil" EntityType="plnwatchModel.Store.dil" store:Type="Tables" Schema="plnwatch" />
+        </EntityContainer>
+        <EntityType Name="dil">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="JENIS_MK" Type="varchar" MaxLength="20" />
+          <Property Name="IDPEL" Type="int" />
+          <Property Name="NAMA" Type="varchar" MaxLength="25" />
+          <Property Name="TARIF" Type="varchar" MaxLength="4" />
+          <Property Name="DAYA" Type="int" />
+          <Property Name="LINGKUNGAN" Type="varchar" MaxLength="10" />
+          <Property Name="TGLPASANG" Type="datetime" />
+          <Property Name="MEREK_KWH" Type="varchar" MaxLength="24" />
+          <Property Name="KDGARDU" Type="varchar" MaxLength="30" />
+          <Property Name="NOTIANG" Type="varchar" MaxLength="35" />
+          <Property Name="KODEAREA" Type="varchar" MaxLength="5" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="plnwatchModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="plnwatchEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="dil" EntityType="plnwatchModel.dil" />
+        </EntityContainer>
+        <EntityType Name="dil">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="JENIS_MK" />
+          <Property Type="Int32" Name="IDPEL" />
+          <Property Type="String" Name="NAMA" />
+          <Property Type="String" Name="TARIF" />
+          <Property Type="Int32" Name="DAYA" />
+          <Property Type="String" Name="LINGKUNGAN" />
+          <Property Type="DateTime" Name="TGLPASANG" />
+          <Property Type="String" Name="MEREK_KWH" />
+          <Property Type="String" Name="KDGARDU" />
+          <Property Type="String" Name="NOTIANG" />
+          <Property Type="String" Name="KODEAREA" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="plnwatchModelStoreContainer" CdmEntityContainer="plnwatchEntities" >
+          <EntitySetMapping Name="dil">
+            <EntityTypeMapping TypeName="plnwatchModel.dil">
+              <MappingFragment StoreEntitySet="dil">
+                <ScalarProperty Name="KODEAREA" ColumnName="KODEAREA" />
+                <ScalarProperty Name="NOTIANG" ColumnName="NOTIANG" />
+                <ScalarProperty Name="KDGARDU" ColumnName="KDGARDU" />
+                <ScalarProperty Name="MEREK_KWH" ColumnName="MEREK_KWH" />
+                <ScalarProperty Name="TGLPASANG" ColumnName="TGLPASANG" />
+                <ScalarProperty Name="LINGKUNGAN" ColumnName="LINGKUNGAN" />
+                <ScalarProperty Name="DAYA" ColumnName="DAYA" />
+                <ScalarProperty Name="TARIF" ColumnName="TARIF" />
+                <ScalarProperty Name="NAMA" ColumnName="NAMA" />
+                <ScalarProperty Name="IDPEL" ColumnName="IDPEL" />
+                <ScalarProperty Name="JENIS_MK" ColumnName="JENIS_MK" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="PLNWatchMySqlModel" >
+        <EntityTypeShape EntityType="plnwatchModel.dil" Width="1.5" PointX="0.75" PointY="0.75" Height="2.9070849609374996" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

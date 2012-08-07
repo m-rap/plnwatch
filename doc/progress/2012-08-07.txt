@@ -1,0 +1,5 @@
+pertanyaan:
+1. environment server, akses mysql dari luar (bukan localhost), berpengaruh pada aplikasi yang digunakan untuk mengkonversi database ms access (.mdb) ke mysql
+2. web perlu menampilkan data DIL dari semua bulan atau hanya bulan terakhir
+3. hubungan field tanggal baca, pemakaian kwh, dan jam nyala
+4. pembeda area menggunakan table atau cukup kolom saja
