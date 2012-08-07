@@ -13,20 +13,25 @@ MySQL - 5.5.8 : Database - plnwatch
 /*Table structure for table `dil` */
 
 CREATE TABLE `DIL` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `BLTH` varchar(6) DEFAULT NULL,
   `JENIS_MK` varchar(20) DEFAULT NULL,
-  `IDPEL` int(11) DEFAULT NULL,
+  `IDPEL` int(11) NOT NULL,
   `NAMA` varchar(25) DEFAULT NULL,
   `TARIF` varchar(4) DEFAULT NULL,
   `DAYA` int(11) DEFAULT NULL,
+  `PNJ` varchar(2) DEFAULT NULL,
+  `NAMAPNJ` varchar(62) DEFAULT NULL,
+  `NOBANG` varchar(3) DEFAULT NULL,
+  `RT` varchar(3) DEFAULT NULL,
+  `RW` varchar(2) DEFAULT NULL,
   `LINGKUNGAN` varchar(10) DEFAULT NULL,
-  `TGLPASANG` date DEFAULT NULL,
+  `NOTELP` varchar(20) DEFAULT NULL,
+  `KODEPOS` int(5) DEFAULT NULL,
+  `TGLPASANG_KWH` date DEFAULT NULL,
   `MEREK_KWH` varchar(24) DEFAULT NULL,
   `KDGARDU` varchar(30) DEFAULT NULL,
   `NOTIANG` varchar(35) DEFAULT NULL,
   `KODEAREA` varchar(5) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`IDPEL`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
