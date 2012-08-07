@@ -110,7 +110,7 @@
                     </div>
 		</div>
                 <div id="content_pln">
-                    
+a                    
                 </div>
                 <div id="footer_pln">
                     <div id="footer_pln_kiri">
