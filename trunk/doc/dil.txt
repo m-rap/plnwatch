@@ -3,7 +3,8 @@
 - nama
 - tarif (ft.4)
 - daya (ft.2)
-- kdgardu
-- notiang
+- LINGKUNGAN
 - tglpasang (ft.1)
 - merek_kwh
+- kdgardu
+- notiang
