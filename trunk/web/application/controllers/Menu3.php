@@ -1,14 +1,14 @@
 <?php
 /**
- * Description of Menu1
+ * Description of Menu3
  *
  * @author spondbob
  */
-class Menu1 extends CI_Controller {
+class Menu3 extends CI_Controller {
     function __construct() {
         parent::__construct();
-        $this->load->library('layout', array('controller' => 'menu1'));
-        $this->load->library(array('LibMenu1','LibArea'));
+        $this->load->library('layout', array('controller' => 'menu3'));
+        $this->load->library(array('LibMenu3','LibArea'));
         $this->load->helper(array('form'));
     }
     
@@ -16,11 +16,10 @@ class Menu1 extends CI_Controller {
         $data = array();
         $data['dropdownData'] = array(
             'area' => $this->libarea->getList(),
-            'meter' => $this->libmenu1->getListRangeMeter(),
-            'tglPasang' => $this->libmenu1->getListRangeTglPasang()
+            'tren' => $this->libmenu3->getListTren()
         );
         $data['sidebar']['dropdownData'] = $data['dropdownData'];
-        $data['pageTitle'] = 'Menu 1';
+        $data['pageTitle'] = 'Menu 3';
         $this->layout->render('main', $data);
     }
 }

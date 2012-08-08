@@ -1,7 +1,8 @@
 <?php
 /**
- * Description of Theme
- *
+ * Description of Layout
+ * 
+ * Main library to generate page on browser and ability to switch to another layout.
  * @author spondbob
  */
 class Layout {
@@ -19,16 +20,14 @@ class Layout {
     
     public function render($page = null, $attr = array()){
         $start = array();
-        $start['pageTitle'] = $this->pageTitle.(array_key_exists('pageTitle', $attr) ? ' - '.$attr['pageTitle'] : '');
+        $start['pageTitle'] = (array_key_exists('pageTitle', $attr) ? $attr['pageTitle'].' - ' : '').$this->pageTitle;
         $start['controller'] = $this->controller;
         $start['sidebar'] = (array_key_exists('sidebar', $attr) ? $attr['sidebar'] : array());
         
         $this->ci->load->view('layout/header', $start);
-        //$this->get('header', $attr);
         $this->ci->load->view('layout/'.$this->activeLayout.'/start', $start);
         $this->ci->load->view(($page == null ? 'error' : ($this->controller == null ? '' : $this->controller.'/').$page), $attr);
         $this->ci->load->view('layout/'.$this->activeLayout.'/end');
-        //$this->get('footer');
         $this->ci->load->view('layout/footer');
     }
 }
