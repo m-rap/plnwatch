@@ -102,8 +102,10 @@ img {
 
 #content_pln
 {
-	width:880px;
+	width:850px;
 	height:289px;
+        text-align:left;
+        margin-top: 15px;
 }
 /*wordpress post*/
 #container
@@ -124,16 +126,16 @@ img {
 }
 #contentleft-wp
 {
-	background-image:url(../images/bgcontentwp.png);
-	background-repeat:repeat-y;
+	background: #ABABAB;
 	float:left;
 	text-align:left;
 	margin-left:15px;
 	margin-top:10px;
-	width:200px;
+	width:180px;
 	height:100%;
 	min-height:300px;
 	font-family:Tahoma, Geneva, sans-serif;
+        padding: 5px;
 }
 .clear{clear:both;visibility:hidden;height:0;}
 #contentleft-wp ul li

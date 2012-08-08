@@ -1,4 +1,4 @@
-                <div id="footer_pln">
+                    <div id="footer_pln">
                     <div id="footer_pln_kiri">
                         <div id="footer_pln_kiri_1">
                             <div id="posisi_menu_bwh">
