@@ -12,9 +12,11 @@ MySQL - 5.5.8 : Database - plnwatch
 
 /*Table structure for table `dil` */
 
+DROP TABLE IF EXISTS `DIL`;
+
 CREATE TABLE `DIL` (
   `JENIS_MK` varchar(20) DEFAULT NULL,
-  `IDPEL` int(11) NOT NULL,
+  `IDPEL` varchar(12) NOT NULL,
   `NAMA` varchar(25) DEFAULT NULL,
   `TARIF` varchar(4) DEFAULT NULL,
   `DAYA` int(11) DEFAULT NULL,

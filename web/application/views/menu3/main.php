@@ -3,8 +3,7 @@
 <?php
 echo form_open();
 echo 'Area : ' . form_dropdown('area', $dropdownData['area'])
- . ' Rentang Meter-an : ' . form_dropdown('meter', $dropdownData['meter'])
- . ' Rentang Tgl. Pasang : ' . form_dropdown('tglPasang', $dropdownData['tglPasang'])
+ . ' Tren Pemakaian KWH : ' . form_dropdown('tren', $dropdownData['tren'])
  . ' ' . form_submit('', ' lihat data ');
 echo form_close();
 ?>
