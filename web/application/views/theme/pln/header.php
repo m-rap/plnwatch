@@ -19,7 +19,7 @@
         <![endif]-->
         <meta charset="UTF-8" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-        <title>PLN Watch | PT PLN (Persero) | Distribusi Jatim</title>
+        <title><?php echo $pageTitle ?></title>
         <link rel="shortcut icon" href="<?php echo base_url(); ?>images/logo_pln.jpg" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/pln_base.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/pln_ext.css" />
@@ -48,7 +48,7 @@
             <div id="awal" >
                 <div id="header_pln">
                     <div id="header_pln_kiri" style="background-repeat:no-repeat;width:450px;float:left;">
-                        <a  href="<?php echo site_url(); ?>"><img src="<?php echo base_url(); ?>images/pln-logo.jpg"  style="background-repeat:no-repeat;float:left;border:0px;"/></a>
+                        <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/pln-logo.jpg"  style="background-repeat:no-repeat;float:left;border:0px;"/></a>
                             <div>
                                 <span style="margin-left:40px;">
                                     <h1 style="font:Tahoma, Geneva, sans-serif; font-size:18px;margin-left:0px;margin-top:35px;text-align:left;">PLN Watch</h1>
@@ -58,19 +58,19 @@
                     </div>
                     <div id="header_pln_kanan" style="">
                         <div id="header_pln_kanan_1" style="float:right;">
-                            <a  href="<?php echo site_url(); ?>"><img src="<?php echo base_url(); ?>images/ind.png" title="Indonesia" style="margin-top:12px;" align="left"/></a>
-                            <a  href="<?php echo site_url(); ?>"><img src="<?php echo base_url(); ?>images/us.png" title="English" style="margin-top:12px; margin-left:5px; margin-right:3px;" align="left" /></a>
+                            <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/ind.png" title="Indonesia" style="margin-top:12px;" align="left"/></a>
+                            <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/us.png" title="English" style="margin-top:12px; margin-left:5px; margin-right:3px;" align="left" /></a>
                             <div id="posisi_menu" style="padding-right:4px">
                                 <ul>
-                                    <li id="header_menu"><a href="<?php echo site_url(); ?>">CSR</a></li>
+                                    <li id="header_menu"><a href="<?php echo base_url(); ?>">CSR</a></li>
                                     <li id="header_menu">|</li>
-                                    <li id="header_menu"><a href="<?php echo site_url(); ?>">Careers</a></li>
+                                    <li id="header_menu"><a href="<?php echo base_url(); ?>">Careers</a></li>
                                     <li id="header_menu">|</li>
-                                    <li id="header_menu"><a href="<?php echo site_url(); ?>">Site Map</a></li>
+                                    <li id="header_menu"><a href="<?php echo base_url(); ?>">Site Map</a></li>
                                     <li id="header_menu">|</li>
-                                    <li id="header_menu"><a href="<?php echo site_url(); ?>">FAQ's</a></li>
+                                    <li id="header_menu"><a href="<?php echo base_url(); ?>">FAQ's</a></li>
                                     <li id="header_menu">|</li>
-                                    <li id="header_menu"><a href="<?php echo site_url(); ?>">Kontak Kami</a></li></ul>
+                                    <li id="header_menu"><a href="<?php echo base_url(); ?>">Kontak Kami</a></li></ul>
                             </div>
                         </div>
                         <div id="header_pln_kanan_2" align="right">
@@ -93,14 +93,14 @@
                         <div class="jqueryslidemenu_aw"></div>
                         <div id="myslidemenu" class="jqueryslidemenu">
                             <ul>
-                                <li><a href="http://www.pln.co.id/disjatim"  class="first" >Beranda</a></li>
+                                <li><a href="<?php echo base_url(); ?>"  class="first" >Beranda</a></li>
                                 <li>
                                     <a href="#"  class="level1 " >Menu</a>
                                     <ul style="z-index: 1000;">
-                                        <li style="z-index: 1000;"><a href="http://www.pln.co.id/disjatim/?p=108"><span style='margin-left:15px;'>Menu 1</span></a></li>
-                                        <li style="z-index: 1000;"><a href="http://www.pln.co.id/disjatim/?p=42"><span style='margin-left:15px;'>Menu 2</span></a></li>
-                                        <li style="z-index: 1000;"><a href="http://www.pln.co.id/disjatim/?p=42"><span style='margin-left:15px;'>Menu 3</span></a></li>
-                                        <li style="z-index: 1000;"><a href="http://www.pln.co.id/disjatim/?p=42"><span style='margin-left:15px;'>Menu 4</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu1"><span style='margin-left:15px;'>Menu 1</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu2"><span style='margin-left:15px;'>Menu 2</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu3"><span style='margin-left:15px;'>Menu 3</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu4"><span style='margin-left:15px;'>Menu 4</span></a></li>
                                     </ul>
                                 </li>
                             </ul>
