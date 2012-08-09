@@ -4,14 +4,24 @@
  *
  * @author spondbob
  */
-class Menu1 extends CI_Controller {
-    function __construct() {
+class Menu1Controller extends CI_Controller {
+    private $activeUser = null;
+    public function __construct() {
         parent::__construct();
         $this->load->library('layout', array('controller' => 'menu1'));
         $this->load->library(array('LibMenu1','LibArea'));
         $this->load->helper(array('form'));
+        $this->activeUser = $this->libuser->activeUser;
+        $this->_accessRules();
     }
     
+    private function _accessRules(){
+        $access = new AccessRule();
+        $access->activeRole = $this->activeUser['role'];
+        $access->allowedRoles = array(1, 3);
+        $access->validate();
+    }
+
     public function index(){
         $data = array();
         $data['dropdownData'] = array(

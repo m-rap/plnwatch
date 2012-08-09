@@ -10,7 +10,7 @@ class Layout {
     private $ci = null;
     public $activeLayout = '2column';
     public $pageTitle = 'PLN Watch | PT PLN (Persero) | Distribusi Jatim';
-    private $controller = null;
+    public $controller = null;
     
     public function __construct($params = array()) {
         $this->ci =& get_instance();
@@ -18,17 +18,22 @@ class Layout {
         $this->controller = (array_key_exists('controller', $params) ? strtolower($params['controller']) : null);
     }
     
-    public function render($page = null, $attr = array()){
+    public function render($page = null, $attr = null, $returnData = false){
         $start = array();
+        $attr = ($attr == null ? array() : $attr);
         $start['pageTitle'] = (array_key_exists('pageTitle', $attr) ? $attr['pageTitle'].' - ' : '').$this->pageTitle;
         $start['controller'] = $this->controller;
         $start['sidebar'] = (array_key_exists('sidebar', $attr) ? $attr['sidebar'] : array());
         
-        $this->ci->load->view('layout/header', $start);
-        $this->ci->load->view('layout/'.$this->activeLayout.'/start', $start);
-        $this->ci->load->view(($page == null ? 'error' : ($this->controller == null ? '' : $this->controller.'/').$page), $attr);
-        $this->ci->load->view('layout/'.$this->activeLayout.'/end');
-        $this->ci->load->view('layout/footer');
+        $ret = $this->ci->load->view('layout/header', $start, $returnData);
+        $ret .= $this->ci->load->view('layout/'.$this->activeLayout.'/start', $start, $returnData);
+        $ret .= $this->ci->load->view(($page == null ? 'error' : ($this->controller == null ? '' : $this->controller.'/').$page), $attr, $returnData);
+        $ret .= $this->ci->load->view('layout/'.$this->activeLayout.'/end', null, $returnData);
+        $ret .= $this->ci->load->view('layout/footer', null, $returnData);
+        
+        if($returnData){
+            echo $ret;
+        }
     }
 }
 
