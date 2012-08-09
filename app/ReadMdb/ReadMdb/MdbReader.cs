@@ -65,19 +65,18 @@ namespace ReadMdb
                 MySqlTransaction myTransaction = null;
                 try
                 {
+                    DateTime start = DateTime.Now;
+                    Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToShortTimeString());
+
                     mySqlConnection.Open();
                     myTransaction = mySqlConnection.BeginTransaction();
                     MySqlCommand myCmd = new MySqlCommand();
                     myCmd.Connection = mySqlConnection;
                     myCmd.Transaction = myTransaction;
 
-                    DateTime start = DateTime.Now;
-                    Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToShortTimeString());
                     int i = 0;
                     while (reader.Read() && i < 1000)
                     {
-                        Program.ClearCurrentConsoleLine();
-                        Console.Write("[Jumlah record:" + i + "]");
                         DateTime tglpsg;
                         if (reader["TGLPASANG_KWH"].ToString() != "")
                             tglpsg = (DateTime)reader["TGLPASANG_KWH"];
@@ -106,7 +105,8 @@ namespace ReadMdb
                           .Append(kodeArea).Append("')");
                         myCmd.CommandText = sb.ToString();
                         myCmd.ExecuteNonQuery();
-                        i++;
+                        Program.ClearCurrentConsoleLine();
+                        Console.Write("[Jumlah record:" + ++i + "]");
                     }
 
                     myTransaction.Commit();
@@ -131,10 +131,9 @@ namespace ReadMdb
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                ReadDil();
             }
-            Console.WriteLine("Tekan enter..");
-            Console.ReadKey();
+            Console.Write("Tekan enter..");
+            while (Console.ReadKey().Key != ConsoleKey.Enter) ;
         }
     }
 }

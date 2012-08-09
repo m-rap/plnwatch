@@ -1,0 +1,10 @@
+Bikin program converter mdb-mysql dengan .net console.
+
+Metode:
+1. Insert satu-satu ke mysql setiap fetch data dari mdb
+2. Men-dump data mdb menjadi file berisi script insert batch mode, kemudian eksekusi dari file.
+
+Tes 1 Metode 1:
+Start:
+End:
+Selisih:

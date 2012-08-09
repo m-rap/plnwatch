@@ -19,8 +19,7 @@ namespace ReadMdb
         MySqlConnection mySqlConnection;
         string dilMdbPath;
 
-        string dmlDilFileName = "dml_dil.sql";
-        StreamWriter dilStreamWriter;
+        string dmlDilFileName = "dml_dil.sql.tmp";
 
         public MdbReader()
         {
@@ -56,83 +55,108 @@ namespace ReadMdb
         void ReadDil()
         {
             Console.WriteLine("Pilih file database DIL dengan ekstensi *.mdb..");
-            while ((dilMdbPath = FileBrowse()) == null);
+            dilMdbPath = FileBrowse();
             Console.WriteLine("File dipilih: " + dilMdbPath);
             
             try
             {
-                if (File.Exists(@dmlDilFileName))
+                if (!File.Exists(@dmlDilFileName))
                 {
-                    File.Delete(@dmlDilFileName);
-                    File.Create(@dmlDilFileName);
+                    File.Create(@dmlDilFileName).Close();
                 }
-                dilStreamWriter = new StreamWriter(@dmlDilFileName, false);
-
-                oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dilMdbPath);
-                oleDbConnection.Open();
-                OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG FROM DIL_MAIN", oleDbConnection);
-                OleDbDataReader reader = cmd.ExecuteReader();
-
                 DateTime start = DateTime.Now;
-                Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToShortTimeString());
-
-                dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
-                int i = 0;
-                while (reader.Read() && i < 1000)
+                Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToLongTimeString());
+                using (StreamWriter dilStreamWriter = new StreamWriter(@dmlDilFileName))
                 {
-                    Program.ClearCurrentConsoleLine();
-                    Console.Write("[Jumlah record:" + i + "]");
-                    DateTime tglpsg;
-                    if (reader["TGLPASANG_KWH"].ToString() != "")
-                        tglpsg = (DateTime)reader["TGLPASANG_KWH"];
-                    else
-                        tglpsg = new DateTime();
 
-                    StringBuilder sb = new StringBuilder();
-                    if (i > 0)
-                        sb.Append(", ");
-                    sb.Append("('")
-                        .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
-                        .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append(", '")
-                        .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
-                        .Append(reader["DAYA"].ToString()).Append(", '")
-                        .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
-                        .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                        .Append(kodeArea).Append("')");
-                    dilStreamWriter.WriteLine(sb.ToString());
-                    i++;
+                    oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dilMdbPath);
+                    oleDbConnection.Open();
+                    OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG FROM DIL_MAIN", oleDbConnection);
+                    OleDbDataReader reader = cmd.ExecuteReader();
+
+                    dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
+                    int i = 0;
+                    while (reader.Read() && i < 1000)
+                    {
+                        DateTime tglpsg;
+                        if (reader["TGLPASANG_KWH"].ToString() != "")
+                            tglpsg = (DateTime)reader["TGLPASANG_KWH"];
+                        else
+                            tglpsg = new DateTime();
+
+                        StringBuilder sb = new StringBuilder();
+                        if (i > 0)
+                            sb.Append(", ");
+                        sb.Append("('")
+                            .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
+                            .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append(", '")
+                            .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
+                            .Append(reader["DAYA"].ToString()).Append(", '")
+                            .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
+                            .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(kodeArea).Append("')");
+                        dilStreamWriter.WriteLine(sb.ToString());
+                        Program.ClearCurrentConsoleLine();
+                        Console.Write("[Jumlah record:" + ++i + "]");
+                    }
+                    dilStreamWriter.WriteLine(";");
                 }
-                dilStreamWriter.WriteLine(";");
-                dilStreamWriter.Close();
 
                 mySqlConnection.Open();
                 MySqlScript myScript = new MySqlScript(mySqlConnection, File.ReadAllText(@dmlDilFileName));
                 myScript.Execute();
-                mySqlConnection.Close();
-                oleDbConnection.Close();
 
                 DateTime end = DateTime.Now;
-                Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToShortTimeString());
-                Console.WriteLine("Total waktu: " + (end - start).TotalMilliseconds);
+                TimeSpan timeElapsed = end - start;
+                Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToLongTimeString());
+                Console.WriteLine("Total waktu: " + timeElapsed.TotalMilliseconds);
+
+                using (StreamWriter dilStreamWriter = new StreamWriter(@dmlDilFileName, true))
+                {
+                    dilStreamWriter.WriteLine("/*");
+                    dilStreamWriter.WriteLine("Start: " + start.ToLongTimeString());
+                    dilStreamWriter.WriteLine("End: " + end.ToLongTimeString());
+                    dilStreamWriter.WriteLine("Time Elapsed: " + timeElapsed.TotalMilliseconds);
+                    dilStreamWriter.WriteLine("*/");
+                }
+                
+
+                Console.WriteLine("Apakah Anda ingin menyimpan file DML? (y/n)");
+
+                string input;
+                while ((input = Console.ReadLine()) != "")
+                {
+                    if (input == "y")
+                    {
+                        Console.WriteLine("Tulis nama file: ");
+                        string newfilename = Console.ReadLine();
+                        File.Copy(dmlDilFileName, newfilename + ".sql");
+                        File.Delete(@dmlDilFileName);
+                        break;
+                    }
+                    if (input == "n") break;
+                }
+
+                mySqlConnection.Close();
+                oleDbConnection.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                ReadDil();
             }
-            Console.WriteLine("Tekan enter..");
-            Console.ReadKey();
+            Console.Write("Tekan enter..");
+            while (Console.ReadKey().Key != ConsoleKey.Enter) ;
         }
     }
 }
