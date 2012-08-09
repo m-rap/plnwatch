@@ -20,6 +20,7 @@ namespace ReadMdb
         string dilMdbPath;
 
         string dmlDilFileName = "dml_dil.sql.tmp";
+        string logFileName = "readmdb.log";
 
         public MdbReader()
         {
@@ -60,10 +61,9 @@ namespace ReadMdb
             
             try
             {
+                int i = 0;
                 if (!File.Exists(@dmlDilFileName))
-                {
                     File.Create(@dmlDilFileName).Close();
-                }
                 DateTime start = DateTime.Now;
                 Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToLongTimeString());
                 using (StreamWriter dilStreamWriter = new StreamWriter(@dmlDilFileName))
@@ -75,7 +75,7 @@ namespace ReadMdb
                     OleDbDataReader reader = cmd.ExecuteReader();
 
                     dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
-                    int i = 0;
+                    
                     while (reader.Read() && i < 1000)
                     {
                         DateTime tglpsg;
@@ -122,13 +122,16 @@ namespace ReadMdb
                 Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToLongTimeString());
                 Console.WriteLine("Total waktu: " + timeElapsed.TotalMilliseconds);
 
-                using (StreamWriter dilStreamWriter = new StreamWriter(@dmlDilFileName, true))
+                if (!File.Exists(@logFileName))
+                    File.Create(@logFileName).Close();
+                using (StreamWriter dilStreamWriter = new StreamWriter(@logFileName, true))
                 {
-                    dilStreamWriter.WriteLine("/*");
+                    dilStreamWriter.WriteLine("/* ::DIL convert:: " + DateTime.Now.ToLongDateString());
+                    dilStreamWriter.WriteLine("Records: " + i);
                     dilStreamWriter.WriteLine("Start: " + start.ToLongTimeString());
                     dilStreamWriter.WriteLine("End: " + end.ToLongTimeString());
                     dilStreamWriter.WriteLine("Time Elapsed: " + timeElapsed.TotalMilliseconds);
-                    dilStreamWriter.WriteLine("*/");
+                    dilStreamWriter.WriteLine("*/\n");
                 }
                 
 

@@ -18,6 +18,8 @@ namespace ReadMdb
         OleDbConnection oleDbConnection;
         MySqlConnection mySqlConnection;
 
+        string logFileName = "readmdb.log";
+
         public MdbReader()
         {
             bool cekinput;
@@ -112,8 +114,21 @@ namespace ReadMdb
                     myTransaction.Commit();
                     mySqlConnection.Close();
                     DateTime end = DateTime.Now;
+                    TimeSpan timeElapsed = end - start;
                     Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToShortTimeString());
                     Console.WriteLine("Total waktu: " + (end - start).TotalMilliseconds);
+
+                    if (!File.Exists(@logFileName))
+                        File.Create(@logFileName).Close();
+                    using (StreamWriter dilStreamWriter = new StreamWriter(@logFileName, true))
+                    {
+                        dilStreamWriter.WriteLine("/* ::DIL convert:: " + DateTime.Now.ToLongDateString());
+                        dilStreamWriter.WriteLine("Records: " + i);
+                        dilStreamWriter.WriteLine("Start: " + start.ToLongTimeString());
+                        dilStreamWriter.WriteLine("End: " + end.ToLongTimeString());
+                        dilStreamWriter.WriteLine("Time Elapsed: " + timeElapsed.TotalMilliseconds);
+                        dilStreamWriter.WriteLine("*/\n");
+                    }
                 }
                 catch (Exception ex)
                 {
