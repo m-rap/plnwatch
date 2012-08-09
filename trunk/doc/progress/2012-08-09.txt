@@ -4,7 +4,150 @@ Metode:
 1. Insert satu-satu ke mysql setiap fetch data dari mdb
 2. Men-dump data mdb menjadi file berisi script insert batch mode, kemudian eksekusi dari file.
 
-Tes 1 Metode 1:
-Start:
-End:
-Selisih:
+Testing metode 1
+================
+Jumlah tes: 10 kali
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 11:58:36
+End: 11:58:42
+Time Elapsed: 5758,7891
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 11:58:58
+End: 11:59:03
+Time Elapsed: 5567,3828
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 11:59:25
+End: 11:59:31
+Time Elapsed: 5570,3125
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:02:34
+End: 12:02:40
+Time Elapsed: 5634,7656
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:02:56
+End: 12:03:01
+Time Elapsed: 5667,9688
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:03:16
+End: 12:03:21
+Time Elapsed: 5590,8203
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:03:37
+End: 12:03:42
+Time Elapsed: 5598,6328
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:04:00
+End: 12:04:06
+Time Elapsed: 5622,0703
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:04:36
+End: 12:04:42
+Time Elapsed: 5602,5391
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:04:56
+End: 12:05:01
+Time Elapsed: 5564,4531
+*/
+
+
+Testing Metode 2
+================
+Jumlah tes: 10 kali
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:07:33
+End: 12:07:39
+Time Elapsed: 6103,5156
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:08:07
+End: 12:08:13
+Time Elapsed: 5856,4454
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:08:36
+End: 12:08:42
+Time Elapsed: 5937,5
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:09:04
+End: 12:09:09
+Time Elapsed: 5871,0938
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:09:22
+End: 12:09:28
+Time Elapsed: 6031,25
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:09:40
+End: 12:09:46
+Time Elapsed: 5918,9453
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:09:58
+End: 12:10:04
+Time Elapsed: 5858,3984
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:10:17
+End: 12:10:23
+Time Elapsed: 5962,8907
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:10:54
+End: 12:11:00
+Time Elapsed: 5910,1563
+*/
+
+/* ::DIL convert:: 09 Agustus 2012
+Records: 1000
+Start: 12:11:13
+End: 12:11:19
+Time Elapsed: 6016,6015
+*/
+
