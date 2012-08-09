@@ -177,8 +177,7 @@ namespace ReadMdb
                     {
                         Console.WriteLine("Tulis nama file: ");
                         string newfilename = Console.ReadLine();
-                        File.Copy(dmlDilFileName, newfilename + ".sql");
-                        File.Delete(@dmlDilFileName);
+                        File.Move(dmlDilFileName, newfilename + ".sql");
                         break;
                     }
                     if (input == "n") break;
