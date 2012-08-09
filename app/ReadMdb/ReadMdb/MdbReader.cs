@@ -23,7 +23,7 @@ namespace ReadMdb
             bool cekinput;
             do
             {
-                Console.Write("Masukkan tahun dan bulan (YYYYMM, kosongkan jika menggunakan tahun dan bulan sekarang): ");
+                Console.Write("Masukkan bulan dan tahun (MMYYY, kosongkan jika menggunakan bulan dan tahun sekarang): ");
                 blth = Console.ReadLine();
                 Console.WriteLine(blth);
 
@@ -71,12 +71,12 @@ namespace ReadMdb
                     myCmd.Connection = mySqlConnection;
                     myCmd.Transaction = myTransaction;
 
-                    Console.Write("Membaca database. Silakan menunggu.. " + DateTime.Now.ToShortTimeString());
+                    Console.WriteLine("Membaca database. Silakan menunggu.. " + DateTime.Now.ToShortTimeString());
                     int i = 0;
                     while (reader.Read())
                     {
                         Program.ClearCurrentConsoleLine();
-                        Console.Write("Membaca database. Silakan menunggu.. [Jumlah record:" + i + "]");
+                        Console.Write("[Jumlah record:" + i + "]");
                         DateTime tglpsg;
                         if (reader["TGLPASANG_KWH"].ToString() != "")
                             tglpsg = (DateTime)reader["TGLPASANG_KWH"];
@@ -109,7 +109,8 @@ namespace ReadMdb
                     }
 
                     myTransaction.Commit();
-                    Console.WriteLine("Semua record DIL berhasil dimasukkan ke MySql. " + DateTime.Now.ToShortTimeString());
+                    mySqlConnection.Close();
+                    Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + DateTime.Now.ToShortTimeString());
                 }
                 catch (Exception ex)
                 {
