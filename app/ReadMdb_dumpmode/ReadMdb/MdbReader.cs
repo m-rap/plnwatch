@@ -7,11 +7,18 @@ using System.IO;
 using System.Data;
 using System.Data.OleDb;
 using MySql.Data.MySqlClient;
+using System.Diagnostics;
 
 namespace ReadMdb
 {
     class MdbReader
     {
+        string mysqlpath;
+        string mysqlhost;
+        string mysqluser;
+        string mysqlpass;
+        string mysqldb;
+
         string blth;
         string kodeArea;
         
@@ -24,6 +31,8 @@ namespace ReadMdb
 
         public MdbReader()
         {
+            Initialize();
+
             bool cekinput;
             do
             {
@@ -41,8 +50,17 @@ namespace ReadMdb
             if (kodeArea.Length > 5) kodeArea.Substring(0, 5);
             Console.WriteLine(kodeArea + "\n");
 
-            mySqlConnection = new MySqlConnection("server=localhost;User Id=root;database=plnwatch");
+            mySqlConnection = new MySqlConnection("server=" + mysqlhost + ";User Id=" + mysqluser + ";password=" + mysqlpass + ";database=" + mysqldb);
             ReadDil();
+        }
+
+        void Initialize()
+        {
+            mysqlpath = System.Configuration.ConfigurationSettings.AppSettings["mysqlpath"];
+            mysqlhost = System.Configuration.ConfigurationSettings.AppSettings["mysqlhost"];
+            mysqluser = System.Configuration.ConfigurationSettings.AppSettings["mysqluser"];
+            mysqlpass = System.Configuration.ConfigurationSettings.AppSettings["mysqlpass"];
+            mysqldb = System.Configuration.ConfigurationSettings.AppSettings["mysqldb"];
         }
 
         string FileBrowse()
@@ -51,6 +69,12 @@ namespace ReadMdb
             if (openFileDialog.ShowDialog() == DialogResult.OK)
                 return openFileDialog.FileName;
             return null;
+        }
+
+        void ProcessOutputReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null)
+                Console.WriteLine(e.Data);
         }
 
         void ReadDil()
@@ -76,7 +100,7 @@ namespace ReadMdb
 
                     dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
                     
-                    while (reader.Read() && i < 1000)
+                    while (reader.Read())
                     {
                         DateTime tglpsg;
                         if (reader["TGLPASANG_KWH"].ToString() != "")
@@ -113,9 +137,19 @@ namespace ReadMdb
                     dilStreamWriter.WriteLine(";");
                 }
 
-                mySqlConnection.Open();
-                MySqlScript myScript = new MySqlScript(mySqlConnection, File.ReadAllText(@dmlDilFileName));
-                myScript.Execute();
+                Process p = new Process();
+                string pArguments = "/c \"" + mysqlpath + "\" -u" + mysqluser + ((mysqlpass == "") ? "" : " -p" + mysqlpass) + " " + mysqldb + " < " + dmlDilFileName;
+                Console.WriteLine("\nMengeksekusi..\n" + pArguments);
+                p.StartInfo = new ProcessStartInfo("cmd.exe", pArguments)
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                p.Start();
+                p.OutputDataReceived += new DataReceivedEventHandler(ProcessOutputReceived);
+                p.BeginOutputReadLine();
+                p.WaitForExit();
 
                 DateTime end = DateTime.Now;
                 TimeSpan timeElapsed = end - start;
@@ -133,7 +167,6 @@ namespace ReadMdb
                     dilStreamWriter.WriteLine("Time Elapsed: " + timeElapsed.TotalMilliseconds);
                     dilStreamWriter.WriteLine("*/\n");
                 }
-                
 
                 Console.WriteLine("Apakah Anda ingin menyimpan file DML? (y/n)");
 
@@ -151,7 +184,6 @@ namespace ReadMdb
                     if (input == "n") break;
                 }
 
-                mySqlConnection.Close();
                 oleDbConnection.Close();
             }
             catch (Exception ex)
