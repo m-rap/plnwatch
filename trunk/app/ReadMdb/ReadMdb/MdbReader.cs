@@ -71,9 +71,10 @@ namespace ReadMdb
                     myCmd.Connection = mySqlConnection;
                     myCmd.Transaction = myTransaction;
 
-                    Console.WriteLine("Membaca database. Silakan menunggu.. " + DateTime.Now.ToShortTimeString());
+                    DateTime start = DateTime.Now;
+                    Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToShortTimeString());
                     int i = 0;
-                    while (reader.Read())
+                    while (reader.Read() && i < 1000)
                     {
                         Program.ClearCurrentConsoleLine();
                         Console.Write("[Jumlah record:" + i + "]");
@@ -110,7 +111,9 @@ namespace ReadMdb
 
                     myTransaction.Commit();
                     mySqlConnection.Close();
-                    Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + DateTime.Now.ToShortTimeString());
+                    DateTime end = DateTime.Now;
+                    Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToShortTimeString());
+                    Console.WriteLine("Total waktu: " + (end - start).TotalMilliseconds);
                 }
                 catch (Exception ex)
                 {

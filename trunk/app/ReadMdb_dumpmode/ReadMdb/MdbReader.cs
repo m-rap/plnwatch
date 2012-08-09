@@ -58,7 +58,7 @@ namespace ReadMdb
             Console.WriteLine("Pilih file database DIL dengan ekstensi *.mdb..");
             while ((dilMdbPath = FileBrowse()) == null);
             Console.WriteLine("File dipilih: " + dilMdbPath);
-
+            
             try
             {
                 if (File.Exists(@dmlDilFileName))
@@ -73,11 +73,12 @@ namespace ReadMdb
                 OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG FROM DIL_MAIN", oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
-                Console.WriteLine("Membaca database. Silakan menunggu.. " + DateTime.Now.ToShortTimeString());
+                DateTime start = DateTime.Now;
+                Console.WriteLine("Membaca database. Silakan menunggu.. " + start.ToShortTimeString());
 
                 dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
                 int i = 0;
-                while (reader.Read())
+                while (reader.Read() && i < 1000)
                 {
                     Program.ClearCurrentConsoleLine();
                     Console.Write("[Jumlah record:" + i + "]");
@@ -114,7 +115,6 @@ namespace ReadMdb
                 }
                 dilStreamWriter.WriteLine(";");
                 dilStreamWriter.Close();
-                dilStreamWriter.Flush();
 
                 mySqlConnection.Open();
                 MySqlScript myScript = new MySqlScript(mySqlConnection, File.ReadAllText(@dmlDilFileName));
@@ -122,7 +122,9 @@ namespace ReadMdb
                 mySqlConnection.Close();
                 oleDbConnection.Close();
 
-                Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + DateTime.Now.ToShortTimeString());
+                DateTime end = DateTime.Now;
+                Console.WriteLine("\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToShortTimeString());
+                Console.WriteLine("Total waktu: " + (end - start).TotalMilliseconds);
             }
             catch (Exception ex)
             {
