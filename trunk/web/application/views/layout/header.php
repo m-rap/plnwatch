@@ -95,7 +95,7 @@
                             <ul>
                                 <li><a href="<?php echo base_url(); ?>"  class="first" >Beranda</a></li>
                                 <li>
-                                    <a href="#"  class="level1 " >Menu</a>
+                                    <a href="#" class="level1">Menu</a>
                                     <ul style="z-index: 1000;">
                                         <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu1"><span style='margin-left:15px;'>Menu 1</span></a></li>
                                         <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu2"><span style='margin-left:15px;'>Menu 2</span></a></li>
@@ -103,6 +103,9 @@
                                         <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu4"><span style='margin-left:15px;'>Menu 4</span></a></li>
                                     </ul>
                                 </li>
+                                <?php if($user['active'] == 1) :
+                                    echo '<li>'.anchor('user/profile', 'Profile').'</li>';
+                                endif; ?>
                             </ul>
                             <br style="clear: left" />
                         </div>
