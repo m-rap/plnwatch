@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 10, 2012 at 12:20 PM
+-- Generation Time: Aug 10, 2012 at 04:19 PM
 -- Server version: 5.0.51
 -- PHP Version: 5.2.6
 
@@ -25,17 +25,11 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `sorek`
 --
 
-CREATE TABLE IF NOT EXISTS `sorek` (
-  `BLTH` varchar(6) NOT NULL,
+CREATE TABLE IF NOT EXISTS `SOREK_2012_07` (
   `IDPEL` varchar(12) NOT NULL,
   `TGLBACA` date default NULL,
   `PEMKWH` double default NULL,
   `KODEAREA` varchar(5) default NULL,
   `JAMNYALA` double default NULL,
-  PRIMARY KEY  (`BLTH`,`IDPEL`)
+  PRIMARY KEY  (`IDPEL`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `sorek`
---
-
