@@ -1,2 +1,2 @@
-Selamat Datang <?php echo $alias ?>,<br />
+Selamat bekerja <?php echo $alias ?>,<br />
 <?php echo anchor('user/logout', 'logout') ?>
