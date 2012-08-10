@@ -7,10 +7,10 @@ namespace ReadMdb
 {
     class Program
     {
-        public static void ClearCurrentConsoleLine()
+        public static void ClearCurrentConsoleLine(int left)
         {
             int currentLineCursor = Console.CursorTop;
-            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.SetCursorPosition(left, Console.CursorTop);
             for (int i = 0; i < Console.WindowWidth; i++)
                 Console.Write(" ");
             Console.SetCursorPosition(0, currentLineCursor);
