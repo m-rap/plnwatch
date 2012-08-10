@@ -23,7 +23,9 @@
         <link rel="shortcut icon" href="<?php echo base_url(); ?>images/logo_pln.jpg" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/pln_base.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/pln_ext.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/datatables/demo_table.css" />
         <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>js/jqueryslidemenu.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {

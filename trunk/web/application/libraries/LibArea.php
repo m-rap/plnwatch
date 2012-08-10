@@ -7,7 +7,7 @@
 class LibArea {
     public function getList() {
         return array(
-            'SBY' => 'SBY',
+            'SBS' => 'SBS',
         );
     }
 }

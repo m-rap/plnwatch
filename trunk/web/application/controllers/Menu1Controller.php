@@ -23,15 +23,39 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function index(){
-        $data = array();
+        $this->view();
+    }
+    
+    public function view(){
+        $data = array(
+            'pageTitle' => 'Menu 1',
+            'data' => array(),
+            'label' => $this->dil->attributeLabels(),
+        );
         $data['dropdownData'] = array(
             'area' => $this->libarea->getList(),
-            'meter' => $this->libmenu1->getListRangeMeter(),
-            'tglPasang' => $this->libmenu1->getListRangeTglPasang()
+            'daya' => $this->libmenu1->getListRangeDaya(),
+            'tglPasang' => $this->libmenu1->getListRangeTglPasang(),
+            
         );
+        
+        if(isset($_GET['submit'])){
+            $filter = array(
+                'area' => $_GET['area'],
+                'daya' => $_GET['daya'],
+                'tglPasang' => $_GET['tglPasang'],
+                'limit' => 10,
+                'offset' => 0,
+            );
+            $data['data'] = $this->libmenu1->filter($filter);
+            //redirect('menu1/view/'.$filter['area'].'/'.$filter['daya'].'/'.$filter['tglPasang']);
+        }
         $data['sidebar']['dropdownData'] = $data['dropdownData'];
-        $data['pageTitle'] = 'Menu 1';
         $this->layout->render('main', $data);
+    }
+    
+    public function data(){
+        $data['data'] = $this->libmenu1->filter($filter);
     }
 }
 

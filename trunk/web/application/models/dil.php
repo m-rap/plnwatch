@@ -7,7 +7,7 @@
  */
 class Dil extends CI_Model {
 
-    public $tableName = 'DIL';
+    public $table = 'DIL';
     
     function __construct() {
         parent::__construct();
@@ -21,7 +21,7 @@ class Dil extends CI_Model {
             'NAMA' => 'Nama',
             'TARIF' => 'Tarif',
             'DAYA' => 'Daya',
-            'TGLPASANG' => 'Tanggal Pasang',
+            'TGLPASANG_KWH' => 'Tanggal Pasang',
             'MEREK_KWH' => 'Merek KWH',
             'KDGARDU' => 'Kode Gardu',
             'NOTIANG' => 'No. Tiang',
@@ -29,6 +29,24 @@ class Dil extends CI_Model {
         );
     }
 
+    public function filterMenu1($filter, $year){
+        $where = "KODEAREA = '". $filter['area']."'";
+        $where .= " AND DAYA ";
+        if(array_key_exists('max', $filter['daya'])){
+            $where .= "BETWEEN ".$filter['daya']['min']." AND ".$filter['daya']['max'];
+        }else{
+            $where .= ">= ".$filter['daya']['min'];
+        }
+        
+        $where .= " AND (".$year." - DATE_FORMAT(TGLPASANG_KWH, '%Y')) ";
+        if(array_key_exists('max', $filter['tglPasang'])){
+            $where .= "BETWEEN ".$filter['tglPasang']['min']." AND ".$filter['tglPasang']['max'];
+        }else{
+            $where .= ">= ".$filter['tglPasang']['min'];
+        }
+
+        return $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset'])->result();
+    }
 }
 
 ?>
