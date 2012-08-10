@@ -1,0 +1,7 @@
+===========================
+Nama Database -> Nama Tabel
+===========================
+
+DIL {KodeArea} {Bulan}{Tahun}.mdb -> DIL_MAIN
+SOREK_{KodeArea}_{Tahun}{Bulan}.mdb -> SOREK_{Tahun}_{Bulan}
+PPOB_LPB_{Tahun}{Bulan}.mdb -> PPOB_LPB_{Tahun}{Bulan}
