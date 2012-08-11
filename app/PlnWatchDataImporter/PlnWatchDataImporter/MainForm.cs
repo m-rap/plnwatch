@@ -11,6 +11,9 @@ namespace PlnWatchDataImporter
 {
     public partial class MainForm : Form
     {
+        MdbReader mdbReader;
+        ProgressWindow progressWindow;
+
         public MainForm()
         {
             InitializeComponent();
@@ -34,42 +37,21 @@ namespace PlnWatchDataImporter
             ppobGroupBox.Enabled = ppobCheckBox.Checked;
         }
 
-        private void dilMdbPathTextBox_Enter(object sender, EventArgs e)
+        private void dilMdbPathTextBox_EnterOrClick(object sender, EventArgs e)
         {
             openFileDialog.FileName = dilMdbPathTextBox.Text;
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 dilMdbPathTextBox.Text = openFileDialog.FileName;
         }
 
-        private void sorekMdbPathTextBox_Enter(object sender, EventArgs e)
+        private void sorekMdbPathTextBox_EnterOrClick(object sender, EventArgs e)
         {
             openFileDialog.FileName = sorekMdbPathTextBox.Text;
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 sorekMdbPathTextBox.Text = openFileDialog.FileName;
         }
 
-        private void ppobMdbPathTextBox_Enter(object sender, EventArgs e)
-        {
-            openFileDialog.FileName = ppobMdbPathTextBox.Text;
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                ppobMdbPathTextBox.Text = openFileDialog.FileName;
-        }
-
-        private void dilMdbPathTextBox_Click(object sender, EventArgs e)
-        {
-            openFileDialog.FileName = dilMdbPathTextBox.Text;
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                dilMdbPathTextBox.Text = openFileDialog.FileName;
-        }
-
-        private void sorekMdbPathTextBox_Click(object sender, EventArgs e)
-        {
-            openFileDialog.FileName = sorekMdbPathTextBox.Text;
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                sorekMdbPathTextBox.Text = openFileDialog.FileName;
-        }
-
-        private void ppobMdbPathTextBox_Click(object sender, EventArgs e)
+        private void ppobMdbPathTextBox_EnterOrClick(object sender, EventArgs e)
         {
             openFileDialog.FileName = ppobMdbPathTextBox.Text;
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -78,7 +60,10 @@ namespace PlnWatchDataImporter
 
         private void startButton_Click(object sender, EventArgs e)
         {
-
+            mdbReader = new MdbReader(dilMdbPathTextBox.Text, dilBulanTextBox.Text + dilTahunTextBox.Text, dilKodeAreaTextBox.Text);
+            progressWindow = new ProgressWindow(mdbReader);
+            progressWindow.Show();
+            mdbReader.ReadDil();
         }
     }
 }
