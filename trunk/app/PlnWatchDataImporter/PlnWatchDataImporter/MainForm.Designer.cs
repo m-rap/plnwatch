@@ -162,8 +162,8 @@
             this.dilMdbPathTextBox.Name = "dilMdbPathTextBox";
             this.dilMdbPathTextBox.Size = new System.Drawing.Size(198, 20);
             this.dilMdbPathTextBox.TabIndex = 0;
-            this.dilMdbPathTextBox.Click += new System.EventHandler(this.dilMdbPathTextBox_Click);
-            this.dilMdbPathTextBox.Enter += new System.EventHandler(this.dilMdbPathTextBox_Enter);
+            this.dilMdbPathTextBox.Click += new System.EventHandler(this.dilMdbPathTextBox_EnterOrClick);
+            this.dilMdbPathTextBox.Enter += new System.EventHandler(this.dilMdbPathTextBox_EnterOrClick);
             // 
             // sorekGroupBox
             // 
@@ -253,8 +253,8 @@
             this.sorekMdbPathTextBox.Name = "sorekMdbPathTextBox";
             this.sorekMdbPathTextBox.Size = new System.Drawing.Size(198, 20);
             this.sorekMdbPathTextBox.TabIndex = 0;
-            this.sorekMdbPathTextBox.Click += new System.EventHandler(this.sorekMdbPathTextBox_Click);
-            this.sorekMdbPathTextBox.Enter += new System.EventHandler(this.sorekMdbPathTextBox_Enter);
+            this.sorekMdbPathTextBox.Click += new System.EventHandler(this.sorekMdbPathTextBox_EnterOrClick);
+            this.sorekMdbPathTextBox.Enter += new System.EventHandler(this.sorekMdbPathTextBox_EnterOrClick);
             // 
             // ppobGroupBox
             // 
@@ -344,8 +344,8 @@
             this.ppobMdbPathTextBox.Name = "ppobMdbPathTextBox";
             this.ppobMdbPathTextBox.Size = new System.Drawing.Size(198, 20);
             this.ppobMdbPathTextBox.TabIndex = 0;
-            this.ppobMdbPathTextBox.Click += new System.EventHandler(this.ppobMdbPathTextBox_Click);
-            this.ppobMdbPathTextBox.Enter += new System.EventHandler(this.ppobMdbPathTextBox_Enter);
+            this.ppobMdbPathTextBox.Click += new System.EventHandler(this.ppobMdbPathTextBox_EnterOrClick);
+            this.ppobMdbPathTextBox.Enter += new System.EventHandler(this.ppobMdbPathTextBox_EnterOrClick);
             // 
             // importLabel
             // 
