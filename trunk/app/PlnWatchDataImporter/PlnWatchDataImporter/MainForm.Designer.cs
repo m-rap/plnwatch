@@ -64,9 +64,15 @@
             this.sorekCheckBox = new System.Windows.Forms.CheckBox();
             this.ppobCheckBox = new System.Windows.Forms.CheckBox();
             this.startButton = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.dilGroupBox.SuspendLayout();
             this.sorekGroupBox.SuspendLayout();
             this.ppobGroupBox.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog
@@ -84,7 +90,7 @@
             this.dilGroupBox.Controls.Add(this.dilKodeAreaTextBox);
             this.dilGroupBox.Controls.Add(this.dilMdbPathLabel);
             this.dilGroupBox.Controls.Add(this.dilMdbPathTextBox);
-            this.dilGroupBox.Location = new System.Drawing.Point(12, 41);
+            this.dilGroupBox.Location = new System.Drawing.Point(12, 56);
             this.dilGroupBox.Name = "dilGroupBox";
             this.dilGroupBox.Size = new System.Drawing.Size(304, 129);
             this.dilGroupBox.TabIndex = 0;
@@ -176,7 +182,7 @@
             this.sorekGroupBox.Controls.Add(this.sorekKodeAreaTextBox);
             this.sorekGroupBox.Controls.Add(this.sorekMdbPathLabel);
             this.sorekGroupBox.Controls.Add(this.sorekMdbPathTextBox);
-            this.sorekGroupBox.Location = new System.Drawing.Point(12, 176);
+            this.sorekGroupBox.Location = new System.Drawing.Point(12, 191);
             this.sorekGroupBox.Name = "sorekGroupBox";
             this.sorekGroupBox.Size = new System.Drawing.Size(304, 129);
             this.sorekGroupBox.TabIndex = 9;
@@ -267,7 +273,7 @@
             this.ppobGroupBox.Controls.Add(this.ppobKodeAreaTextBox);
             this.ppobGroupBox.Controls.Add(this.ppobMdbPathLabel);
             this.ppobGroupBox.Controls.Add(this.ppobMdbPathTextBox);
-            this.ppobGroupBox.Location = new System.Drawing.Point(12, 311);
+            this.ppobGroupBox.Location = new System.Drawing.Point(12, 326);
             this.ppobGroupBox.Name = "ppobGroupBox";
             this.ppobGroupBox.Size = new System.Drawing.Size(304, 129);
             this.ppobGroupBox.TabIndex = 10;
@@ -350,7 +356,7 @@
             // importLabel
             // 
             this.importLabel.AutoSize = true;
-            this.importLabel.Location = new System.Drawing.Point(17, 17);
+            this.importLabel.Location = new System.Drawing.Point(17, 32);
             this.importLabel.Name = "importLabel";
             this.importLabel.Size = new System.Drawing.Size(39, 13);
             this.importLabel.TabIndex = 11;
@@ -359,7 +365,7 @@
             // dilCheckBox
             // 
             this.dilCheckBox.AutoSize = true;
-            this.dilCheckBox.Location = new System.Drawing.Point(62, 16);
+            this.dilCheckBox.Location = new System.Drawing.Point(62, 31);
             this.dilCheckBox.Name = "dilCheckBox";
             this.dilCheckBox.Size = new System.Drawing.Size(43, 17);
             this.dilCheckBox.TabIndex = 12;
@@ -370,7 +376,7 @@
             // sorekCheckBox
             // 
             this.sorekCheckBox.AutoSize = true;
-            this.sorekCheckBox.Location = new System.Drawing.Point(111, 16);
+            this.sorekCheckBox.Location = new System.Drawing.Point(111, 31);
             this.sorekCheckBox.Name = "sorekCheckBox";
             this.sorekCheckBox.Size = new System.Drawing.Size(63, 17);
             this.sorekCheckBox.TabIndex = 13;
@@ -381,7 +387,7 @@
             // ppobCheckBox
             // 
             this.ppobCheckBox.AutoSize = true;
-            this.ppobCheckBox.Location = new System.Drawing.Point(180, 16);
+            this.ppobCheckBox.Location = new System.Drawing.Point(180, 31);
             this.ppobCheckBox.Name = "ppobCheckBox";
             this.ppobCheckBox.Size = new System.Drawing.Size(55, 17);
             this.ppobCheckBox.TabIndex = 14;
@@ -391,7 +397,7 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(241, 12);
+            this.startButton.Location = new System.Drawing.Point(241, 27);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 15;
@@ -399,11 +405,50 @@
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.toolsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(328, 24);
+            this.menuStrip1.TabIndex = 16;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Keluar";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem1});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
+            this.toolsToolStripMenuItem.Text = "Peralatan";
+            // 
+            // optionsToolStripMenuItem1
+            // 
+            this.optionsToolStripMenuItem1.Name = "optionsToolStripMenuItem1";
+            this.optionsToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem1.Text = "Opsi...";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(328, 451);
+            this.ClientSize = new System.Drawing.Size(328, 467);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.ppobCheckBox);
             this.Controls.Add(this.sorekCheckBox);
@@ -412,6 +457,8 @@
             this.Controls.Add(this.ppobGroupBox);
             this.Controls.Add(this.sorekGroupBox);
             this.Controls.Add(this.dilGroupBox);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "PLN Watch Data Importer";
             this.dilGroupBox.ResumeLayout(false);
@@ -420,6 +467,8 @@
             this.sorekGroupBox.PerformLayout();
             this.ppobGroupBox.ResumeLayout(false);
             this.ppobGroupBox.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -463,6 +512,11 @@
         private System.Windows.Forms.CheckBox sorekCheckBox;
         private System.Windows.Forms.CheckBox ppobCheckBox;
         private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem1;
     }
 }
 
