@@ -1,6 +1,12 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        $("#menu1").dataTable();
+        $("#menu1").dataTable({
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "<?php echo $sAjaxSource ?>",
+            "sColumns"   : "IDPEL,NAMA,JENIS_MK,KDGARDU,NOTIANG",
+            "iDisplayLength" : 25
+        });
     } );
 </script>
 
@@ -17,14 +23,6 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($data as $r) : ?>
-            <tr>
-                <td><?php echo $r->IDPEL ?></td>
-                <td><?php echo $r->NAMA ?></td>
-                <td><?php echo $r->JENIS_MK ?></td>
-                <td><?php echo $r->KDGARDU ?></td>
-                <td><?php echo $r->NOTIANG ?></td>
-            </tr>
-        <?php endforeach; ?>
+
     </tbody>
 </table>
