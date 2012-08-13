@@ -43,45 +43,15 @@ class AccessRule {
         $allow = false;
         $currentMethod = $this->ci->uri->segment(2);
 
+        $allowedRolesKeys = array_keys($this->allowedRoles);
         if ($this->ci->uri->segment(1) == NULL) {
             $allow = true;
-        } else if ($currentMethod == NULL) {
+        } else if ($currentMethod != NULL && array_key_exists($currentMethod, $this->allowedRoles)){
+            $allow = $this->check($this->activeRole, $this->allowedRoles[$currentMethod]);
+        } else if ($currentMethod == NULL || !array_key_exists($currentMethod, $this->allowedRoles)){
             $allow = $this->check($this->activeRole, $this->allowedRoles);
-            /* if (in_array($this->allowedRoles, array('*', '?', '@'))) {
-                if ($this->allowedRoles == "*") {
-                    $allow = true;
-                } else if ($this->activeRole == 0 && $this->allowedRoles == "?") {
-                    $allow = true;
-                } else if ($this->activeRole != 0 && $this->allowedRoles == "@") {
-                    $allow = true;
-                } else {
-                    $allow = false;
-                }
-            } else if (is_array($this->allowedRoles) && in_array($this->activeRole, $this->allowedRoles)) {
-                $allow = true;
-            } else {
-                $allow = false;
-            }*/
         } else {
-            // defined for some role
-            if (array_key_exists($currentMethod, $this->allowedRoles)) {
-                $allow = $this->check($this->activeRole, $this->allowedRoles[$currentMethod]);
-                /*if (in_array($this->allowedRoles[$currentMethod], array('*', '?', '@'))) {
-                    if ($this->allowedRoles[$currentMethod] == "*") {
-                        $allow = true;
-                    } else if ($this->activeRole == 0 && $this->allowedRoles[$currentMethod] == "?") {
-                        $allow = true;
-                    } else if ($this->activeRole != 0 && $this->allowedRoles[$currentMethod] == "@") {
-                        $allow = true;
-                    } else {
-                        $allow = false;
-                    }
-                } else if (is_array($this->allowedRoles) && in_array($this->activeRole, $this->allowedRoles[$currentMethod])) {
-                    $allow = true;
-                } else {
-                    $allow = false;
-                }*/
-            }
+            $allow = false;
         }
 
         if (!$allow) {
