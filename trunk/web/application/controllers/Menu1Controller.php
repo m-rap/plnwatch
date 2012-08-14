@@ -94,7 +94,7 @@ class Menu1Controller extends CI_Controller {
             'limit' => (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 50),
             'offset' => (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0),
         );
-        $data = $this->libmenu1->filter($filter);
+        $data = $this->libmenu1->getData($filter);
         $aaData = array();
         foreach ($data['data'] as $d) {
             $aaData[] = array(

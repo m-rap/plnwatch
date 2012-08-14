@@ -11,7 +11,7 @@ class LibExport {
     public $template = 'template.xlsx';
     public $activeSheet = 'sheet1.xml';
     public $wdir = 'wdir';
-    public $fileName = 'file.xlsx';
+    public $fileName = 'file.xls';
 
     function __construct() {
         $this->ci = & get_instance();
@@ -22,13 +22,12 @@ class LibExport {
         $this->template = FCPATH . 'static/export/' . $this->template;
         $this->activeSheet = FCPATH . 'static/export/' . $this->wdir . '/xl/worksheets/' . $this->activeSheet;
         $this->wdir = FCPATH . 'static/export/' . $this->wdir;
-        if (!file_exists($this->wdir)) {
-            mkdir($this->wdir);
-        }
-        $this->fileName = FCPATH . 'static/export/' . $this->fileName;
     }
 
     public function generate($filter) {
+        if (!file_exists($this->wdir)) {
+            mkdir($this->wdir);
+        }
         $this->extract($this->template, $this->wdir);
         $this->injectDataToSpreadsheet($this->activeSheet, $filter);
         $this->compress($this->fileName, $this->wdir);
@@ -91,7 +90,7 @@ class LibExport {
         $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
         for ($i = 0; $i <= $n + $part; $i+=$part) {
             $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
-            $q = $model->filterMenu1($filter, false);   //return object
+            $q = $model->filterMenu1($filter, false);   //return query object
             while ($row = @mysql_fetch_object($q->result_id)) {
                 $newRow = $xml->sheetData->addChild('row');
                 foreach ($row as $col) {
@@ -124,6 +123,40 @@ class LibExport {
 
     private function removeWdir($path) {
         $this->removeWdirRecursive($path);
+    }
+
+    public function generateHtml($filter) {
+        $start = "<html><head></head><body><table>";
+        $model = new Dil();
+        $label = $model->attributeLabels();
+        $header = "<tr>";
+        foreach ($filter['select'] as $col) {
+            $header .= "<td>" . $label[$col] . "</td>";
+        }
+        $header .= "</tr>";
+
+        $body = "";
+        $n = $model->count($filter);
+        $part = $filter['limit'];
+        $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
+        for ($i = 0; $i <= $n + $part; $i+=$part) {
+            $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
+            $q = $model->filterMenu1($filter, false);   //return object
+            while ($row = @mysql_fetch_object($q->result_id)) {
+                $body .= "<tr>";
+                foreach ($row as $col) {
+                    $body .= "<td>" . $col . "</td>";
+                }
+                $body .= "</tr>";
+            }
+        }
+        
+        $end = "</table></body></html>";
+
+        file_put_contents('static/export/menu1/'.$this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
+        header('Content-type: application/ms-excel');
+        header('Content-Disposition: attachment; filename=' . $this->fileName);
+        //echo $start . $header . $body . $end;
     }
 
 }
