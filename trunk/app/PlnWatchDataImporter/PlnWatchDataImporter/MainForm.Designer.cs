@@ -30,6 +30,7 @@
         {
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.dilGroupBox = new System.Windows.Forms.GroupBox();
+            this.dilMdbPathBrowseButton = new System.Windows.Forms.Button();
             this.dilTableNameLabel = new System.Windows.Forms.Label();
             this.dilBlThLabel = new System.Windows.Forms.Label();
             this.dilKodeAreaLabel = new System.Windows.Forms.Label();
@@ -40,6 +41,7 @@
             this.dilMdbPathLabel = new System.Windows.Forms.Label();
             this.dilMdbPathTextBox = new System.Windows.Forms.TextBox();
             this.sorekGroupBox = new System.Windows.Forms.GroupBox();
+            this.sorekMdbPathBrowseButton = new System.Windows.Forms.Button();
             this.sorekTableNameLabel = new System.Windows.Forms.Label();
             this.sorekBlThLabel = new System.Windows.Forms.Label();
             this.sorekKodeAreaLabel = new System.Windows.Forms.Label();
@@ -50,6 +52,7 @@
             this.sorekMdbPathLabel = new System.Windows.Forms.Label();
             this.sorekMdbPathTextBox = new System.Windows.Forms.TextBox();
             this.ppobGroupBox = new System.Windows.Forms.GroupBox();
+            this.ppobMdbPathBrowseButton = new System.Windows.Forms.Button();
             this.ppobTableNameLabel = new System.Windows.Forms.Label();
             this.ppobBlThLabel = new System.Windows.Forms.Label();
             this.ppobKodeAreaLabel = new System.Windows.Forms.Label();
@@ -68,7 +71,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dilGroupBox.SuspendLayout();
             this.sorekGroupBox.SuspendLayout();
             this.ppobGroupBox.SuspendLayout();
@@ -81,6 +84,7 @@
             // 
             // dilGroupBox
             // 
+            this.dilGroupBox.Controls.Add(this.dilMdbPathBrowseButton);
             this.dilGroupBox.Controls.Add(this.dilTableNameLabel);
             this.dilGroupBox.Controls.Add(this.dilBlThLabel);
             this.dilGroupBox.Controls.Add(this.dilKodeAreaLabel);
@@ -96,6 +100,16 @@
             this.dilGroupBox.TabIndex = 0;
             this.dilGroupBox.TabStop = false;
             this.dilGroupBox.Text = "DIL";
+            // 
+            // dilMdbPathBrowseButton
+            // 
+            this.dilMdbPathBrowseButton.Location = new System.Drawing.Point(229, 16);
+            this.dilMdbPathBrowseButton.Name = "dilMdbPathBrowseButton";
+            this.dilMdbPathBrowseButton.Size = new System.Drawing.Size(69, 23);
+            this.dilMdbPathBrowseButton.TabIndex = 4;
+            this.dilMdbPathBrowseButton.Text = "Cari...";
+            this.dilMdbPathBrowseButton.UseVisualStyleBackColor = true;
+            this.dilMdbPathBrowseButton.Click += new System.EventHandler(this.dilMdbPathBrowseButton_Click);
             // 
             // dilTableNameLabel
             // 
@@ -129,29 +143,31 @@
             this.dilTableNameTextBox.Location = new System.Drawing.Point(100, 97);
             this.dilTableNameTextBox.Name = "dilTableNameTextBox";
             this.dilTableNameTextBox.Size = new System.Drawing.Size(198, 20);
-            this.dilTableNameTextBox.TabIndex = 5;
+            this.dilTableNameTextBox.TabIndex = 8;
             this.dilTableNameTextBox.Text = "DIL_MAIN";
             // 
             // dilTahunTextBox
             // 
             this.dilTahunTextBox.Location = new System.Drawing.Point(153, 71);
+            this.dilTahunTextBox.MaxLength = 4;
             this.dilTahunTextBox.Name = "dilTahunTextBox";
             this.dilTahunTextBox.Size = new System.Drawing.Size(66, 20);
-            this.dilTahunTextBox.TabIndex = 4;
+            this.dilTahunTextBox.TabIndex = 7;
             // 
             // dilBulanTextBox
             // 
             this.dilBulanTextBox.Location = new System.Drawing.Point(100, 71);
+            this.dilBulanTextBox.MaxLength = 2;
             this.dilBulanTextBox.Name = "dilBulanTextBox";
             this.dilBulanTextBox.Size = new System.Drawing.Size(47, 20);
-            this.dilBulanTextBox.TabIndex = 3;
+            this.dilBulanTextBox.TabIndex = 6;
             // 
             // dilKodeAreaTextBox
             // 
             this.dilKodeAreaTextBox.Location = new System.Drawing.Point(100, 45);
             this.dilKodeAreaTextBox.Name = "dilKodeAreaTextBox";
             this.dilKodeAreaTextBox.Size = new System.Drawing.Size(198, 20);
-            this.dilKodeAreaTextBox.TabIndex = 2;
+            this.dilKodeAreaTextBox.TabIndex = 5;
             // 
             // dilMdbPathLabel
             // 
@@ -166,13 +182,12 @@
             // 
             this.dilMdbPathTextBox.Location = new System.Drawing.Point(100, 19);
             this.dilMdbPathTextBox.Name = "dilMdbPathTextBox";
-            this.dilMdbPathTextBox.Size = new System.Drawing.Size(198, 20);
-            this.dilMdbPathTextBox.TabIndex = 0;
-            this.dilMdbPathTextBox.Click += new System.EventHandler(this.dilMdbPathTextBox_EnterOrClick);
-            this.dilMdbPathTextBox.Enter += new System.EventHandler(this.dilMdbPathTextBox_EnterOrClick);
+            this.dilMdbPathTextBox.Size = new System.Drawing.Size(123, 20);
+            this.dilMdbPathTextBox.TabIndex = 3;
             // 
             // sorekGroupBox
             // 
+            this.sorekGroupBox.Controls.Add(this.sorekMdbPathBrowseButton);
             this.sorekGroupBox.Controls.Add(this.sorekTableNameLabel);
             this.sorekGroupBox.Controls.Add(this.sorekBlThLabel);
             this.sorekGroupBox.Controls.Add(this.sorekKodeAreaLabel);
@@ -188,6 +203,16 @@
             this.sorekGroupBox.TabIndex = 9;
             this.sorekGroupBox.TabStop = false;
             this.sorekGroupBox.Text = "SOREK";
+            // 
+            // sorekMdbPathBrowseButton
+            // 
+            this.sorekMdbPathBrowseButton.Location = new System.Drawing.Point(229, 16);
+            this.sorekMdbPathBrowseButton.Name = "sorekMdbPathBrowseButton";
+            this.sorekMdbPathBrowseButton.Size = new System.Drawing.Size(69, 23);
+            this.sorekMdbPathBrowseButton.TabIndex = 10;
+            this.sorekMdbPathBrowseButton.Text = "Cari...";
+            this.sorekMdbPathBrowseButton.UseVisualStyleBackColor = true;
+            this.sorekMdbPathBrowseButton.Click += new System.EventHandler(this.sorekMdbPathBrowseButton_Click);
             // 
             // sorekTableNameLabel
             // 
@@ -221,28 +246,30 @@
             this.sorekTableNameTextBox.Location = new System.Drawing.Point(100, 97);
             this.sorekTableNameTextBox.Name = "sorekTableNameTextBox";
             this.sorekTableNameTextBox.Size = new System.Drawing.Size(198, 20);
-            this.sorekTableNameTextBox.TabIndex = 5;
+            this.sorekTableNameTextBox.TabIndex = 14;
             // 
             // sorekTahunTextBox
             // 
             this.sorekTahunTextBox.Location = new System.Drawing.Point(153, 71);
+            this.sorekTahunTextBox.MaxLength = 4;
             this.sorekTahunTextBox.Name = "sorekTahunTextBox";
             this.sorekTahunTextBox.Size = new System.Drawing.Size(66, 20);
-            this.sorekTahunTextBox.TabIndex = 4;
+            this.sorekTahunTextBox.TabIndex = 13;
             // 
             // sorekBulanTextBox
             // 
             this.sorekBulanTextBox.Location = new System.Drawing.Point(100, 71);
+            this.sorekBulanTextBox.MaxLength = 2;
             this.sorekBulanTextBox.Name = "sorekBulanTextBox";
             this.sorekBulanTextBox.Size = new System.Drawing.Size(47, 20);
-            this.sorekBulanTextBox.TabIndex = 3;
+            this.sorekBulanTextBox.TabIndex = 12;
             // 
             // sorekKodeAreaTextBox
             // 
             this.sorekKodeAreaTextBox.Location = new System.Drawing.Point(100, 45);
             this.sorekKodeAreaTextBox.Name = "sorekKodeAreaTextBox";
             this.sorekKodeAreaTextBox.Size = new System.Drawing.Size(198, 20);
-            this.sorekKodeAreaTextBox.TabIndex = 2;
+            this.sorekKodeAreaTextBox.TabIndex = 11;
             // 
             // sorekMdbPathLabel
             // 
@@ -257,13 +284,12 @@
             // 
             this.sorekMdbPathTextBox.Location = new System.Drawing.Point(100, 19);
             this.sorekMdbPathTextBox.Name = "sorekMdbPathTextBox";
-            this.sorekMdbPathTextBox.Size = new System.Drawing.Size(198, 20);
-            this.sorekMdbPathTextBox.TabIndex = 0;
-            this.sorekMdbPathTextBox.Click += new System.EventHandler(this.sorekMdbPathTextBox_EnterOrClick);
-            this.sorekMdbPathTextBox.Enter += new System.EventHandler(this.sorekMdbPathTextBox_EnterOrClick);
+            this.sorekMdbPathTextBox.Size = new System.Drawing.Size(123, 20);
+            this.sorekMdbPathTextBox.TabIndex = 9;
             // 
             // ppobGroupBox
             // 
+            this.ppobGroupBox.Controls.Add(this.ppobMdbPathBrowseButton);
             this.ppobGroupBox.Controls.Add(this.ppobTableNameLabel);
             this.ppobGroupBox.Controls.Add(this.ppobBlThLabel);
             this.ppobGroupBox.Controls.Add(this.ppobKodeAreaLabel);
@@ -279,6 +305,16 @@
             this.ppobGroupBox.TabIndex = 10;
             this.ppobGroupBox.TabStop = false;
             this.ppobGroupBox.Text = "PPOB";
+            // 
+            // ppobMdbPathBrowseButton
+            // 
+            this.ppobMdbPathBrowseButton.Location = new System.Drawing.Point(229, 16);
+            this.ppobMdbPathBrowseButton.Name = "ppobMdbPathBrowseButton";
+            this.ppobMdbPathBrowseButton.Size = new System.Drawing.Size(69, 23);
+            this.ppobMdbPathBrowseButton.TabIndex = 16;
+            this.ppobMdbPathBrowseButton.Text = "Cari...";
+            this.ppobMdbPathBrowseButton.UseVisualStyleBackColor = true;
+            this.ppobMdbPathBrowseButton.Click += new System.EventHandler(this.ppobMdbPathBrowseButton_Click);
             // 
             // ppobTableNameLabel
             // 
@@ -312,28 +348,30 @@
             this.ppobTableNameTextBox.Location = new System.Drawing.Point(100, 97);
             this.ppobTableNameTextBox.Name = "ppobTableNameTextBox";
             this.ppobTableNameTextBox.Size = new System.Drawing.Size(198, 20);
-            this.ppobTableNameTextBox.TabIndex = 5;
+            this.ppobTableNameTextBox.TabIndex = 20;
             // 
             // ppobTahunTextBox
             // 
             this.ppobTahunTextBox.Location = new System.Drawing.Point(153, 71);
+            this.ppobTahunTextBox.MaxLength = 4;
             this.ppobTahunTextBox.Name = "ppobTahunTextBox";
             this.ppobTahunTextBox.Size = new System.Drawing.Size(66, 20);
-            this.ppobTahunTextBox.TabIndex = 4;
+            this.ppobTahunTextBox.TabIndex = 19;
             // 
             // ppobBulanTextBox
             // 
             this.ppobBulanTextBox.Location = new System.Drawing.Point(100, 71);
+            this.ppobBulanTextBox.MaxLength = 2;
             this.ppobBulanTextBox.Name = "ppobBulanTextBox";
             this.ppobBulanTextBox.Size = new System.Drawing.Size(47, 20);
-            this.ppobBulanTextBox.TabIndex = 3;
+            this.ppobBulanTextBox.TabIndex = 18;
             // 
             // ppobKodeAreaTextBox
             // 
             this.ppobKodeAreaTextBox.Location = new System.Drawing.Point(100, 45);
             this.ppobKodeAreaTextBox.Name = "ppobKodeAreaTextBox";
             this.ppobKodeAreaTextBox.Size = new System.Drawing.Size(198, 20);
-            this.ppobKodeAreaTextBox.TabIndex = 2;
+            this.ppobKodeAreaTextBox.TabIndex = 17;
             // 
             // ppobMdbPathLabel
             // 
@@ -348,10 +386,8 @@
             // 
             this.ppobMdbPathTextBox.Location = new System.Drawing.Point(100, 19);
             this.ppobMdbPathTextBox.Name = "ppobMdbPathTextBox";
-            this.ppobMdbPathTextBox.Size = new System.Drawing.Size(198, 20);
-            this.ppobMdbPathTextBox.TabIndex = 0;
-            this.ppobMdbPathTextBox.Click += new System.EventHandler(this.ppobMdbPathTextBox_EnterOrClick);
-            this.ppobMdbPathTextBox.Enter += new System.EventHandler(this.ppobMdbPathTextBox_EnterOrClick);
+            this.ppobMdbPathTextBox.Size = new System.Drawing.Size(123, 20);
+            this.ppobMdbPathTextBox.TabIndex = 15;
             // 
             // importLabel
             // 
@@ -368,7 +404,7 @@
             this.dilCheckBox.Location = new System.Drawing.Point(62, 31);
             this.dilCheckBox.Name = "dilCheckBox";
             this.dilCheckBox.Size = new System.Drawing.Size(43, 17);
-            this.dilCheckBox.TabIndex = 12;
+            this.dilCheckBox.TabIndex = 0;
             this.dilCheckBox.Text = "DIL";
             this.dilCheckBox.UseVisualStyleBackColor = true;
             this.dilCheckBox.CheckedChanged += new System.EventHandler(this.dilCheckBox_CheckedChanged);
@@ -379,7 +415,7 @@
             this.sorekCheckBox.Location = new System.Drawing.Point(111, 31);
             this.sorekCheckBox.Name = "sorekCheckBox";
             this.sorekCheckBox.Size = new System.Drawing.Size(63, 17);
-            this.sorekCheckBox.TabIndex = 13;
+            this.sorekCheckBox.TabIndex = 1;
             this.sorekCheckBox.Text = "SOREK";
             this.sorekCheckBox.UseVisualStyleBackColor = true;
             this.sorekCheckBox.CheckedChanged += new System.EventHandler(this.sorekCheckBox_CheckedChanged);
@@ -390,7 +426,7 @@
             this.ppobCheckBox.Location = new System.Drawing.Point(180, 31);
             this.ppobCheckBox.Name = "ppobCheckBox";
             this.ppobCheckBox.Size = new System.Drawing.Size(55, 17);
-            this.ppobCheckBox.TabIndex = 14;
+            this.ppobCheckBox.TabIndex = 2;
             this.ppobCheckBox.Text = "PPOB";
             this.ppobCheckBox.UseVisualStyleBackColor = true;
             this.ppobCheckBox.CheckedChanged += new System.EventHandler(this.ppobCheckBox_CheckedChanged);
@@ -400,7 +436,7 @@
             this.startButton.Location = new System.Drawing.Point(241, 27);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
-            this.startButton.TabIndex = 15;
+            this.startButton.TabIndex = 21;
             this.startButton.Text = "START";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
@@ -427,22 +463,23 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.exitToolStripMenuItem.Text = "Keluar";
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem1});
+            this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.toolsToolStripMenuItem.Text = "Peralatan";
             // 
-            // optionsToolStripMenuItem1
+            // optionsToolStripMenuItem
             // 
-            this.optionsToolStripMenuItem1.Name = "optionsToolStripMenuItem1";
-            this.optionsToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.optionsToolStripMenuItem1.Text = "Opsi...";
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.optionsToolStripMenuItem.Text = "Opsi...";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -516,7 +553,10 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.Button dilMdbPathBrowseButton;
+        private System.Windows.Forms.Button sorekMdbPathBrowseButton;
+        private System.Windows.Forms.Button ppobMdbPathBrowseButton;
     }
 }
 
