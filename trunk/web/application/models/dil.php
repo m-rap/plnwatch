@@ -12,6 +12,7 @@ class Dil extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->load->dbutil();
     }
 
     public function attributeLabels() {
@@ -29,13 +30,14 @@ class Dil extends CI_Model {
         );
     }
 
-    public function getListArea(){
+    public function getListArea() {
         $this->db->distinct();
         $this->db->select('KODEAREA');
         return $this->db->get_where($this->table)->result();
     }
 
-    public function filterMenu1($filter, $year) {
+    public function filterMenu1Condition($filter) {
+        $year = date('Y');
         $where = "KODEAREA = '" . $filter['area'] . "'";
         $where .= " AND DAYA ";
         if (array_key_exists('max', $filter['daya'])) {
@@ -50,23 +52,28 @@ class Dil extends CI_Model {
         } else {
             $where .= ">= " . $filter['tglPasang']['min'];
         }
+        return $where;
+    }
 
-        $this->db->select($filter['select']);
-        if($filter['limit'] == -1 && $filter['offset'] == -1){
-            $d = $this->db->get_where($this->table, $where);
-            $num = $d->num_rows();
-            $data = $d->result();
-        }else{
-            $d = $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset']);
-            $total = $this->db->get_where($this->table, $where);
-            $data = $d->result();
-            $num = $total->num_rows();
+    public function filterMenu1($filter, $returnData = true) {
+        $where = $this->filterMenu1Condition($filter);
+        //die($filter['limit'].'-'.$filter['offset']);
+        $this->db->select(implode(',', $filter['select']));
+        $q = $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset']);
+        if($returnData){
+            return $q->result();
         }
-        
-        return array(
-            'num' => $num,
-            'data' => $data
-        );
+        return $q;
+    }
+
+    public function count($filter) {
+        $where = $this->filterMenu1Condition($filter);
+        return $this->db->get_where($this->table, $where)->num_rows();
+    }
+    
+    public function export($filter) {
+        $where = $this->filterMenu1Condition($filter);
+        $n = $this->db->get_where($this->table, $where)->num_rows();
     }
 
 }
