@@ -28,9 +28,9 @@
                             <span>
                                 <h3>
                                     <span style="font:Tahoma, Geneva, sans-serif; font-size:14px;text-decoration:none">
-                                        <a href="http://www.facebook.com/pages/Komunikasi-Korporat-PLN/169891086408522"><img src="/images/fb.png" width="17px" align="absmiddle" border="0" /></a>
-                                        <a href="http://www.twitter.com/plnkita"><img src="/images/twit.png" width="17px" align="absmiddle" border="0" /></a>
-                                        <a href="http://www.pln.co.id/?feed=rss2"><img src="/images/rss.png" width="17px" align="absmiddle" border="0" /></a>
+                                        <a href="http://www.facebook.com/pages/Komunikasi-Korporat-PLN/169891086408522"><img src="/static/images/fb.png" width="17px" align="absmiddle" border="0" /></a>
+                                        <a href="http://www.twitter.com/plnkita"><img src="/static/images/twit.png" width="17px" align="absmiddle" border="0" /></a>
+                                        <a href="http://www.pln.co.id/?feed=rss2"><img src="/static/images/rss.png" width="17px" align="absmiddle" border="0" /></a>
                                         Ikuti Berita Dari Kami
                                     </span>
                                 </h3>

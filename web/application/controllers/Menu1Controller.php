@@ -12,8 +12,8 @@ class Menu1Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('layout', array('controller' => 'menu1'));
-        $this->load->library(array('LibMenu1','LibArea','LibExport'));
-        $this->load->helper(array('form','file'));
+        $this->load->library(array('LibMenu1', 'LibArea', 'LibExport'));
+        $this->load->helper(array('form', 'file'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
     }
@@ -50,7 +50,7 @@ class Menu1Controller extends CI_Controller {
             'pageTitle' => 'Menu 1',
             'data' => array(),
             'label' => $this->dil->attributeLabels(),
-            'sAjaxSource' => site_url("menu1/data?area=".$fArea."&daya=".$fDaya.'&tglPasang='.$fTglPasang),
+            'sAjaxSource' => site_url("menu1/data?area=" . $fArea . "&daya=" . $fDaya . '&tglPasang=' . $fTglPasang),
         );
 
         $data['dropdownData'] = array(
@@ -87,13 +87,30 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function data() {
+        if(empty($_GET['area']) || empty($_GET['daya']) || empty($_GET['tglPasang'])){
+            return;
+        }
+        $select = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
         $filter = array(
+            'select' => $select,
             'area' => (isset($_GET['area']) ? $_GET['area'] : -1),
             'daya' => (isset($_GET['daya']) ? $_GET['daya'] : -1),
             'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : -1 ),
             'limit' => (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 50),
             'offset' => (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0),
         );
+        $sOrder = "";
+        if (isset($_GET['iSortCol_0'])) {
+            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
+                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
+                    $sOrder .= "`" . $select[intval($_GET['iSortCol_' . $i])] . "` " .
+                            mysql_real_escape_string($_GET['sSortDir_' . $i]);
+                }
+                if($i != 0 && $i+1 == intval($_GET['iSortingCols'])) $sOrder .= ', ';
+            }
+        }
+        
+        $filter['order'] = $sOrder;
         $data = $this->libmenu1->getData($filter);
         $aaData = array();
         foreach ($data['data'] as $d) {
@@ -114,8 +131,8 @@ class Menu1Controller extends CI_Controller {
         $output['aaData'] = $aaData;
         echo json_encode($output);
     }
-    
-    public function export(){
+
+    public function export() {
         $filter = array(
             'area' => (isset($_GET['area']) ? $_GET['area'] : -1),
             'daya' => (isset($_GET['daya']) ? $_GET['daya'] : -1),

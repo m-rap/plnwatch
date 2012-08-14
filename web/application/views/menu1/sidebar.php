@@ -8,6 +8,6 @@ echo form_close();
 
 if(isset($_GET['area']) && isset($_GET['daya']) && isset($_GET['tglPasang'])){
     echo anchor('menu1/export/?area='.$_GET['area'].'&daya='.$_GET['daya'].'&tglPasang='.$_GET['tglPasang'], 'download')
-        .' (proses akan berjalan cukup lama untuk pertama kali download)';
+        .' (proses akan berjalan cukup lama untuk pertama kali)';
 }
 ?>

@@ -59,6 +59,7 @@ class Dil extends CI_Model {
         $where = $this->filterMenu1Condition($filter);
         //die($filter['limit'].'-'.$filter['offset']);
         $this->db->select(implode(',', $filter['select']));
+        $this->db->order_by($filter['order']);
         $q = $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset']);
         if($returnData){
             return $q->result();

@@ -51,6 +51,7 @@ class LibMenu1 {
         $daya = $this->getListRangeDaya(true);
         $tglPasang = $this->getListRangeTglPasang(true);
         $filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG') : $filter['select']);
+        $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
         $filter['dayaId'] = $filter['daya'];
         $filter['tglPasangId'] = $filter['tglPasang'];
         $filter['daya'] = $daya[$filter['daya']];
