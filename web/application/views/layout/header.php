@@ -20,13 +20,13 @@
         <meta charset="UTF-8" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
         <title><?php echo $pageTitle ?></title>
-        <link rel="shortcut icon" href="<?php echo base_url(); ?>images/logo_pln.jpg" />
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/pln_base.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/pln_ext.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/datatables/demo_table.css" />
-        <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="<?php echo base_url(); ?>js/jqueryslidemenu.js"></script>
+        <link rel="shortcut icon" href="<?php echo base_url(); ?>static/images/logo_pln.jpg" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/pln_base.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/pln_ext.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/datatables/demo_table.css" />
+        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jqueryslidemenu.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 //Default Action
@@ -50,7 +50,7 @@
             <div id="awal" >
                 <div id="header_pln">
                     <div id="header_pln_kiri" style="background-repeat:no-repeat;width:450px;float:left;">
-                        <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/pln-logo.jpg"  style="background-repeat:no-repeat;float:left;border:0px;"/></a>
+                        <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>static/images/pln-logo.jpg"  style="background-repeat:no-repeat;float:left;border:0px;"/></a>
                             <div>
                                 <span style="margin-left:40px;">
                                     <h1 style="font:Tahoma, Geneva, sans-serif; font-size:18px;margin-left:0px;margin-top:35px;text-align:left;">PLN Watch</h1>
@@ -60,8 +60,8 @@
                     </div>
                     <div id="header_pln_kanan" style="">
                         <div id="header_pln_kanan_1" style="float:right;">
-                            <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/ind.png" title="Indonesia" style="margin-top:12px;" align="left"/></a>
-                            <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/us.png" title="English" style="margin-top:12px; margin-left:5px; margin-right:3px;" align="left" /></a>
+                            <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>static/images/ind.png" title="Indonesia" style="margin-top:12px;" align="left"/></a>
+                            <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>static/images/us.png" title="English" style="margin-top:12px; margin-left:5px; margin-right:3px;" align="left" /></a>
                             <div id="posisi_menu" style="padding-right:4px">
                                 <ul>
                                     <li id="header_menu"><a href="<?php echo base_url(); ?>">CSR</a></li>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div id="header_pln_kanan_2" align="right">
-                            <img src="<?php echo base_url(); ?>images/header_pln_03_02.jpg" align="right"/><br />
+                            <img src="<?php echo base_url(); ?>static/images/header_pln_03_02.jpg" align="right"/><br />
                             <table>
                                 <tr>
                                     <td>

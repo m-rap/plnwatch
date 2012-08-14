@@ -12,8 +12,8 @@ class Menu1Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('layout', array('controller' => 'menu1'));
-        $this->load->library(array('LibMenu1', 'LibArea'));
-        $this->load->helper(array('form'));
+        $this->load->library(array('LibMenu1','LibArea','LibExport'));
+        $this->load->helper(array('form','file'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
     }
@@ -116,55 +116,12 @@ class Menu1Controller extends CI_Controller {
     }
     
     public function export(){
-        $this->load->library('PHPExcel');
         $filter = array(
             'area' => (isset($_GET['area']) ? $_GET['area'] : -1),
             'daya' => (isset($_GET['daya']) ? $_GET['daya'] : -1),
             'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : -1 ),
         );
-        //$objPHPExcel = $this->libmenu1->export($filter);
-        $label = $this->dil->attributeLabels();
-
-        $daya = $this->libmenu1->getListRangeDaya(true);
-        $tglPasang = $this->libmenu1->getListRangeTglPasang(true);
-
-        $filter['limit'] = -1;
-        $filter['offset'] = -1;
-        $filter['select'] = (!array_key_exists('select', $filter) ? 'IDPEL,NAMA,JENIS_MK,KDGARDU,NOTIANG' : $filter['select']);
-        $filter['daya'] = $daya[$filter['daya']];
-        $filter['tglPasang'] = $tglPasang[$filter['tglPasang']];
-
-        $objPHPExcel = new PHPExcel();
-        $objPHPExcel->getProperties()->setCreator("spondbob")
-                ->setLastModifiedBy("spondbob")
-                ->setTitle("Office 2007 XLSX")
-                ->setSubject("Office 2007 XLSX")
-                ->setDescription("Schematics2011")
-                ->setKeywords("schematics")
-                ->setCategory("file");
-        $objPHPExcel->getSheet(0)->setTitle('Menu 1');
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', $label['IDPEL'])
-                ->setCellValue('B1', $label['NAMA'])
-                ->setCellValue('C1', $label['JENIS_MK'])
-                ->setCellValue('D1', $label['KDGARDU'])
-                ->setCellValue('E1', $label['NOTIANG']);
-        $i = 2;
-        $d = $this->dil->filterMenu1($filter, date('Y'));
-        foreach ($d['data'] as $r) {
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $r->IDPEL)
-                    ->setCellValue('B' . $i, $r->NAMA)
-                    ->setCellValue('C' . $i, ($r->JENIS_MK == "A" ? "AMR" : ($r->JENIS_MK == "E" ? "Elektronik" : ($r->JENIS_MK == "M" ? "Mekanik" : "Blank"))))
-                    ->setCellValue('D' . $i, $r->KDGARDU)
-                    ->setCellValue('E' . $i, $r->NOTIANG);
-            $i++;
-        }
-        $objPHPExcel->getActiveSheet()->setTitle('Menu 1 - PLN Watch');
-
-        $objPHPExcel->setActiveSheetIndex(0);
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+        $this->libmenu1->export($filter);
     }
 
 }
