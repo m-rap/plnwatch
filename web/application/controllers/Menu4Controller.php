@@ -36,7 +36,7 @@ class Menu4Controller extends CI_Controller {
             'area' => $this->libarea->getList(),
         );
         $input = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+            'area' => $this->input->get('area'),
         );
         $input = $lib->validateInput($input, $list);
         
@@ -55,7 +55,7 @@ class Menu4Controller extends CI_Controller {
 
     public function data() {
         $filter = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+            'area' => $this->input->get('area'),
         );
         $filter = $this->libmenu4->validateInput($filter);
         $filter['select'] = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
@@ -97,7 +97,7 @@ class Menu4Controller extends CI_Controller {
 
     public function export() {
         $filter = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+            'area' => $this->input->get('area'),
         );
         $filter = $this->libmenu4->validateInput($filter);
         $filter['controller'] = $this->controller;

@@ -46,9 +46,9 @@ class Menu1Controller extends CI_Controller {
     public function view() {
         $lib = new LibMenu1();
         $input = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
-            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : null),
-            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : null),
+            'area' => $this->input->get('area'),
+            'daya' => $this->input->get('daya'),
+            'tglPasang' => $this->input->get('tglPasang'),
         );
         $list = array(
             'area' => $this->libarea->getList(),
@@ -76,9 +76,9 @@ class Menu1Controller extends CI_Controller {
     public function data() {
         $select = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
         $filter = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
-            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : null),
-            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : null),
+            'area' => $this->input->get('area'),
+            'daya' => $this->input->get('daya'),
+            'tglPasang' => $this->input->get('tglPasang'),
         );
         $filter = $this->libmenu1->validateInput($filter);
         $filter['select'] = $select;
@@ -120,9 +120,9 @@ class Menu1Controller extends CI_Controller {
 
     public function export() {
         $filter = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
-            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : null),
-            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : null),
+            'area' => $this->input->get('area'),
+            'daya' => $this->input->get('daya'),
+            'tglPasang' => $this->input->get('tglPasang'),
         );
         $filter = $this->libmenu1->validateInput($filter);
         $filter['controller'] = $this->controller;
