@@ -7,11 +7,12 @@
  */
 class Menu1Controller extends CI_Controller {
 
+    private $controller = 'Menu1';
     private $activeUser = null;
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('layout', array('controller' => 'menu1'));
+        $this->load->library('layout', array('controller' => strtolower($this->controller)));
         $this->load->library(array('LibMenu1', 'LibArea', 'LibExport'));
         $this->load->helper(array('form', 'file'));
         $this->activeUser = $this->libuser->activeUser;
@@ -43,14 +44,15 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function view() {
-        $fArea = (isset($_GET['area']) ? $_GET['area'] : 0);
-        $fDaya = (isset($_GET['daya']) ? $_GET['daya'] : 0);
-        $fTglPasang = (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : 0);
+        $fArea = (isset($_GET['area']) ? $_GET['area'] : 'A');
+        $fDaya = (isset($_GET['daya']) ? $_GET['daya'] : 1);
+        $fTglPasang = (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : 1);
         $data = array(
             'pageTitle' => 'Menu 1',
             'data' => array(),
             'label' => $this->dil->attributeLabels(),
             'sAjaxSource' => site_url("menu1/data?area=" . $fArea . "&daya=" . $fDaya . '&tglPasang=' . $fTglPasang),
+            'select' => array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG'),
         );
 
         $data['dropdownData'] = array(
@@ -67,21 +69,6 @@ class Menu1Controller extends CI_Controller {
                 'selected' => $fTglPasang,
             ),
         );
-
-        /*
-          if (isset($_GET['submit'])) {
-          $filter = array(
-          'area' => $_GET['area'],
-          'daya' => $_GET['daya'],
-          'tglPasang' => $_GET['tglPasang'],
-          'limit' => 10,
-          'offset' => 0,
-          );
-          $d = $this->libmenu1->filter($filter);
-          $data['data'] = $d['data'];
-          }
-         * 
-         */
         $data['sidebar']['dropdownData'] = $data['dropdownData'];
         $this->layout->render('main', $data);
     }
@@ -137,6 +124,7 @@ class Menu1Controller extends CI_Controller {
             'area' => (isset($_GET['area']) ? $_GET['area'] : -1),
             'daya' => (isset($_GET['daya']) ? $_GET['daya'] : -1),
             'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : -1 ),
+            'controller' => $this->controller,
         );
         $this->libmenu1->export($filter);
     }
