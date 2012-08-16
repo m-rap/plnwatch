@@ -24,11 +24,17 @@ namespace PlnWatchDataImporter
             set;
             get;
         }
+        public int Width
+        {
+            set;
+            get;
+        }
 
-        public MdbReaderProgressEventArgs(bool clearCurrentLine, int left)
+        public MdbReaderProgressEventArgs(bool clearCurrentLine, int left, int width)
         {
             ClearCurrentLine = clearCurrentLine;
             Left = left;
+            Width = width;
         }
     }
 
@@ -163,11 +169,10 @@ namespace PlnWatchDataImporter
             }
         }
 
-        public void tesproc()
+        public void RunCmd(string arguments)
         {
             Process p = new Process();
-            string pArguments = "/c dir";
-            p.StartInfo = new ProcessStartInfo("cmd.exe", pArguments)
+            p.StartInfo = new ProcessStartInfo("cmd.exe", arguments)
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -178,7 +183,13 @@ namespace PlnWatchDataImporter
             p.OutputDataReceived += ProcessOutputReceived;
             p.ErrorDataReceived += ProcessOutputReceived;
             p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
             p.WaitForExit();
+        }
+
+        public void tesproc()
+        {
+            RunCmd("/c asdasd");
         }
 
         public MdbReadResult ReadDil()
@@ -191,9 +202,7 @@ namespace PlnWatchDataImporter
                 MySqlDataReader myreader = mycmd.ExecuteReader();
                 bool blthExists = false;
                 if (myreader.Read())
-                {
                     blthExists = true;
-                }
                 myreader.Close();
                 if (!blthExists)
                 {
@@ -215,11 +224,16 @@ namespace PlnWatchDataImporter
                 
                 using (StreamWriter dilStreamWriter = new StreamWriter(@dmlDilFileName))
                 {
+                    ProgressText = "Membuka koneksi Ms Access..";
+                    OnProgressTextChanged(null);
 
                     oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + DilMdbPath);
                     oleDbConnection.Open();
                     OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG FROM " + DilTableName, oleDbConnection);
                     OleDbDataReader reader = cmd.ExecuteReader();
+
+                    ProgressText = "Mengeksekusi reader dan menulis file dump..";
+                    OnProgressTextChanged(null);
 
                     dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
                     
@@ -233,32 +247,34 @@ namespace PlnWatchDataImporter
 
                         StringBuilder sb = new StringBuilder();
                         if (i > 0)
-                        {
                             sb.Append(", ");
-                        }
                         sb.Append("('")
-                            .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
-                            .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append(", '")
-                            .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
+                            .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', ")
                             .Append(reader["DAYA"].ToString()).Append(", '")
-                            .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                             .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
-                            .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
+                            .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                             .Append(DilKodeArea).Append("')");
                         dilStreamWriter.WriteLine(sb.ToString());
 
-                        ProgressText = "Jumlah record:" + ++i + "";
-                        ProgressTextChanged(this, null);
+                        string n = (++i).ToString();
+                        ProgressText = "Jumlah record:" + n + "";
+                        if (i > 1)
+                            OnProgressTextChanged(new MdbReaderProgressEventArgs(true, 14, n.Length));
+                        else
+                            OnProgressTextChanged(null);
                     }
                     dilStreamWriter.WriteLine(";");
                 }
@@ -268,7 +284,6 @@ namespace PlnWatchDataImporter
 
                 if (File.Exists(@mysqlpath))
                 {
-                    Process p = new Process();
                     string pArguments = "/c \"" + mysqlpath + "\" -h" + mysqlhost + " -u" + mysqluser + ((mysqlpass == "") ? "" : " -p" + mysqlpass) + " " + mysqldb + " < " + dmlDilFileName;
 
                     ProgressText = "Mengeksekusi MySql. Silakan menunggu..";
@@ -276,25 +291,13 @@ namespace PlnWatchDataImporter
 
                     startExecuteMySql = DateTime.Now;
 
-                    p.StartInfo = new ProcessStartInfo("cmd.exe", pArguments)
-                    {
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    };
-                    p.Start();
-                    p.OutputDataReceived += ProcessOutputReceived;
-                    p.ErrorDataReceived += ProcessOutputReceived;
-                    p.BeginOutputReadLine();
-                    p.WaitForExit();
+                    RunCmd(pArguments);
 
                     result = MdbReadResult.SUCCESS;
                     end = DateTime.Now;
 
                     ProgressText = "\nSemua record DIL berhasil dimasukkan ke MySql. " + end.ToLongTimeString();
                     OnProgressTextChanged(null);
-                    
                 }
                 else
                 {
@@ -353,31 +356,67 @@ namespace PlnWatchDataImporter
         public MdbReadResult ReadSorek()
         {
             MdbReadResult result;
+            MySqlCommand mycmd;
+            MySqlDataReader myreader;
             try
             {
                 int i = 0;
                 DateTime start = DateTime.Now;
+                string sorekTh = SorekBlTh.Substring(2), sorekBl = SorekBlTh.Substring(0, 2), sorekTableName = "SOREK_" + sorekTh + "_" + sorekBl;
 
                 ProgressText = "Membaca database. Silakan menunggu.. " + start.ToLongTimeString();
                 OnProgressTextChanged(null);
 
                 using (StreamWriter sorekStreamWriter = new StreamWriter(@dmlSorekFileName))
                 {
+                    ProgressText = "Membuka koneksi Ms Access..";
+                    OnProgressTextChanged(null);
 
                     oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + SorekMdbPath);
                     oleDbConnection.Open();
-                    OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG FROM DIL_MAIN", oleDbConnection);
+                    OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, TGLBACA, PEMKWH FROM " + SorekTableName, oleDbConnection);
                     OleDbDataReader reader = cmd.ExecuteReader();
+                    
+                    sorekStreamWriter.WriteLine("" +
+                        "CREATE TABLE IF NOT EXISTS `" + sorekTableName + "` (\n" +
+                        "    `IDPEL` varchar(12) NOT NULL,\n" +
+                        "    `TGLBACA` date default NULL,\n" +
+                        "    `PEMKWH` double default NULL,\n" +
+                        "    `KODEAREA` varchar(5) default NULL,\n" +
+                        "    `JAMNYALA` double default NULL,\n" +
+                        "    PRIMARY KEY  (`IDPEL`)\n" +
+                        ") ENGINE=MyISAM DEFAULT CHARSET=latin1;" +
+                    "");
 
-                    sorekStreamWriter.WriteLine("INSERT INTO sorek (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
+                    sorekStreamWriter.WriteLine("INSERT INTO `" + sorekTableName + "` (IDPEL, TGLBACA, PEMKWH, KODEAREA, JAMNYALA) VALUES ");
 
+                    ProgressText = "Mengeksekusi reader, mengkalkulasi jam nyala, dan menulis file dump..";
+                    OnProgressTextChanged(null);
+
+                    mySqlConnection.Open();
+                    mycmd = mySqlConnection.CreateCommand();
                     while (reader.Read())
                     {
-                        DateTime tglpsg;
-                        if (reader["TGLPASANG_KWH"].ToString() != "")
-                            tglpsg = (DateTime)reader["TGLPASANG_KWH"];
-                        else
-                            tglpsg = new DateTime();
+                        string tglbaca, idpel = reader["IDPEL"].ToString();
+                        try
+                        {
+                            tglbaca = reader["TGLBACA"].ToString().Trim().Insert(6, "-").Insert(4, "-");
+                        }
+                        catch (Exception ex)
+                        {
+                            ProgressText = ex.Message;
+                            OnProgressTextChanged(null);
+                            tglbaca = "0000-00-00";
+                        }
+
+                        mycmd.CommandText = "SELECT daya FROM dil WHERE IDPEL = '" + idpel + "';";
+                        myreader = mycmd.ExecuteReader();
+                        double daya = -1;
+                        while (myreader.Read())
+                            daya = double.Parse(myreader["DAYA"].ToString());
+                        myreader.Close();
+                        double pemkwh = double.Parse(reader["PEMKWH"].ToString()),
+                               jamnyala = (daya == -1) ? -1 : pemkwh * 1000 / daya;
 
                         StringBuilder sb = new StringBuilder();
                         if (i > 0)
@@ -385,29 +424,20 @@ namespace PlnWatchDataImporter
                             sb.Append(", ");
                         }
                         sb.Append("('")
-                            .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
-                            .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append(", '")
-                            .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', ")
-                            .Append(reader["DAYA"].ToString()).Append(", '")
-                            .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
-                            .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\")).Append("', '")
-                            .Append(SorekKodeArea).Append("')");
+                            .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                            .Append(tglbaca).Append("', ")
+                            .Append(reader["PEMKWH"].ToString()).Append(", '")
+                            .Append(SorekKodeArea).Append("', ")
+                            .Append(jamnyala).Append(")");
                         sorekStreamWriter.WriteLine(sb.ToString());
-
-                        ProgressText = "Jumlah record:" + ++i + "";
-                        ProgressTextChanged(this, null);
+                        string n = (++i).ToString();
+                        ProgressText = "Jumlah record:" + n + "";
+                        if (i > 1)
+                            OnProgressTextChanged(new MdbReaderProgressEventArgs(true, 14, n.Length));
+                        else
+                            OnProgressTextChanged(null);
                     }
+                    mySqlConnection.Close();
                     sorekStreamWriter.WriteLine(";");
                 }
 
@@ -416,7 +446,20 @@ namespace PlnWatchDataImporter
 
                 if (File.Exists(@mysqlpath))
                 {
-                    Process p = new Process();
+                    ProgressText = "Mengecek keberadaan tabel " + sorekTableName + "..";
+                    OnProgressTextChanged(null);
+                    mySqlConnection.Open();
+                    mycmd = mySqlConnection.CreateCommand();
+                    mycmd.CommandText = "SHOW TABLES WHERE Tables_in_" + mysqldb + " like '" + sorekTableName + "';";
+                    myreader = mycmd.ExecuteReader();
+                    if (myreader.Read())
+                    {
+                        myreader.Close();
+                        mycmd.CommandText = "DROP TABLE " + sorekTableName + ";";
+                        mycmd.ExecuteNonQuery();
+                    }
+                    mySqlConnection.Close();
+
                     string pArguments = "/c \"" + mysqlpath + "\" -h" + mysqlhost + " -u" + mysqluser + ((mysqlpass == "") ? "" : " -p" + mysqlpass) + " " + mysqldb + " < " + dmlSorekFileName;
 
                     ProgressText = "Mengeksekusi MySql. Silakan menunggu..";
@@ -424,18 +467,7 @@ namespace PlnWatchDataImporter
 
                     startExecuteMySql = DateTime.Now;
 
-                    p.StartInfo = new ProcessStartInfo("cmd.exe", pArguments)
-                    {
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    };
-                    p.Start();
-                    p.OutputDataReceived += ProcessOutputReceived;
-                    p.ErrorDataReceived += ProcessOutputReceived;
-                    p.BeginOutputReadLine();
-                    p.WaitForExit();
+                    RunCmd(pArguments);
 
                     result = MdbReadResult.SUCCESS;
                     end = DateTime.Now;
@@ -458,7 +490,7 @@ namespace PlnWatchDataImporter
 
                 using (StreamWriter sorekStreamWriter = new StreamWriter(@logFileName, true))
                 {
-                    sorekStreamWriter.WriteLine("/* ::DIL convert:: " + DateTime.Now.ToLongDateString());
+                    sorekStreamWriter.WriteLine("/* ::SOREK_" + sorekTh + "_" + sorekBl + " convert:: " + DateTime.Now.ToLongDateString());
                     sorekStreamWriter.WriteLine("Records: " + i);
                     sorekStreamWriter.WriteLine("Start: " + start.ToLongTimeString());
                     sorekStreamWriter.WriteLine("Start Execute MySql: " + startExecuteMySql.ToLongTimeString());
