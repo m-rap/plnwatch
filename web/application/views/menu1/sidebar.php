@@ -1,13 +1,12 @@
 <?php
+
 echo form_open('', array('method' => 'get'));
-echo 'Area : ' . form_dropdown('area', $dropdownData['area']['data'], $dropdownData['area']['selected']).'<br />'
- .'Rentang Daya : ' . form_dropdown('daya', $dropdownData['daya']['data'], $dropdownData['daya']['selected']).'<br />'
- .'Rentang Tgl. Pasang : ' . form_dropdown('tglPasang', $dropdownData['tglPasang']['data'], $dropdownData['tglPasang']['selected']).'<br />'
- .form_submit('submit', ' lihat data ');
+echo 'Area : ' . form_dropdown('area', $dropdownData['area']['list'], $dropdownData['area']['input']) . '<br />'
+ . 'Rentang Daya : ' . form_dropdown('daya', $dropdownData['daya']['list'], $dropdownData['daya']['input']) . '<br />'
+ . 'Rentang Tgl. Pasang : ' . form_dropdown('tglPasang', $dropdownData['tglPasang']['list'], $dropdownData['tglPasang']['input']) . '<br />'
+ . form_submit('submit', ' lihat data ');
 echo form_close();
 
-if(isset($_GET['area']) && isset($_GET['daya']) && isset($_GET['tglPasang'])){
-    echo anchor('menu1/export/?area='.$_GET['area'].'&daya='.$_GET['daya'].'&tglPasang='.$_GET['tglPasang'], 'download')
-        .' (proses membutuhkan waktu lebih untuk pertama kali)';
-}
+echo anchor('menu1/export/?area=' . $dropdownData['area']['input'] . '&daya=' . $dropdownData['daya']['input'] . '&tglPasang=' . $dropdownData['tglPasang']['input'], 'download')
+ . ' (proses membutuhkan waktu lebih untuk pertama kali)';
 ?>

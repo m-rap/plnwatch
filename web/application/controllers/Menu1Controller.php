@@ -44,46 +44,46 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function view() {
-        $fArea = (isset($_GET['area']) ? $_GET['area'] : 'A');
-        $fDaya = (isset($_GET['daya']) ? $_GET['daya'] : 1);
-        $fTglPasang = (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : 1);
+        $lib = new LibMenu1();
+        $input = array(
+            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : null),
+            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : null),
+        );
+        $list = array(
+            'area' => $this->libarea->getList(),
+            'daya' => $lib->getListRangeDaya(),
+            'tglPasang' => $lib->getListRangeTglPasang(),
+        );
+        $input = $lib->validateInput($input, $list);
+        
         $data = array(
             'pageTitle' => 'Menu 1',
             'label' => $this->dil->attributeLabels(),
-            'sAjaxSource' => site_url("menu1/data?area=" . $fArea . "&daya=" . $fDaya . "&tglPasang=" . $fTglPasang),
             'select' => array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG'),
+            'sAjaxSource' => site_url("menu1/data?area=" . $input['area'] . "&daya=" . $input['daya'] . "&tglPasang=" . $input['tglPasang']),
         );
 
-        $data['sidebar']['dropdownData'] = array(
-            'area' => array(
-                'data' => $this->libarea->getList(),
-                'selected' => $fArea,
-            ),
-            'daya' => array(
-                'data' => $this->libmenu1->getListRangeDaya(),
-                'selected' => $fDaya,
-            ),
-            'tglPasang' => array(
-                'data' => $this->libmenu1->getListRangeTglPasang(),
-                'selected' => $fTglPasang,
-            ),
-        );
+        foreach(array_keys($input) as $k){
+            $data['sidebar']['dropdownData'][$k] = array(
+                'input' => $input[$k],
+                'list' => $list[$k],
+            );
+        }
         $this->layout->render('main', $data);
     }
 
     public function data() {
-        if (empty($_GET['area']) || empty($_GET['daya']) || empty($_GET['tglPasang'])) {
-            return;
-        }
         $select = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
         $filter = array(
-            'select' => $select,
-            'area' => (isset($_GET['area']) ? $_GET['area'] : -1),
-            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : -1),
-            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : -1 ),
-            'limit' => (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 50),
-            'offset' => (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0),
+            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : null),
+            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : null),
         );
+        $filter = $this->libmenu1->validateInput($filter);
+        $filter['select'] = $select;
+        $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
+        $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
         $sOrder = "";
         if (isset($_GET['iSortCol_0'])) {
             for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
@@ -120,11 +120,12 @@ class Menu1Controller extends CI_Controller {
 
     public function export() {
         $filter = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : -1),
-            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : -1),
-            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : -1 ),
-            'controller' => $this->controller,
+            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+            'daya' => (isset($_GET['daya']) ? $_GET['daya'] : null),
+            'tglPasang' => (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : null),
         );
+        $filter = $this->libmenu1->validateInput($filter);
+        $filter['controller'] = $this->controller;
         $this->libmenu1->export($filter);
     }
 
