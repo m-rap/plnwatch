@@ -64,22 +64,22 @@ class LibMenu1 {
         $filter = $this->filter($filter);
         return array(
             'data' => $this->ci->dil->filterMenu1($filter),
-            'num' => $this->ci->dil->count($filter),
+            'num' => $this->ci->dil->countFilterMenu1($filter),
         );
     }
 
     public function export($filter) {
         $dilBLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xls';
+        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xlsx';
         if (!file_exists(FCPATH . 'static/export/menu1/'.$fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 10000;
             $filter['dilBLTH'] = $dilBLTH;
             
-            $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . '.xls';
+            $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . '.xlsx';
             $export = new LibExport();
             $export->fileName = $fileName;
-            $export->generateHtml($filter);
+            $export->generate($filter);
         }
         redirect('static/export/menu1/' . $fileName);
     }

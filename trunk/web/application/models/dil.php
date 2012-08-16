@@ -36,6 +36,9 @@ class Dil extends CI_Model {
         return $this->db->get_where($this->table)->result();
     }
 
+    /*
+     * ---------------------------------------------- Menu 1 ----------------------------------------------
+     */
     public function filterMenu1Condition($filter) {
         $year = date('Y');
         $where = "KODEAREA = '" . $filter['area'] . "'";
@@ -67,16 +70,28 @@ class Dil extends CI_Model {
         return $q;
     }
 
-    public function count($filter) {
+    // count all according to filter without limit
+    public function countFilterMenu1($filter) {
         $where = $this->filterMenu1Condition($filter);
         return $this->db->get_where($this->table, $where)->num_rows();
     }
-    
-    public function export($filter) {
-        $where = $this->filterMenu1Condition($filter);
-        $n = $this->db->get_where($this->table, $where)->num_rows();
-    }
 
+    /*
+     * ---------------------------------------------- Menu 4 ----------------------------------------------
+     */
+    public function filterMenu4($filter, $returnData = true) {
+        $this->db->select(implode(',', $filter['select']));
+        $this->db->order_by($filter['order']);
+        $q = $this->db->get_where($this->table, array('KODEAREA' => $filter['area']), $filter['limit'], $filter['offset']);
+        if($returnData){
+            return $q->result();
+        }
+        return $q;
+    }
+    
+    public function countFilterMenu4($filter) {
+        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area']))->num_rows();
+    }
 }
 
 ?>

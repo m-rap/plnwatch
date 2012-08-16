@@ -30,7 +30,7 @@ class LibExport {
         }
         $this->extract($this->template, $this->wdir);
         $this->injectDataToSpreadsheet($this->activeSheet, $filter);
-        $this->compress($this->fileName, $this->wdir);
+        $this->compress(FCPATH . 'static/export/' . $filter['controller'] . '/' . $this->fileName, $this->wdir);
         //$this->removeWdir($this->wdir);
     }
 
@@ -85,12 +85,22 @@ class LibExport {
             $newIs->addChild('t', htmlspecialchars($label[$col]));
         }
 
-        $n = $model->count($filter);
+        // count n data without LIMIT
+        if ($filter['controller'] == 'Menu1')
+            $n = $model->countFilterMenu1($filter);
+        else if ($filter['controller'] == 'Menu4')
+            $n = $model->countFilterMenu4($filter);
+
         $part = $filter['limit'];
         $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
         for ($i = 0; $i <= $n + $part; $i+=$part) {
             $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
-            $q = $model->filterMenu1($filter, false);   //return query object
+
+            if ($filter['controller'] == 'Menu1')
+                $q = $model->filterMenu1($filter, false);   //return query object
+            else if ($filter['controller'] == 'Menu4')
+                $q = $model->filterMenu4($filter, false);   //return query object
+
             while ($row = @mysql_fetch_object($q->result_id)) {
                 $newRow = $xml->sheetData->addChild('row');
                 foreach ($row as $col) {
