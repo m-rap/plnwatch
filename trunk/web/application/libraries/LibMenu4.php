@@ -15,6 +15,27 @@ class LibMenu4 {
         $this->ci->load->library(array('LibExport'));
     }
 
+    public function validateInput($input, $list = null) {
+        if ($list == null) {
+            $list = array(
+                'area' => $this->ci->libarea->getList(),
+            );
+        }
+        
+        $k = array_keys($list['area']);
+        $defaultValue = array(
+            'area' => $list['area'][$k[0]],
+        );
+        
+        foreach (array_keys($input) as $i) {
+            if (empty($input[$i]) or !array_key_exists($input[$i], $list[$i])) {
+                $input[$i] = $defaultValue[$i];
+            }
+        }
+
+        return $input;
+    }
+    
     private function filter($filter) {
         $filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);

@@ -31,35 +31,42 @@ class Menu4Controller extends CI_Controller {
     }
 
     public function view() {
-        $area = (isset($_GET['area']) ? $_GET['area'] : 'A');
+        $lib = new LibMenu4();
+        $list = array(
+            'area' => $this->libarea->getList(),
+        );
+        $input = array(
+            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
+        );
+        $input = $lib->validateInput($input, $list);
+        
         $data = array(
             'pageTitle' => 'Menu 4',
             'label' => $this->dil->attributeLabels(),
-            'sAjaxSource' => site_url('menu4/data?area=' . $area),
+            'sAjaxSource' => site_url('menu4/data?area=' . $input['area']),
             'select' => array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG'),
         );
-        $data['sidebar']['dropdownData'] = array(
-            'area' => $this->libarea->getList()
+        $data['sidebar']['dropdownData']['area'] = array(
+            'input' => $input['area'],
+            'list' => $list['area'],
         );
         $this->layout->render('main', $data);
     }
 
     public function data() {
-        if (empty($_GET['area'])) {
-            return;
-        }
-        $select = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
         $filter = array(
-            'select' => $select,
-            'area' => (isset($_GET['area']) ? $_GET['area'] : 'A'),
-            'limit' => (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 50),
-            'offset' => (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0),
+            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
         );
+        $filter = $this->libmenu4->validateInput($filter);
+        $filter['select'] = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
+        $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
+        $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
+        
         $sOrder = "";
         if (isset($_GET['iSortCol_0'])) {
             for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
                 if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
-                    $sOrder .= "`" . $select[intval($_GET['iSortCol_' . $i])] . "` " .
+                    $sOrder .= "`" . $filter['select'][intval($_GET['iSortCol_' . $i])] . "` " .
                             mysql_real_escape_string($_GET['sSortDir_' . $i]);
                 }
                 if ($i != 0 && $i + 1 == intval($_GET['iSortingCols']))
@@ -90,9 +97,10 @@ class Menu4Controller extends CI_Controller {
 
     public function export() {
         $filter = array(
-            'area' => (isset($_GET['area']) ? $_GET['area'] : 'A'),
-            'controller' => $this->controller,
+            'area' => (isset($_GET['area']) ? $_GET['area'] : null),
         );
+        $filter = $this->libmenu4->validateInput($filter);
+        $filter['controller'] = $this->controller;
         $this->libmenu4->export($filter);
     }
 
