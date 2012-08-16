@@ -153,7 +153,7 @@ class LibExport {
 
         $end = "</table></body></html>";
 
-        file_put_contents('static/export/menu1/' . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
+        file_put_contents('static/export/' . strtolower($filter['controller']) . '/' . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
         //header('Content-type: application/ms-excel');
         //header('Content-Disposition: attachment; filename=' . $this->fileName);
         //echo $start . $header . $body . $end;

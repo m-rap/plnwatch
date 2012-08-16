@@ -70,13 +70,13 @@ class LibMenu1 {
 
     public function export($filter) {
         $dilBLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . $dilBLTH . '.xls';
+        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/menu1/'.$fileName)) {
-            $filter['limit'] = 10000;
             $filter = $this->filter($filter);
+            $filter['limit'] = 10000;
             $filter['dilBLTH'] = $dilBLTH;
             
-            $fileName = $filter['controller'] . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . $dilBLTH . '.xls';
+            $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . '.xls';
             $export = new LibExport();
             $export->fileName = $fileName;
             $export->generateHtml($filter);
