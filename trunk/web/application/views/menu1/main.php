@@ -4,7 +4,7 @@
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "<?php echo $sAjaxSource ?>",
-            "sColumns"   : "IDPEL,NAMA,JENIS_MK,KDGARDU,NOTIANG",
+            "sColumns"   : "<?php echo implode(',', $select) ?>",
             "iDisplayLength" : 25
         });
     } );

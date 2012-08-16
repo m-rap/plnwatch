@@ -150,12 +150,12 @@ class LibExport {
                 $body .= "</tr>";
             }
         }
-        
+
         $end = "</table></body></html>";
 
-        file_put_contents('static/export/menu1/'.$this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
-        header('Content-type: application/ms-excel');
-        header('Content-Disposition: attachment; filename=' . $this->fileName);
+        file_put_contents('static/export/menu1/' . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
+        //header('Content-type: application/ms-excel');
+        //header('Content-Disposition: attachment; filename=' . $this->fileName);
         //echo $start . $header . $body . $end;
     }
 

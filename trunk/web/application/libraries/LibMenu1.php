@@ -11,7 +11,7 @@ class LibMenu1 {
 
     public function __construct() {
         $this->ci = & get_instance();
-        $this->ci->load->model(array('dil'));
+        $this->ci->load->model(array('dil','option'));
         $this->ci->load->library(array('LibExport'));
     }
 
@@ -69,15 +69,19 @@ class LibMenu1 {
     }
 
     public function export($filter) {
-        if (file_exists(FCPATH . 'static/export/menu1/Menu1' . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xls')) {
-            redirect('static/export/menu1/Menu1' . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xls');
-        }else{
+        $dilBLTH = $this->ci->option->getValue('DilBLTH');
+        $fileName = $filter['controller'] . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . $dilBLTH . '.xls';
+        if (!file_exists(FCPATH . 'static/export/menu1/'.$fileName)) {
             $filter['limit'] = 10000;
             $filter = $this->filter($filter);
+            $filter['dilBLTH'] = $dilBLTH;
+            
+            $fileName = $filter['controller'] . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . $dilBLTH . '.xls';
             $export = new LibExport();
-            $export->fileName = 'Menu1' . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . '.xls';
+            $export->fileName = $fileName;
             $export->generateHtml($filter);
         }
+        redirect('static/export/menu1/' . $fileName);
     }
 
 }

@@ -18,6 +18,12 @@ CREATE TABLE `Role` (
   `RoleId` int(11) NOT NULL AUTO_INCREMENT,
   `RoleName` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`RoleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+/*Data for the table `role` */
+
+insert  into `Role`(RoleId,RoleName) values (1,'Admin');
+insert  into `Role`(RoleId,RoleName) values (2,'Operator');
+insert  into `Role`(RoleId,RoleName) values (3,'User');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
