@@ -49,13 +49,12 @@ class Menu1Controller extends CI_Controller {
         $fTglPasang = (isset($_GET['tglPasang']) ? $_GET['tglPasang'] : 1);
         $data = array(
             'pageTitle' => 'Menu 1',
-            'data' => array(),
             'label' => $this->dil->attributeLabels(),
-            'sAjaxSource' => site_url("menu1/data?area=" . $fArea . "&daya=" . $fDaya . '&tglPasang=' . $fTglPasang),
+            'sAjaxSource' => site_url("menu1/data?area=" . $fArea . "&daya=" . $fDaya . "&tglPasang=" . $fTglPasang),
             'select' => array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG'),
         );
 
-        $data['dropdownData'] = array(
+        $data['sidebar']['dropdownData'] = array(
             'area' => array(
                 'data' => $this->libarea->getList(),
                 'selected' => $fArea,
@@ -69,12 +68,11 @@ class Menu1Controller extends CI_Controller {
                 'selected' => $fTglPasang,
             ),
         );
-        $data['sidebar']['dropdownData'] = $data['dropdownData'];
         $this->layout->render('main', $data);
     }
 
     public function data() {
-        if(empty($_GET['area']) || empty($_GET['daya']) || empty($_GET['tglPasang'])){
+        if (empty($_GET['area']) || empty($_GET['daya']) || empty($_GET['tglPasang'])) {
             return;
         }
         $select = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
@@ -93,10 +91,11 @@ class Menu1Controller extends CI_Controller {
                     $sOrder .= "`" . $select[intval($_GET['iSortCol_' . $i])] . "` " .
                             mysql_real_escape_string($_GET['sSortDir_' . $i]);
                 }
-                if($i != 0 && $i+1 == intval($_GET['iSortingCols'])) $sOrder .= ', ';
+                if ($i != 0 && $i + 1 == intval($_GET['iSortingCols']))
+                    $sOrder .= ', ';
             }
         }
-        
+
         $filter['order'] = $sOrder;
         $data = $this->libmenu1->getData($filter);
         $aaData = array();
