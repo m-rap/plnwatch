@@ -137,7 +137,6 @@ namespace PlnWatchDataImporter
             }
             mdbReader.ProgressTextChanged += mdbReader_ProgressTextChanged;
             AllocConsole();
-            mdbReader.tesproc();
             if (dilCheckBox.Checked)
             {
                 mdbReader.ReadDil();
@@ -157,6 +156,8 @@ namespace PlnWatchDataImporter
 
         void mdbReader_ProgressTextChanged(object sender, MdbReaderProgressEventArgs e)
         {
+            if (e != null && e.ClearCurrentLine)
+                Program.ClearCurrentConsoleLine(e.Left, e.Width);
             Console.WriteLine(mdbReader.ProgressText);
         }
 
