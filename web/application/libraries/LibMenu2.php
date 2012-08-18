@@ -62,7 +62,6 @@ class LibMenu2 {
         $jamNyala = $this->getListRangeJamNyala(true);
         $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL', 'DIL.NAMA', 'JAMNYALA', 'DIL.KDGARDU', 'DIL.NOTIANG') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
-        $filter['jamNyalaId'] = $filter['jamNyala'];
         $filter['jamNyala'] = $jamNyala[$filter['jamNyala']];
 
         return $filter;

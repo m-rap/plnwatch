@@ -9,10 +9,10 @@ class Sorek extends CI_Model {
 
     public $table = 'SOREK';
 
-    function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->load->database();
-        $this->table = $this->table.'_'.$this->currentBLTH();
+        $this->table = $this->table . '_' . $this->currentBLTH();
     }
 
     public function attributeLabels() {
@@ -28,7 +28,9 @@ class Sorek extends CI_Model {
     public function currentBLTH() {
         $bl = date('m');
         $th = date('Y');
-        while (mysql_query('select 1 from `SOREK_' . $bl . $th . '`') === FALSE) {
+        $table = explode(',', strtoupper(implode(',', $this->db->list_tables())));
+        while (!in_array('SOREK_' . $bl . $th, $table)) {
+        //while (mysql_query('select 1 from `SOREK_' . $bl . $th . '`') === FALSE) {
             if ($bl == '01') {
                 $bl = 12;
                 $th--;
@@ -37,7 +39,6 @@ class Sorek extends CI_Model {
                 $bl = ($bl < 10 ? '0' . $bl : $bl);
             }
         }
-        
         return $bl . $th;
     }
 
@@ -46,7 +47,7 @@ class Sorek extends CI_Model {
         $this->db->select('KODEAREA');
         return $this->db->get_where($this->table)->result();
     }
-    
+
     public function filterMenu2Condition($filter) {
         $where = $this->table . ".KODEAREA = '" . $filter['area'] . "'";
         $where .= " AND " . $this->table . ".JAMNYALA ";
