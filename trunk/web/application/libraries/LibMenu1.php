@@ -76,8 +76,6 @@ class LibMenu1 {
         $tglPasang = $this->getListRangeTglPasang(true);
         $filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
-        $filter['dayaId'] = $filter['daya'];
-        $filter['tglPasangId'] = $filter['tglPasang'];
         $filter['daya'] = $daya[$filter['daya']];
         $filter['tglPasang'] = $tglPasang[$filter['tglPasang']];
 
@@ -95,17 +93,16 @@ class LibMenu1 {
     public function export($filter) {
         $dilBLTH = $this->ci->option->getValue('DilBLTH');
         $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xlsx';
-        if (!file_exists(FCPATH . 'static/export/menu1/' . $fileName)) {
+        if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
             $filter = $this->filter($filter);
-            $filter['limit'] = 10000;
+            $filter['limit'] = 50000;
             $filter['dilBLTH'] = $dilBLTH;
 
-            $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['dayaId'] . $filter['tglPasangId'] . '.xlsx';
             $export = new LibExport();
             $export->fileName = $fileName;
             $export->generate($filter);
         }
-        redirect('static/export/menu1/' . $fileName);
+        redirect('static/export/' . $filter['controller'] . '/' . $fileName);
     }
 
 }

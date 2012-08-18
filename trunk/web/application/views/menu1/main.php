@@ -1,6 +1,7 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $("#menu1").dataTable({
+            "bFilter"    : false,
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "<?php echo $sAjaxSource ?>",
