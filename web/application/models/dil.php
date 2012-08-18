@@ -15,18 +15,18 @@ class Dil extends CI_Model {
         $this->load->dbutil();
     }
 
-    public function attributeLabels() {
+    public function attributeLabels($tableName = false) {
         return array(
-            'JENIS_MK' => 'Jenis Meteran',
-            'IDPEL' => 'ID',
-            'NAMA' => 'Nama Pelanggan',
-            'TARIF' => 'Tarif',
-            'DAYA' => 'Daya',
-            'TGLPASANG_KWH' => 'Tanggal Pasang',
-            'MEREK_KWH' => 'Merek KWH',
-            'KDGARDU' => 'Kode Gardu',
-            'NOTIANG' => 'No. Tiang',
-            'KODEAREA' => 'Kode Area',
+            ($tableName ? $this->table.'.' : '').'JENIS_MK' => 'Jenis Meteran',
+            ($tableName ? $this->table.'.' : '').'IDPEL' => 'ID Pelanggan',
+            ($tableName ? $this->table.'.' : '').'NAMA' => 'Nama Pelanggan',
+            ($tableName ? $this->table.'.' : '').'TARIF' => 'Tarif',
+            ($tableName ? $this->table.'.' : '').'DAYA' => 'Daya',
+            ($tableName ? $this->table.'.' : '').'TGLPASANG_KWH' => 'Tanggal Pasang',
+            ($tableName ? $this->table.'.' : '').'MEREK_KWH' => 'Merek KWH',
+            ($tableName ? $this->table.'.' : '').'KDGARDU' => 'Kode Gardu',
+            ($tableName ? $this->table.'.' : '').'NOTIANG' => 'No. Tiang',
+            ($tableName ? $this->table.'.' : '').'KODEAREA' => 'Kode Area',
         );
     }
 

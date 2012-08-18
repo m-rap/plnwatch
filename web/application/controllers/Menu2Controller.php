@@ -1,37 +1,124 @@
 <?php
+
 /**
  * Description of Menu2
  *
  * @author spondbob
  */
 class Menu2Controller extends CI_Controller {
+
+    private $controller = 'Menu2';
     private $activeUser = null;
+
     public function __construct() {
         parent::__construct();
-        $this->load->library('layout', array('controller' => 'menu2'));
-        $this->load->library(array('LibMenu2','LibArea'));
+        $this->load->library('layout', array('controller' => $this->controller));
+        $this->load->library(array('LibMenu2', 'LibArea'));
         $this->load->helper(array('form'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
     }
-    
-    private function _accessRules(){
+
+    private function _accessRules() {
         $access = new AccessRule();
         $access->activeRole = $this->activeUser['role'];
         $access->allowedRoles = array(1, 3);
         $access->validate();
     }
-    
-    public function index(){
-        $data = array();
-        $data['dropdownData'] = array(
-            'area' => $this->libarea->getList(),
-            'jamNyala' => $this->libmenu2->getListRangeJamNyala()
+
+    public function index() {
+        $this->view();
+    }
+
+    public function view() {
+        $lib = new LibMenu2();
+        $list = array(
+            'area' => $this->libarea->getList('sorek'),
+            'jamNyala' => $lib->getListRangeJamNyala(),
         );
-        $data['sidebar']['dropdownData'] = $data['dropdownData'];
-        $data['pageTitle'] = 'Menu 2';
+        $input = array(
+            'area' => $this->input->get('area'),
+            'jamNyala' => $this->input->get('jamNyala'),
+        );
+        $input = $lib->validateInput($input, $list);
+
+        $data = array(
+            'pageTitle' => 'Menu 2',
+            'label' => array_merge($this->sorek->attributeLabels(), $this->dil->attributeLabels()),
+            'sAjaxSource' => site_url('menu2/data?area=' . $input['area'] . '&jamNyala=' . $input['jamNyala']),
+            'select' => array('IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG'),
+        );
+        foreach (array_keys($input) as $k) {
+            $data['sidebar']['dropdownData'][$k] = array(
+                'input' => $input[$k],
+                'list' => $list[$k],
+            );
+        }
+        $data['sidebar']['blth'] = $this->sorek->currentBLTH();
+
         $this->layout->render('main', $data);
     }
+
+    public function data() {
+        $lib = new LibMenu2();
+        $filter = array(
+            'area' => $this->input->get('area'),
+            'jamNyala' => $this->input->get('jamNyala'),
+        );
+        $filter = $lib->validateInput($filter);
+        $filter['select'] = array('DIL.IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG');
+        $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
+        $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
+
+        $sOrder = "";
+        if (isset($_GET['iSortCol_0'])) {
+            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
+                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
+                    $sOrder .= "`" . $filter['select'][intval($_GET['iSortCol_' . $i])] . "` " .
+                            mysql_real_escape_string($_GET['sSortDir_' . $i]);
+                }
+                if ($i != 0 && $i + 1 == intval($_GET['iSortingCols']))
+                    $sOrder .= ', ';
+            }
+        }
+
+        $filter['order'] = $sOrder;
+        $data = $lib->getData($filter);
+        $aaData = array();
+        foreach ($data['data'] as $d) {
+            $aaData[] = array(
+                $d->IDPEL,
+                $d->NAMA,
+                $d->JAMNYALA,
+                $d->KDGARDU,
+                $d->NOTIANG
+            );
+        }
+        $output = array(
+            "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
+            "iTotalRecords" => $data['num'],
+            "iTotalDisplayRecords" => $data['num'],
+        );
+        $output['aaData'] = $aaData;
+        echo json_encode($output);
+    }
+
+    public function export() {
+        $filter = array(
+            'area' => $this->input->get('area'),
+            'jamNyala' => $this->input->get('jamNyala'),
+        );
+        $filter = $this->libmenu2->validateInput($filter);
+        $filter['controller'] = $this->controller;
+        $this->libmenu2->export($filter);
+    }
+
+    public function tes() {
+        if ($this->cache->apc->is_supported()) {
+            echo 'oke';
+        }
+    }
+
 }
 
 ?>

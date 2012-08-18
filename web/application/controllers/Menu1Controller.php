@@ -70,6 +70,7 @@ class Menu1Controller extends CI_Controller {
                 'list' => $list[$k],
             );
         }
+        $data['sidebar']['blth'] = $this->option->getValue('DilBLTH');
         $this->layout->render('main', $data);
     }
 
