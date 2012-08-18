@@ -29,7 +29,7 @@ class User extends CI_Model {
     }
     
     public function login($data){
-        $q = $this->db->get_where($this->table, array('UserName' => $data['userName'], 'UserPassword' => $data['userPassword']));
+        $q = $this->db->get_where($this->table, "UserName = '".$data['userName']."' AND UserPassword = '". $data['userPassword']."' AND UserRole IN (1, 3)");
         if($q->num_rows() == 1){
             $user = $q->row();
             $this->db->update($this->table

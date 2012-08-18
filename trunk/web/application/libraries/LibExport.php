@@ -73,8 +73,15 @@ class LibExport {
         if (!$xml)
             return false;
 
-        $model = new Dil();
-        $label = $model->attributeLabels();
+        if ($filter['controller'] == 'Menu1' || $filter['controller'] == 'Menu4') {
+            $model = new Dil();
+            $label = $model->attributeLabels();
+        } else if ($filter['controller'] == 'Menu2') {
+            $dil = new Dil();
+            $model = new Sorek();
+            $label = array_merge($model->attributeLabels(), $dil->attributeLabels(true));
+        }
+
         $newRow = $xml->sheetData->addChild('row');
         foreach ($filter['select'] as $col) {
             $newCell = $newRow->addChild('c');
@@ -88,6 +95,8 @@ class LibExport {
         // count n data without LIMIT
         if ($filter['controller'] == 'Menu1')
             $n = $model->countFilterMenu1($filter);
+        else if ($filter['controller'] == 'Menu2')
+            $n = $model->countFilterMenu2($filter);
         else if ($filter['controller'] == 'Menu4')
             $n = $model->countFilterMenu4($filter);
 
@@ -98,6 +107,8 @@ class LibExport {
 
             if ($filter['controller'] == 'Menu1')
                 $q = $model->filterMenu1($filter, false);   //return query object
+            else if ($filter['controller'] == 'Menu2')
+                $q = $model->filterMenu2($filter, false);   //return query object
             else if ($filter['controller'] == 'Menu4')
                 $q = $model->filterMenu4($filter, false);   //return query object
 

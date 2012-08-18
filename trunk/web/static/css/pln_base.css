@@ -16,10 +16,9 @@ img {
 .input {
     border: 1px solid #C0C0C0;
     background: #FFF;
-	height:16px;
-	width:200px;
+	/* width:200px; */
 	font-family:Verdana, Tahoma, Geneva, sans-serif;
-	font-size:11px;
+	font-size:12px;
 	padding:3px;
 	color:#969696;
 }
@@ -27,12 +26,26 @@ img {
     border: 1px solid #818181;
     background: #e3e3e3;
 }
+.button {
+    border: solid 1px #999;
+	background-color:#eee;
+	color : #666;
+	font-family:tahoma;
+	height:22px;
+	cursor:default;
+        padding-left: 10px;
+        padding-right: 10px;
+}
+.button:hover {
+	cursor:pointer;
+	background-color:#ddd;
+}
 .buttonCari {
     border: solid 1px #999;
 	background-color:#eee;
 	color : #777;
 	font-family:tahoma;
-	width:50px;
+	/* width:50px; */
 	height:22px;
 	cursor:default;
 }
