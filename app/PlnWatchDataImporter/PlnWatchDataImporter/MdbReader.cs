@@ -201,7 +201,7 @@ namespace PlnWatchDataImporter
             try
             {
                 mySqlConnection.Open();
-                MySqlCommand mycmd = new MySqlCommand("SELECT ConfigValue FROM config WHERE ConfigKey = 'BlTh';", mySqlConnection);
+                MySqlCommand mycmd = new MySqlCommand("SELECT OptionValue FROM Option WHERE OptionKey = 'BlTh';", mySqlConnection);
                 MySqlDataReader myreader = mycmd.ExecuteReader();
                 bool blthExists = false;
                 if (myreader.Read())
@@ -209,12 +209,12 @@ namespace PlnWatchDataImporter
                 myreader.Close();
                 if (!blthExists)
                 {
-                    mycmd.CommandText = "INSERT INTO config VALUES ('BlTh', '" + DilBlTh + "');";
+                    mycmd.CommandText = "INSERT INTO Option VALUES ('BlTh', '" + DilBlTh + "');";
                     mycmd.ExecuteNonQuery();
                 }
                 else
                 {
-                    mycmd.CommandText = "UPDATE config SET ConfigValue = '" + DilBlTh + "' WHERE ConfigKey = 'BlTh';";
+                    mycmd.CommandText = "UPDATE Option SET OptionValue = '" + DilBlTh + "' WHERE OptionKey = 'BlTh';";
                     mycmd.ExecuteNonQuery();
                 }
                 mySqlConnection.Close();
