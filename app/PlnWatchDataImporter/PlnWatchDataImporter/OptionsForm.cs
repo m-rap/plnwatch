@@ -24,6 +24,11 @@ namespace PlnWatchDataImporter
             mySqlPassTextBox.Text = ConfigurationManager.AppSettings["mysqlpass"];
             mySqlDbTextBox.Text = ConfigurationManager.AppSettings["mysqldb"];
             mySqlPathTextBox.Text = ConfigurationManager.AppSettings["mysqlpath"];
+            if (ConfigurationManager.AppSettings["batchmode"] == "1")
+                batchModeRadioButton.Checked = true;
+            else
+                transactionRadioButton.Checked = true;
+            mySqlPathTextBox.Enabled = mySqlPathBrowseButton.Enabled = batchModeRadioButton.Checked;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -39,6 +44,11 @@ namespace PlnWatchDataImporter
             config.AppSettings.Settings.Add("mysqldb", mySqlDbTextBox.Text);
             config.AppSettings.Settings.Remove("mysqlpath");
             config.AppSettings.Settings.Add("mysqlpath", mySqlPathTextBox.Text);
+            config.AppSettings.Settings.Remove("batchmode");
+            if (batchModeRadioButton.Checked)
+                config.AppSettings.Settings.Add("mysqlpath", "1");
+            else
+                config.AppSettings.Settings.Add("mysqlpath", "0");
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
             Close();
@@ -61,6 +71,11 @@ namespace PlnWatchDataImporter
             openFileDialog.FileName = mySqlPathTextBox.Text;
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 mySqlPathTextBox.Text = openFileDialog.FileName;
+        }
+
+        private void execModeRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            mySqlPathTextBox.Enabled = mySqlPathBrowseButton.Enabled = batchModeRadioButton.Checked;
         }
     }
 }
