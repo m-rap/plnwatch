@@ -74,7 +74,7 @@ class LibMenu1 {
     private function filter($filter) {
         $daya = $this->getListRangeDaya(true);
         $tglPasang = $this->getListRangeTglPasang(true);
-        $filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG') : $filter['select']);
+        $filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'JENIS_MK', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
         $filter['daya'] = $daya[$filter['daya']];
         $filter['tglPasang'] = $tglPasang[$filter['tglPasang']];
@@ -91,12 +91,11 @@ class LibMenu1 {
     }
 
     public function export($filter) {
-        $dilBLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xlsx';
+        $BLTH = $this->ci->option->getValue('DilBLTH');
+        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xlsx';
         if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 50000;
-            $filter['dilBLTH'] = $dilBLTH;
 
             $export = new LibExport();
             $export->fileName = $fileName;

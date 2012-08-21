@@ -1,12 +1,13 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $("#menu2").dataTable({
-            "bFilter"    : false,
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "<?php echo $sAjaxSource ?>",
             "sColumns"   : "<?php echo implode(',', $select) ?>",
-            "iDisplayLength" : 25
+            "iDisplayLength" : 25,
+            "bFilter"    : false,
+            "sPaginationType": "full_numbers"
         });
     } );
 </script>
