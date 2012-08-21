@@ -17,12 +17,12 @@ class Dil extends CI_Model {
 
     public function attributeLabels($tableName = false) {
         return array(
-            ($tableName ? $this->table.'.' : '').'JENIS_MK' => 'Jenis Meteran',
-            ($tableName ? $this->table.'.' : '').'IDPEL' => 'ID Pelanggan',
+            ($tableName ? $this->table.'.' : '').'JENIS_MK' => 'Meteran',
+            ($tableName ? $this->table.'.' : '').'IDPEL' => 'ID',
             ($tableName ? $this->table.'.' : '').'NAMA' => 'Nama Pelanggan',
             ($tableName ? $this->table.'.' : '').'TARIF' => 'Tarif',
             ($tableName ? $this->table.'.' : '').'DAYA' => 'Daya',
-            ($tableName ? $this->table.'.' : '').'TGLPASANG_KWH' => 'Tanggal Pasang',
+            ($tableName ? $this->table.'.' : '').'TGLPASANG_KWH' => 'Tgl. Pasang',
             ($tableName ? $this->table.'.' : '').'MEREK_KWH' => 'Merek KWH',
             ($tableName ? $this->table.'.' : '').'KDGARDU' => 'Kode Gardu',
             ($tableName ? $this->table.'.' : '').'NOTIANG' => 'No. Tiang',

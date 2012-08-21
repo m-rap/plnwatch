@@ -29,8 +29,10 @@ class Sorek extends CI_Model {
         $bl = date('m');
         $th = date('Y');
         $table = explode(',', strtoupper(implode(',', $this->db->list_tables())));
+        $i=0;
         while (!in_array('SOREK_' . $bl . $th, $table)) {
         //while (mysql_query('select 1 from `SOREK_' . $bl . $th . '`') === FALSE) {
+            if($i++ == 3) die('no table SOREK found.');
             if ($bl == '01') {
                 $bl = 12;
                 $th--;
