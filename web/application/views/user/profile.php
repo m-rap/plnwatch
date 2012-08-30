@@ -12,7 +12,7 @@ switch ($showMessage) {
 <table>
     <tr>
         <td><?php echo $label['UserName'] ?></td>
-        <td> : <input type="text" value="<?php echo $user['name'] ?>"  class="input" disabled /><input type="hidden" name="user[UserName]" value="<?php echo $user['name'] ?>" /></td>
+        <td> : <input type="text" value="<?php echo $user['name'] ?>" class="input disabled" disabled /><input type="hidden" name="user[UserName]" value="<?php echo $user['name'] ?>" /></td>
     </tr>
     <tr>
         <td><?php echo $label['UserAlias'] ?></td>

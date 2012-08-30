@@ -7,7 +7,7 @@
  */
 class Dph extends CI_Model {
 
-    public $tableName = 'DPH';
+    public $table = 'DPH';
     
     function __construct() {
         parent::__construct();

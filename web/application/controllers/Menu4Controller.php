@@ -42,9 +42,8 @@ class Menu4Controller extends CI_Controller {
         
         $data = array(
             'pageTitle' => 'Menu 4',
-            'label' => $this->dil->attributeLabels(),
+            'label' => array_merge($this->dil->attributeLabels(), $this->dph->attributeLabels()),
             'sAjaxSource' => site_url('menu4/data?area=' . $input['area']),
-            'select' => array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG'),
         );
         $data['sidebar']['dropdownData']['area'] = array(
             'input' => $input['area'],
@@ -58,7 +57,7 @@ class Menu4Controller extends CI_Controller {
             'area' => $this->input->get('area'),
         );
         $filter = $this->libmenu4->validateInput($filter);
-        $filter['select'] = array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG');
+        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'JMLBELI', 'KDGARDU', 'NOTIANG');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
         
@@ -81,7 +80,7 @@ class Menu4Controller extends CI_Controller {
             $aaData[] = array(
                 $d->IDPEL,
                 $d->NAMA,
-                ($d->JENIS_MK == "A" ? "AMR" : ($d->JENIS_MK == "E" ? "Elektronik" : ($d->JENIS_MK == "M" ? "Mekanik" : "Blank"))),
+                ($d->JMLBELI == null ? '0' : $d->JMLBELI),
                 $d->KDGARDU,
                 $d->NOTIANG
             );
