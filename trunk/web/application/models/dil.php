@@ -15,18 +15,18 @@ class Dil extends CI_Model {
         $this->load->dbutil();
     }
 
-    public function attributeLabels($tableName = false) {
+    public function attributeLabels() {
         return array(
-            ($tableName ? $this->table.'.' : '').'JENIS_MK' => 'Meteran',
-            ($tableName ? $this->table.'.' : '').'IDPEL' => 'ID',
-            ($tableName ? $this->table.'.' : '').'NAMA' => 'Nama Pelanggan',
-            ($tableName ? $this->table.'.' : '').'TARIF' => 'Tarif',
-            ($tableName ? $this->table.'.' : '').'DAYA' => 'Daya',
-            ($tableName ? $this->table.'.' : '').'TGLPASANG_KWH' => 'Tgl. Pasang',
-            ($tableName ? $this->table.'.' : '').'MEREK_KWH' => 'Merek KWH',
-            ($tableName ? $this->table.'.' : '').'KDGARDU' => 'Kode Gardu',
-            ($tableName ? $this->table.'.' : '').'NOTIANG' => 'No. Tiang',
-            ($tableName ? $this->table.'.' : '').'KODEAREA' => 'Kode Area',
+            'JENIS_MK' => 'Meteran',
+            'IDPEL' => 'ID',
+            'NAMA' => 'Nama Pelanggan',
+            'TARIF' => 'Tarif',
+            'DAYA' => 'Daya',
+            'TGLPASANG_KWH' => 'Tgl. Pasang',
+            'MEREK_KWH' => 'Merek KWH',
+            'KDGARDU' => 'Kode Gardu',
+            'NOTIANG' => 'No. Tiang',
+            'KODEAREA' => 'Kode Area',
         );
     }
 
@@ -81,8 +81,13 @@ class Dil extends CI_Model {
      */
     public function filterMenu4($filter, $returnData = true) {
         $this->db->select(implode(',', $filter['select']));
+        $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'LEFT');
         $this->db->order_by($filter['order']);
-        $q = $this->db->get_where($this->table, array('KODEAREA' => $filter['area']), $filter['limit'], $filter['offset']);
+        
+        $q = $this->db->get_where($this->table,
+                array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T'),
+                $filter['limit'],
+                $filter['offset']);
         if($returnData){
             return $q->result();
         }
@@ -90,7 +95,7 @@ class Dil extends CI_Model {
     }
     
     public function countFilterMenu4($filter) {
-        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area']))->num_rows();
+        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T'))->num_rows();
     }
 }
 

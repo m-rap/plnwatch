@@ -4,7 +4,6 @@
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "<?php echo $sAjaxSource ?>",
-            "sColumns"   : "<?php echo implode(',', $select) ?>",
             "iDisplayLength" : 25,
             "bFilter"    : false,
             "sPaginationType": "full_numbers"

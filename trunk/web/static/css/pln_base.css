@@ -26,6 +26,10 @@ img {
     border: 1px solid #818181;
     background: #e3e3e3;
 }
+.disabled{
+    background: #e3e3e3;
+}
+
 .button {
     border: solid 1px #999;
 	background-color:#eee;

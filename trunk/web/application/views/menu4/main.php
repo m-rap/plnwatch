@@ -4,7 +4,6 @@
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "<?php echo $sAjaxSource ?>",
-            "sColumns"   : "<?php echo implode(',', $select) ?>",
             "iDisplayLength" : 25,
             "bFilter"    : false,
             "sPaginationType": "full_numbers"
@@ -19,7 +18,7 @@
         <tr>
             <th><?php echo $label['IDPEL'] ?></th>
             <th><?php echo $label['NAMA'] ?></th>
-            <th><?php echo $label['JENIS_MK'] ?></th>
+            <th><?php echo $label['JMLBELI'] ?></th>
             <th><?php echo $label['KDGARDU'] ?></th>
             <th><?php echo $label['NOTIANG'] ?></th>
         </tr>

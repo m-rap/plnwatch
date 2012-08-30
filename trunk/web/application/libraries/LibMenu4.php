@@ -11,7 +11,7 @@ class LibMenu4 {
 
     public function __construct() {
         $this->ci = & get_instance();
-        $this->ci->load->model(array('dil', 'option'));
+        $this->ci->load->model(array('dil', 'dph', 'option'));
         $this->ci->load->library(array('LibExport'));
     }
 
@@ -37,8 +37,10 @@ class LibMenu4 {
     }
     
     private function filter($filter) {
-        $filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'JENIS_MK', 'KDGARDU', 'NOTIANG') : $filter['select']);
-        $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
+        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'JMLBELI', 'KDGARDU', 'NOTIANG') : $filter['select']);
+        $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'DIL.IDPEL' : $filter['order']);
+        $explode = explode(' AS ', $filter['order']);
+        $filter['order'] = $explode[0];
 
         return $filter;
     }

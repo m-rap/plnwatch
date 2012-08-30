@@ -46,7 +46,6 @@ class Menu2Controller extends CI_Controller {
             'pageTitle' => 'Menu 2',
             'label' => array_merge($this->sorek->attributeLabels(), $this->dil->attributeLabels()),
             'sAjaxSource' => site_url('menu2/data?area=' . $input['area'] . '&jamNyala=' . $input['jamNyala']),
-            'select' => array('IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG'),
         );
         foreach (array_keys($input) as $k) {
             $data['sidebar']['dropdownData'][$k] = array(
@@ -66,7 +65,7 @@ class Menu2Controller extends CI_Controller {
             'jamNyala' => $this->input->get('jamNyala'),
         );
         $filter = $lib->validateInput($filter);
-        $filter['select'] = array('DIL.IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG');
+        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
 
@@ -111,12 +110,6 @@ class Menu2Controller extends CI_Controller {
         $filter = $this->libmenu2->validateInput($filter);
         $filter['controller'] = $this->controller;
         $this->libmenu2->export($filter);
-    }
-
-    public function tes() {
-        if ($this->cache->apc->is_supported()) {
-            echo 'oke';
-        }
     }
 
 }

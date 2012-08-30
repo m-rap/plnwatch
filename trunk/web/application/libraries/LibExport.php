@@ -73,13 +73,17 @@ class LibExport {
         if (!$xml)
             return false;
 
-        if ($filter['controller'] == 'Menu1' || $filter['controller'] == 'Menu4') {
+        if ($filter['controller'] == 'Menu1') {
             $model = new Dil();
             $label = $model->attributeLabels();
         } else if ($filter['controller'] == 'Menu2') {
             $dil = new Dil();
             $model = new Sorek();
-            $label = array_merge($model->attributeLabels(), $dil->attributeLabels(true));
+            $label = array_merge($model->attributeLabels(), $dil->attributeLabels());
+        } else if ($filter['controller'] == 'Menu4') {
+            $dph = new Dph();
+            $model = new Dil();
+            $label = array_merge($model->attributeLabels(), $dph->attributeLabels());
         }
 
         $newRow = $xml->sheetData->addChild('row');
@@ -89,7 +93,9 @@ class LibExport {
             $newIs = $newCell->addChild('is');
             if (!mb_check_encoding($col, 'utf-8'))
                 $col = iconv("cp1250", "utf-8", $col);
-            $newIs->addChild('t', htmlspecialchars($label[$col]));
+            $explode = explode(' AS ', $col);
+            $newCol= (array_key_exists(1, $explode) ? $explode[1] : $explode[0]);
+            $newIs->addChild('t', htmlspecialchars($label[$newCol]));
         }
 
         // count n data without LIMIT
