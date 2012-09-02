@@ -201,8 +201,9 @@ namespace PlnWatchDataImporter
             MdbReadResult result;
             try
             {
+                #region update DilBlTh
                 mySqlConnection.Open();
-                MySqlCommand mycmd = new MySqlCommand("SELECT OptionValue FROM Option WHERE OptionKey = 'BlTh';", mySqlConnection);
+                MySqlCommand mycmd = new MySqlCommand("SELECT `OptionValue` FROM `Option` WHERE `OptionKey` = 'DilBlTh';", mySqlConnection);
                 MySqlDataReader myreader = mycmd.ExecuteReader();
                 bool blthExists = false;
                 if (myreader.Read())
@@ -210,15 +211,16 @@ namespace PlnWatchDataImporter
                 myreader.Close();
                 if (!blthExists)
                 {
-                    mycmd.CommandText = "INSERT INTO Option VALUES ('BlTh', '" + DilBlTh + "');";
+                    mycmd.CommandText = "INSERT INTO `Option` VALUES ('DilBlTh', '" + DilBlTh + "');";
                     mycmd.ExecuteNonQuery();
                 }
                 else
                 {
-                    mycmd.CommandText = "UPDATE Option SET OptionValue = '" + DilBlTh + "' WHERE OptionKey = 'BlTh';";
+                    mycmd.CommandText = "UPDATE `Option` SET `OptionValue` = '" + DilBlTh + "' WHERE `OptionKey` = 'DilBlTh';";
                     mycmd.ExecuteNonQuery();
                 }
                 mySqlConnection.Close();
+                #endregion
 
                 int i = 0;
                 DateTime start = DateTime.Now, end, startExecuteMySql;
@@ -726,10 +728,29 @@ namespace PlnWatchDataImporter
         public MdbReadResult ReadPpob()
         {
             MdbReadResult result = MdbReadResult.FAILED;
-            MySqlCommand mycmd = null;
-            MySqlDataReader myreader = null;
             try
             {
+                #region update DilBlTh
+                mySqlConnection.Open();
+                MySqlCommand mycmd = new MySqlCommand("SELECT OptionValue FROM `Option` WHERE `OptionKey` = 'PpobBlTh';", mySqlConnection);
+                MySqlDataReader myreader = mycmd.ExecuteReader();
+                bool blthExists = false;
+                if (myreader.Read())
+                    blthExists = true;
+                myreader.Close();
+                if (!blthExists)
+                {
+                    mycmd.CommandText = "INSERT INTO `Option` VALUES ('PpobBlTh', '" + PpobBlTh + "');";
+                    mycmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    mycmd.CommandText = "UPDATE `Option` SET `OptionValue` = '" + PpobBlTh + "' WHERE `OptionKey` = 'PpobBlTh';";
+                    mycmd.ExecuteNonQuery();
+                }
+                mySqlConnection.Close();
+                #endregion
+
                 int i = 0;
                 DateTime start = DateTime.Now, end, startExecuteMySql;
                 TimeSpan timeElapsed;
@@ -747,7 +768,7 @@ namespace PlnWatchDataImporter
                 OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, COUNT(IDPEL) AS JMLBELI FROM " + PpobTableName + " GROUP BY IDPEL", oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
-                #region //truncate ppob
+                #region truncate ppob
                 try
                 {
                     ProgressText = "Truncate tabel PPOB di MySql";
