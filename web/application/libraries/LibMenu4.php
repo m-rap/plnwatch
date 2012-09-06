@@ -15,18 +15,34 @@ class LibMenu4 {
         $this->ci->load->library(array('LibExport'));
     }
 
+    public function getListMutasi($value = false) {
+        if ($value) {
+            return array(
+                1 => 'A',
+                2 => 'D',
+            );
+        } else {
+            return array(
+                1 => 'Pasang baru',
+                2 => 'Mutasi',
+            );
+        }
+    }
+
     public function validateInput($input, $list = null) {
         if ($list == null) {
             $list = array(
                 'area' => $this->ci->libarea->getList(),
+                'mutasi' => $this->getListMutasi(),
             );
         }
-        
+
         $k = array_keys($list['area']);
         $defaultValue = array(
             'area' => $list['area'][$k[0]],
+            'mutasi' => 1,
         );
-        
+
         foreach (array_keys($input) as $i) {
             if (empty($input[$i]) or !array_key_exists($input[$i], $list[$i])) {
                 $input[$i] = $defaultValue[$i];
@@ -35,12 +51,14 @@ class LibMenu4 {
 
         return $input;
     }
-    
+
     private function filter($filter) {
+        $mutasi = $this->getListMutasi(true);
         $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'JMLBELI', 'KDGARDU', 'NOTIANG') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'DIL.IDPEL' : $filter['order']);
         $explode = explode(' AS ', $filter['order']);
         $filter['order'] = $explode[0];
+        $filter['mutasi'] = $mutasi[$filter['mutasi']];
 
         return $filter;
     }
@@ -55,7 +73,7 @@ class LibMenu4 {
 
     public function export($filter) {
         $dilBLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . '.xlsx';
+        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['mutasi'] . '.xlsx';
         if (!file_exists(FCPATH . 'static/export/menu4/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 10000;

@@ -47,6 +47,7 @@ class Sorek extends CI_Model {
     public function getListArea() {
         $this->db->distinct();
         $this->db->select('KODEAREA');
+        $this->db->order_by('KODEAREA');
         return $this->db->get_where($this->table)->result();
     }
 
