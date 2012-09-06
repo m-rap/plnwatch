@@ -34,33 +34,38 @@ class Menu4Controller extends CI_Controller {
         $lib = new LibMenu4();
         $list = array(
             'area' => $this->libarea->getList(),
+            'mutasi' => $lib->getListMutasi(),
         );
         $input = array(
             'area' => $this->input->get('area'),
+            'mutasi' => $this->input->get('mutasi'),
         );
         $input = $lib->validateInput($input, $list);
-        
+
         $data = array(
             'pageTitle' => 'Menu 4',
             'label' => array_merge($this->dil->attributeLabels(), $this->dph->attributeLabels()),
-            'sAjaxSource' => site_url('menu4/data?area=' . $input['area']),
+            'sAjaxSource' => site_url('menu4/data?area=' . $input['area'] . '&mutasi=' . $input['mutasi']),
         );
-        $data['sidebar']['dropdownData']['area'] = array(
-            'input' => $input['area'],
-            'list' => $list['area'],
-        );
+        foreach (array_keys($input) as $k) {
+            $data['sidebar']['dropdownData'][$k] = array(
+                'input' => $input[$k],
+                'list' => $list[$k],
+            );
+        }
         $this->layout->render('main', $data);
     }
 
     public function data() {
         $filter = array(
             'area' => $this->input->get('area'),
+            'mutasi' => $this->input->get('mutasi'),
         );
         $filter = $this->libmenu4->validateInput($filter);
         $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'JMLBELI', 'KDGARDU', 'NOTIANG');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
-        
+
         $sOrder = "";
         if (isset($_GET['iSortCol_0'])) {
             for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
@@ -97,6 +102,7 @@ class Menu4Controller extends CI_Controller {
     public function export() {
         $filter = array(
             'area' => $this->input->get('area'),
+            'mutasi' => $this->input->get('mutasi'),
         );
         $filter = $this->libmenu4->validateInput($filter);
         $filter['controller'] = $this->controller;

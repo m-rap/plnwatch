@@ -17,13 +17,14 @@ class Dil extends CI_Model {
 
     public function attributeLabels() {
         return array(
-            'JENIS_MK' => 'Meteran',
+            'JENIS_MK' => 'Jenis Mutasi',
             'IDPEL' => 'ID',
             'NAMA' => 'Nama Pelanggan',
             'TARIF' => 'Tarif',
             'DAYA' => 'Daya',
             'TGLPASANG_KWH' => 'Tgl. Pasang',
             'MEREK_KWH' => 'Merek KWH',
+            'KDPEMBMETER' => 'Meteran',
             'KDGARDU' => 'Kode Gardu',
             'NOTIANG' => 'No. Tiang',
             'KODEAREA' => 'Kode Area',
@@ -33,6 +34,7 @@ class Dil extends CI_Model {
     public function getListArea() {
         $this->db->distinct();
         $this->db->select('KODEAREA');
+        $this->db->order_by('KODEAREA');
         return $this->db->get_where($this->table)->result();
     }
 
@@ -85,7 +87,7 @@ class Dil extends CI_Model {
         $this->db->order_by($filter['order']);
         
         $q = $this->db->get_where($this->table,
-                array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T'),
+                array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%".$filter['mutasi']."%"),
                 $filter['limit'],
                 $filter['offset']);
         if($returnData){
@@ -95,7 +97,7 @@ class Dil extends CI_Model {
     }
     
     public function countFilterMenu4($filter) {
-        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T'))->num_rows();
+        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%".$filter['mutasi']."%"))->num_rows();
     }
 }
 

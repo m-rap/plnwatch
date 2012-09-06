@@ -1,10 +1,16 @@
-- jenis_mk (ft.1)
+- jenis_mk (ft.4) (jenis mutasi)
 - idpel
 - nama
 - tarif (ft.4)
 - daya (ft.2)
+- PNJ
+- NAMAPNJ
+- NOBANG
+- RT
+- RW
 - LINGKUNGAN
-- tglpasang (ft.1)
-- merek_kwh
-- kdgardu
-- notiang
+- TGLPASANG_KWH (ft.1)
+- KDPEMBMETER (ft. 1) (jenis meteran)
+- KDGARDU
+- NOTIANG
+- KODEAREA
