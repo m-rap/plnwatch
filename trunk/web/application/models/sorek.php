@@ -12,7 +12,7 @@ class Sorek extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->database();
-        $this->table = $this->table . '_' . $this->currentBLTH();
+        $this->table = $this->table . '_' . $this->currentBLTH2();//$this->currentBLTH();
     }
 
     public function attributeLabels() {
@@ -42,6 +42,16 @@ class Sorek extends CI_Model {
             }
         }
         return $bl . $th;
+    }
+    
+    public function currentBLTH2() {
+        $result = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
+        foreach ($result as $key => $value) {
+            $result[$key] = array_values($value);
+            $result[$key] = $result[$key][0];
+        }
+        sort($result);
+        return substr($result[count($result) - 1], -6);
     }
 
     public function getListArea() {
@@ -78,7 +88,155 @@ class Sorek extends CI_Model {
         $where = $this->filterMenu2Condition($filter);
         return $this->db->get_where($this->table, $where)->num_rows();
     }
-
+    
+    public function getTrenNaik($filter) {
+        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
+        foreach ($tables as $key => $value) {
+            $tables[$key] = array_values($value);
+            $tables[$key] = $tables[$key][0];
+        }
+        sort($tables);
+        
+        $join = '';
+        $where = '';
+        $alias = 'a';
+        $n = count($tables);
+        foreach ($tables as $i => $t) {
+            $join .= "$t $alias ON d.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $alias++;
+            if ($i >= $n - 2) continue;
+            $where .= 'jamnyala' . ($i + 3) . ' - jamnyala' . ($i + 2) . ' > selisih ' . (($i < $n - 3) ? 'AND ' : '');
+        }
+        
+        $limit = '';
+        if (isset($filter['limit'])) {
+            $limit = 'LIMIT ' . ((isset($filter['offset'])) ? $filter['offset'] . ',' : '') . $filter['limit'];
+            unset($filter['limit']);
+            unset($filter['offset']);
+        }
+        
+        foreach ($filter as $key => $value) {
+            $filter[$key] = "$key = '$value'";
+        }
+        array_unshift($filter, $where);
+        $where = implode(' AND ', $filter);
+        
+        $sql = "
+SELECT idpel, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
+    SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, 0.25 * jamnyala1 as selisih FROM (
+        SELECT d.idpel as idpel, d.kodearea as kodearea, a.jamnyala as jamnyala1, b.jamnyala as jamnyala2, c.jamnyala as jamnyala3
+        FROM DIL d JOIN $join
+    ) s 
+    WHERE (jamnyala2 - jamnyala1) / jamnyala1 > 0.25
+) s 
+WHERE $where $limit";
+        
+        $query = $this->db->query($sql);
+        return array('data' => $query->result_array(), 'num' => $query->num_rows());
+    }
+    
+    public function getTrenFlat($filter) {
+        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
+        foreach ($tables as $key => $value) {
+            $tables[$key] = array_values($value);
+            $tables[$key] = $tables[$key][0];
+        }
+        sort($tables);
+        
+        $join = '';
+        $where = '';
+        $alias = 'a';
+        $n = count($tables);
+        foreach ($tables as $i => $t) {
+            $join .= "$t $alias ON d.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $alias++;
+            if ($i >= $n - 2) continue;
+            $where .= 'ABS(jamnyala' . ($i + 2) . ' - jamnyala' . ($i + 3) . ') <= selisih ' . (($i < $n - 3) ? 'AND ' : '');
+        }
+        
+        $limit = '';
+        if (isset($filter['limit'])) {
+            $limit = 'LIMIT ' . ((isset($filter['offset'])) ? $filter['offset'] . ',' : '') . $filter['limit'];
+            unset($filter['limit']);
+            unset($filter['offset']);
+        }
+        
+        foreach ($filter as $key => $value) {
+            $filter[$key] = "$key = '$value'";
+        }
+        array_unshift($filter, $where);
+        $where = implode(' AND ', $filter);
+        
+        $sql = "
+SELECT idpel, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
+    SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, 0.05 * jamnyala1 as selisih FROM (
+        SELECT d.idpel as idpel, d.kodearea as kodearea, a.jamnyala as jamnyala1, b.jamnyala as jamnyala2, c.jamnyala as jamnyala3
+        FROM DIL d JOIN $join
+    ) s 
+    WHERE ABS(jamnyala1 - jamnyala2) / jamnyala1 <= 0.05
+) s 
+WHERE $where $limit";
+        
+        $query = $this->db->query($sql);
+        return array('data' => $query->result_array(), 'num' => $query->num_rows());
+    }
+    
+    public function getTrenTurun($filter = array()) {
+        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
+        foreach ($tables as $key => $value) {
+            $tables[$key] = array_values($value);
+            $tables[$key] = $tables[$key][0];
+        }
+        sort($tables);
+        
+        $join = '';
+        $where = '';
+        $alias = 'a';
+        $n = count($tables);
+        foreach ($tables as $i => $t) {
+            $join .= "$t $alias ON d.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $alias++;
+            if ($i >= $n - 2) continue;
+            $where .= 'jamnyala' . ($i + 2) . ' - jamnyala' . ($i + 3) . ' > selisih ' . (($i < $n - 3) ? 'AND ' : '');
+        }
+        
+        $limit = '';
+        if (isset($filter['limit'])) {
+            $limit = 'LIMIT ' . ((isset($filter['offset'])) ? $filter['offset'] . ',' : '') . $filter['limit'];
+            unset($filter['limit']);
+            unset($filter['offset']);
+        }
+        
+        foreach ($filter as $key => $value) {
+            $filter[$key] = "$key = '$value'";
+        }
+        array_unshift($filter, $where);
+        $where = implode(' AND ', $filter);
+        
+        $sql = "
+SELECT idpel, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
+    SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, 0.25 * jamnyala1 as selisih FROM (
+        SELECT d.idpel as idpel, d.kodearea as kodearea, a.jamnyala as jamnyala1, b.jamnyala as jamnyala2, c.jamnyala as jamnyala3
+        FROM DIL d JOIN $join
+    ) s 
+    WHERE (jamnyala1 - jamnyala2) / jamnyala1 > 0.25
+) s 
+WHERE $where $limit";
+        
+        $query = $this->db->query($sql);
+        return array('data' => $query->result_array(), 'num' => $query->num_rows());
+    }
+    
+    public function getTrenLabels() {
+        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
+        foreach ($tables as $key => $value) {
+            $tables[$key] = array_values($value);
+            $tables[$key] = $tables[$key][0];
+        }
+        sort($tables);
+        
+        return $tables;
+    }
 }
 
 ?>
