@@ -45,13 +45,8 @@ class Sorek extends CI_Model {
     }
     
     public function currentBLTH2() {
-        $result = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
-        foreach ($result as $key => $value) {
-            $result[$key] = array_values($value);
-            $result[$key] = $result[$key][0];
-        }
-        sort($result);
-        return substr($result[count($result) - 1], -6);
+        $tables = $this->getSortedSorekTables();
+        return substr($tables[count(($tables)) - 1], -6);
     }
 
     public function getListArea() {
@@ -89,23 +84,35 @@ class Sorek extends CI_Model {
         return $this->db->get_where($this->table, $where)->num_rows();
     }
     
-    public function getTrenNaik($filter) {
+    public function getSortedSorekTables() {
         $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
         foreach ($tables as $key => $value) {
             $tables[$key] = array_values($value);
             $tables[$key] = $tables[$key][0];
         }
         sort($tables);
+        return $tables;
+    }
+    
+    public function getSortedLastNSorekTables($n) {
+        $tables = $this->getSortedSorekTables();
+        return array_values(array_slice($tables, -$n));
+    }
+    
+    public function getTrenNaik($filter) {
+        $tables = $this->getSortedLastNSorekTables(6);
         
+        $select = '';
         $join = '';
         $where = '';
         $alias = 'a';
         $n = count($tables);
         foreach ($tables as $i => $t) {
-            $join .= "$t $alias ON d.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $join .= "$t $alias ON dil.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $select .= "$alias.jamnyala as jamnyala" . ($i + 1) . ', ';
             $alias++;
-            if ($i >= $n - 2) continue;
-            $where .= 'jamnyala' . ($i + 3) . ' - jamnyala' . ($i + 2) . ' > selisih ' . (($i < $n - 3) ? 'AND ' : '');
+            if ($i >= $n - 1) continue;
+            $where .= 'jamnyala' . ($i + 2) . ' - jamnyala' . ($i + 1) . ' > selisih ' . (($i < $n - 2) ? 'AND ' : '');
         }
         
         $limit = '';
@@ -122,12 +129,9 @@ class Sorek extends CI_Model {
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
-    SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, 0.25 * jamnyala1 as selisih FROM (
-        SELECT d.idpel as idpel, d.kodearea as kodearea, a.jamnyala as jamnyala1, b.jamnyala as jamnyala2, c.jamnyala as jamnyala3
-        FROM DIL d JOIN $join
-    ) s 
-    WHERE (jamnyala2 - jamnyala1) / jamnyala1 > 0.25
+SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
+    SELECT dil.idpel as idpel, dil.kodearea as kodearea, $select 0.25 * a.jamnyala as selisih
+    FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
         
@@ -136,22 +140,19 @@ WHERE $where $limit";
     }
     
     public function getTrenFlat($filter) {
-        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
-        foreach ($tables as $key => $value) {
-            $tables[$key] = array_values($value);
-            $tables[$key] = $tables[$key][0];
-        }
-        sort($tables);
+        $tables = $this->getSortedLastNSorekTables(6);
         
+        $select = '';
         $join = '';
         $where = '';
         $alias = 'a';
         $n = count($tables);
         foreach ($tables as $i => $t) {
-            $join .= "$t $alias ON d.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $join .= "$t $alias ON dil.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $select .= "$alias.jamnyala as jamnyala" . ($i + 1) . ', ';
             $alias++;
-            if ($i >= $n - 2) continue;
-            $where .= 'ABS(jamnyala' . ($i + 2) . ' - jamnyala' . ($i + 3) . ') <= selisih ' . (($i < $n - 3) ? 'AND ' : '');
+            if ($i >= $n - 1) continue;
+            $where .= 'ABS(jamnyala' . ($i + 1) . ' - jamnyala' . ($i + 2) . ') <= selisih ' . (($i < $n - 2) ? 'AND ' : '');
         }
         
         $limit = '';
@@ -168,12 +169,9 @@ WHERE $where $limit";
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
-    SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, 0.05 * jamnyala1 as selisih FROM (
-        SELECT d.idpel as idpel, d.kodearea as kodearea, a.jamnyala as jamnyala1, b.jamnyala as jamnyala2, c.jamnyala as jamnyala3
-        FROM DIL d JOIN $join
-    ) s 
-    WHERE ABS(jamnyala1 - jamnyala2) / jamnyala1 <= 0.05
+SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
+    SELECT dil.idpel as idpel, dil.kodearea as kodearea, $select 0.05 * a.jamnyala as selisih
+    FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
         
@@ -182,22 +180,19 @@ WHERE $where $limit";
     }
     
     public function getTrenTurun($filter = array()) {
-        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
-        foreach ($tables as $key => $value) {
-            $tables[$key] = array_values($value);
-            $tables[$key] = $tables[$key][0];
-        }
-        sort($tables);
+        $tables = $this->getSortedLastNSorekTables(6);
         
+        $select = '';
         $join = '';
         $where = '';
         $alias = 'a';
         $n = count($tables);
         foreach ($tables as $i => $t) {
-            $join .= "$t $alias ON d.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $join .= "$t $alias ON dil.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
+            $select .= "$alias.jamnyala as jamnyala" . ($i + 1) . ', ';
             $alias++;
-            if ($i >= $n - 2) continue;
-            $where .= 'jamnyala' . ($i + 2) . ' - jamnyala' . ($i + 3) . ' > selisih ' . (($i < $n - 3) ? 'AND ' : '');
+            if ($i >= $n - 1) continue;
+            $where .= 'jamnyala' . ($i + 1) . ' - jamnyala' . ($i + 2) . ' > selisih ' . (($i < $n - 2) ? 'AND ' : '');
         }
         
         $limit = '';
@@ -214,12 +209,9 @@ WHERE $where $limit";
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
-    SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, 0.25 * jamnyala1 as selisih FROM (
-        SELECT d.idpel as idpel, d.kodearea as kodearea, a.jamnyala as jamnyala1, b.jamnyala as jamnyala2, c.jamnyala as jamnyala3
-        FROM DIL d JOIN $join
-    ) s 
-    WHERE (jamnyala1 - jamnyala2) / jamnyala1 > 0.25
+SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
+    SELECT dil.idpel as idpel, dil.kodearea, $select 0.25 * a.jamnyala as selisih
+    FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
         
@@ -231,7 +223,7 @@ WHERE $where $limit";
         $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
         foreach ($tables as $key => $value) {
             $tables[$key] = array_values($value);
-            $tables[$key] = $tables[$key][0];
+            $tables[$key] = substr($tables[$key][0], -6);
         }
         sort($tables);
         
