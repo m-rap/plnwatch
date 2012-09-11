@@ -27,7 +27,11 @@ class Menu3Controller extends CI_Controller {
         $access->validate();
     }
 
-    public function index() {
+    public function index(){
+        $this->view();
+    }
+    
+    public function view() {
         $lib = new LibMenu3();
         $input = array(
             'kodearea' => $this->input->get('area'),
@@ -42,11 +46,10 @@ class Menu3Controller extends CI_Controller {
             'label' => $label,
             'sAjaxSource' => site_url('menu3/data?area='.$input['kodearea'].'&tren='.$input['tren']),
         );
-        $data['dropdownData'] = array(
+        $data['sidebar']['dropdownData'] = array(
             'area' => $this->libarea->getList(),
             'tren' => $this->libmenu3->getListTren()
         );
-        $data['sidebar']['dropdownData'] = $data['dropdownData'];
         $this->layout->render('main', $data);
     }
     
@@ -69,13 +72,19 @@ class Menu3Controller extends CI_Controller {
             "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
             "iTotalRecords" => $data['num'],
             "iTotalDisplayRecords" => $data['num'],
+            'aaData' => $aaData,
         );
-        $output['aaData'] = $aaData;
         echo json_encode($output);
     }
     
-    public function tes() {
-        $this->sorek->getTrenTurun();
+    public function export() {
+        $filter = array(
+            'kodearea' => $this->input->get('area'),
+            'tren' => $this->input->get('tren'),
+        );
+        $filter = $this->libmenu3->validateInput($filter);
+        $filter['controller'] = $this->controller;
+        $this->libmenu3->export($filter);
     }
 
 }

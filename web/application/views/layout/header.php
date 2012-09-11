@@ -18,7 +18,7 @@
         </div>
         <![endif]-->
         <meta charset="UTF-8" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title><?php echo $pageTitle ?></title>
         <link rel="shortcut icon" href="<?php echo base_url(); ?>static/images/logo_pln.jpg" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/pln_base.css" />

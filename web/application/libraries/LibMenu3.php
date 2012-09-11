@@ -64,6 +64,19 @@ class LibMenu3 {
                 return $this->ci->sorek->getTrenFlat($filter);
         }
     }
+    
+    public function export($filter) {
+        $fileName = $filter['controller'] . $filter['kodearea'] . $filter['tren'] . '.xlsx';
+        if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
+            $filter = $this->filter($filter);
+            $filter['limit'] = 50000;
+
+            $export = new LibExport();
+            $export->fileName = $fileName;
+            $export->generate($filter);
+        }
+        redirect('static/export/' . $filter['controller'] . '/' . $fileName);
+    }
 }
 
 ?>

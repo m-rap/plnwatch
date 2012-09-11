@@ -73,6 +73,7 @@ class LibExport {
         if (!$xml)
             return false;
 
+        $select = $filter['select'];
         if ($filter['controller'] == 'Menu1') {
             $model = new Dil();
             $label = $model->attributeLabels();
@@ -80,6 +81,9 @@ class LibExport {
             $dil = new Dil();
             $model = new Sorek();
             $label = array_merge($model->attributeLabels(), $dil->attributeLabels());
+        } else if ($filter['controller'] == 'Menu3') {
+            $model = new Sorek();
+            $select = $this->sorek->getTrenLabels();
         } else if ($filter['controller'] == 'Menu4') {
             $dph = new Dph();
             $model = new Dil();
@@ -87,15 +91,18 @@ class LibExport {
         }
 
         $newRow = $xml->sheetData->addChild('row');
-        foreach ($filter['select'] as $col) {
+        foreach ($select as $col) {
             $newCell = $newRow->addChild('c');
             $newCell->addAttribute('t', "inlineStr");
             $newIs = $newCell->addChild('is');
             if (!mb_check_encoding($col, 'utf-8'))
                 $col = iconv("cp1250", "utf-8", $col);
-            $explode = explode(' AS ', $col);
-            $newCol= (array_key_exists(1, $explode) ? $explode[1] : $explode[0]);
-            $newIs->addChild('t', htmlspecialchars($label[$newCol]));
+            if ($filter['controller'] != 'Menu3') {
+                $explode = explode(' AS ', $col);
+                $col = (array_key_exists(1, $explode) ? $explode[1] : $explode[0]);
+                $col = $label[$col];
+            }
+            $newIs->addChild('t', htmlspecialchars($col));
         }
 
         // count n data without LIMIT

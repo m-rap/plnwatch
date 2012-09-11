@@ -129,8 +129,8 @@ class Sorek extends CI_Model {
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
-    SELECT dil.idpel as idpel, dil.kodearea as kodearea, $select 0.25 * a.jamnyala as selisih
+SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4, selisih FROM (
+    SELECT dil.idpel as idpel as kodearea, $select 0.25 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
@@ -169,8 +169,8 @@ WHERE $where $limit";
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
-    SELECT dil.idpel as idpel, dil.kodearea as kodearea, $select 0.05 * a.jamnyala as selisih
+SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4, selisih FROM (
+    SELECT dil.idpel as idpel as kodearea, $select 0.05 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
@@ -209,8 +209,8 @@ WHERE $where $limit";
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, kodearea, jamnyala1, jamnyala2, jamnyala3, selisih FROM (
-    SELECT dil.idpel as idpel, dil.kodearea, $select 0.25 * a.jamnyala as selisih
+SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4 selisih FROM (
+    SELECT dil.idpel as idpel, $select 0.25 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
 WHERE $where $limit";

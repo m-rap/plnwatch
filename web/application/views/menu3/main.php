@@ -13,20 +13,9 @@
 
 <h2><?php echo $pageTitle ?></h2>
 <hr />
-<?php
-echo form_open('', array('method' => 'get'));
-echo 'Area : ' . form_dropdown('area', $dropdownData['area'], $this->input->get('area'))
- . ' Tren Pemakaian KWH : ' . form_dropdown('tren', $dropdownData['tren'], $this->input->get('tren'))
- . ' ' . form_submit('', ' lihat data ');
-echo form_close();
-?>
 <table id="menu3" class="display">
     <thead>
-        <tr>
-            <?php foreach ($label as $l) { ?> 
-            <th><?php echo $l; ?></th>
-            <?php } ?> 
-        </tr>
+        <tr><?php foreach ($label as $l) echo '<th>' . $l . '</th>'; ?></tr>
     </thead>
     <tbody>
 
