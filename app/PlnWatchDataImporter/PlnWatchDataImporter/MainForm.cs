@@ -56,7 +56,7 @@ namespace PlnWatchDataImporter
                     Regex regex = new Regex(@"[\s_.]");
                     string[] filename = regex.Split(dilMdbPathTextBox.Text.Substring(dilMdbPathTextBox.Text.LastIndexOf('\\') + 1));
                     if (filename[0].ToUpper() != "DIL") throw new ArgumentException(filename[0].ToUpper());
-                    dilKodeAreaTextBox.Text = filename[1];
+                    dilKodeAreaTextBox.Text = filename[1].Substring(filename[1].Length - 3);
                     dilBulanTextBox.Text = filename[2].Substring(0, 2);
                     dilTahunTextBox.Text = filename[2].Substring(2);
                 }
@@ -78,7 +78,7 @@ namespace PlnWatchDataImporter
                     Regex regex = new Regex(@"[\s_.]");
                     string[] filename = regex.Split(sorekMdbPathTextBox.Text.Substring(sorekMdbPathTextBox.Text.LastIndexOf('\\') + 1));
                     if (filename[0].ToUpper() != "SOREK") throw new ArgumentException(filename[0].ToUpper());
-                    sorekKodeAreaTextBox.Text = filename[1];
+                    sorekKodeAreaTextBox.Text = filename[1].Substring(filename[1].Length - 3);
                     sorekBulanTextBox.Text = filename[2].Substring(4);
                     sorekTahunTextBox.Text = filename[2].Substring(0, 4);
                     sorekTableNameTextBox.Text = "SOREK_" + sorekTahunTextBox.Text + "_" + sorekBulanTextBox.Text;
