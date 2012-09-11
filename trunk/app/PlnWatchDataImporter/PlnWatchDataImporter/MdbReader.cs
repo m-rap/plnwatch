@@ -234,7 +234,7 @@ namespace PlnWatchDataImporter
 
                 oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + DilMdbPath);
                 oleDbConnection.Open();
-                OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG FROM " + DilTableName, oleDbConnection);
+                OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG FROM " + DilTableName, oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 if (batchMode)
@@ -248,7 +248,7 @@ namespace PlnWatchDataImporter
                         ProgressText = "Mengeksekusi reader dan menulis file dump..";
                         OnProgressTextChanged(null);
 
-                        dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
+                        dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
 
                         while (reader.Read())
                         {
@@ -276,6 +276,7 @@ namespace PlnWatchDataImporter
                                 .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
+                                .Append(reader["KDPEMBMETER"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
@@ -344,7 +345,7 @@ namespace PlnWatchDataImporter
 
                         while (reader.Read())
                         {
-                            StringBuilder sb = new StringBuilder("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ('");
+                            StringBuilder sb = new StringBuilder("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ('");
                             DateTime tglpsg;
                             if (reader["TGLPASANG_KWH"].ToString() != "")
                                 tglpsg = (DateTime)reader["TGLPASANG_KWH"];
@@ -366,6 +367,7 @@ namespace PlnWatchDataImporter
                                 .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
+                                .Append(reader["KDPEMBMETER"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
@@ -730,7 +732,7 @@ namespace PlnWatchDataImporter
             MdbReadResult result = MdbReadResult.FAILED;
             try
             {
-                #region update DilBlTh
+                #region update PpobBlTh
                 mySqlConnection.Open();
                 MySqlCommand mycmd = new MySqlCommand("SELECT OptionValue FROM `Option` WHERE `OptionKey` = 'PpobBlTh';", mySqlConnection);
                 MySqlDataReader myreader = mycmd.ExecuteReader();
