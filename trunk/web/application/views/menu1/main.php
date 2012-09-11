@@ -31,7 +31,7 @@ echo form_close();
         <tr>
             <th><?php echo $label['IDPEL'] ?></th>
             <th><?php echo $label['NAMA'] ?></th>
-            <th><?php echo $label['JENIS_MK'] ?></th>
+            <th><?php echo $label['KDPEMBMETER'] ?></th>
             <th><?php echo $label['DAYA'] ?></th>
             <th><?php echo $label['TGLPASANG_KWH'] ?></th>
             <th><?php echo $label['KDGARDU'] ?></th>

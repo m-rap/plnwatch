@@ -60,7 +60,7 @@ class Menu1Controller extends CI_Controller {
         $data = array(
             'pageTitle' => 'Menu 1',
             'label' => $this->dil->attributeLabels(),
-            'select' => array('IDPEL', 'NAMA', 'JENIS_MK', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG'),
+            'select' => array('IDPEL', 'NAMA', 'KDPEMBMETER', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG'),
             'sAjaxSource' => site_url("menu1/data?area=" . $input['area'] . "&daya=" . $input['daya'] . "&tglPasang=" . $input['tglPasang']),
         );
 
@@ -82,7 +82,7 @@ class Menu1Controller extends CI_Controller {
             'tglPasang' => $this->input->get('tglPasang'),
         );
         $filter = $this->libmenu1->validateInput($filter);
-        $filter['select'] = array('IDPEL', 'NAMA', 'JENIS_MK', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG');
+        $filter['select'] = array('IDPEL', 'NAMA', 'KDPEMBMETER', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
         $sOrder = "";
@@ -104,7 +104,7 @@ class Menu1Controller extends CI_Controller {
             $aaData[] = array(
                 $d->IDPEL,
                 $d->NAMA,
-                ($d->JENIS_MK == "A" ? "AMR" : ($d->JENIS_MK == "E" ? "Elektronik" : ($d->JENIS_MK == "M" ? "Mekanik" : "Blank"))),
+                ($d->KDPEMBMETER == "A" ? "AMR" : ($d->KDPEMBMETER == "E" ? "Elektronik" : ($d->KDPEMBMETER == "M" ? "Mekanik" : "Blank"))),
                 $d->DAYA,
                 $d->TGLPASANG_KWH,
                 $d->KDGARDU,
