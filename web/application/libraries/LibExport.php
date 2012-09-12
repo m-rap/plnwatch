@@ -73,21 +73,25 @@ class LibExport {
         if (!$xml)
             return false;
 
-        $select = $filter['select'];
-        if ($filter['controller'] == 'Menu1') {
+        $controller = $filter['controller'];unset($filter['controller']);
+        if ($controller == 'Menu1') {
             $model = new Dil();
             $label = $model->attributeLabels();
-        } else if ($filter['controller'] == 'Menu2') {
+            $select = $filter['select'];
+        } else if ($controller == 'Menu2') {
             $dil = new Dil();
             $model = new Sorek();
             $label = array_merge($model->attributeLabels(), $dil->attributeLabels());
-        } else if ($filter['controller'] == 'Menu3') {
+            $select = $filter['select'];
+        } else if ($controller == 'Menu3') {
             $model = new Sorek();
-            $select = $this->sorek->getTrenLabels();
-        } else if ($filter['controller'] == 'Menu4') {
+            $select = $model->getTrenLabels();
+            array_unshift($select, 'ID Pelanggan');
+        } else if ($controller == 'Menu4') {
             $dph = new Dph();
             $model = new Dil();
             $label = array_merge($model->attributeLabels(), $dph->attributeLabels());
+            $select = $filter['select'];
         }
 
         $newRow = $xml->sheetData->addChild('row');
@@ -97,7 +101,7 @@ class LibExport {
             $newIs = $newCell->addChild('is');
             if (!mb_check_encoding($col, 'utf-8'))
                 $col = iconv("cp1250", "utf-8", $col);
-            if ($filter['controller'] != 'Menu3') {
+            if ($controller != 'Menu3') {
                 $explode = explode(' AS ', $col);
                 $col = (array_key_exists(1, $explode) ? $explode[1] : $explode[0]);
                 $col = $label[$col];
@@ -106,11 +110,13 @@ class LibExport {
         }
 
         // count n data without LIMIT
-        if ($filter['controller'] == 'Menu1')
+        if ($controller == 'Menu1')
             $n = $model->countFilterMenu1($filter);
-        else if ($filter['controller'] == 'Menu2')
+        else if ($controller == 'Menu2')
             $n = $model->countFilterMenu2($filter);
-        else if ($filter['controller'] == 'Menu4')
+        else if ($controller == 'Menu3')
+            $n = $model->countFilterMenu3($filter);
+        else if ($controller == 'Menu4')
             $n = $model->countFilterMenu4($filter);
 
         $part = $filter['limit'];
@@ -118,11 +124,13 @@ class LibExport {
         for ($i = 0; $i <= $n + $part; $i+=$part) {
             $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
 
-            if ($filter['controller'] == 'Menu1')
+            if ($controller == 'Menu1')
                 $q = $model->filterMenu1($filter, false);   //return query object
-            else if ($filter['controller'] == 'Menu2')
+            else if ($controller == 'Menu2')
                 $q = $model->filterMenu2($filter, false);   //return query object
-            else if ($filter['controller'] == 'Menu4')
+            else if ($controller == 'Menu3')
+                $q = $model->filterMenu3($filter, false);   //return query object
+            else if ($controller == 'Menu4')
                 $q = $model->filterMenu4($filter, false);   //return query object
 
             while ($row = @mysql_fetch_object($q->result_id)) {

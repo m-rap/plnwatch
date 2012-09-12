@@ -99,7 +99,7 @@ class Sorek extends CI_Model {
         return array_values(array_slice($tables, -$n));
     }
     
-    public function getTrenNaik($filter) {
+    public function getTrenNaik($filter, $returnData = true) {
         $tables = $this->getSortedLastNSorekTables(6);
         
         $select = '';
@@ -118,9 +118,9 @@ class Sorek extends CI_Model {
         $limit = '';
         if (isset($filter['limit'])) {
             $limit = 'LIMIT ' . ((isset($filter['offset'])) ? $filter['offset'] . ',' : '') . $filter['limit'];
-            unset($filter['limit']);
-            unset($filter['offset']);
         }
+        unset($filter['limit']);
+        unset($filter['offset']);
         
         foreach ($filter as $key => $value) {
             $filter[$key] = "$key = '$value'";
@@ -130,16 +130,17 @@ class Sorek extends CI_Model {
         
         $sql = "
 SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4, selisih FROM (
-    SELECT dil.idpel as idpel as kodearea, $select 0.25 * a.jamnyala as selisih
+    SELECT dil.IDPEL as idpel, dil.KODEAREA as kodearea, $select 0.25 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
         
         $query = $this->db->query($sql);
+        if (!$returnData) return $query;
         return array('data' => $query->result_array(), 'num' => $query->num_rows());
     }
     
-    public function getTrenFlat($filter) {
+    public function getTrenFlat($filter, $returnData = true) {
         $tables = $this->getSortedLastNSorekTables(6);
         
         $select = '';
@@ -158,9 +159,9 @@ WHERE $where $limit";
         $limit = '';
         if (isset($filter['limit'])) {
             $limit = 'LIMIT ' . ((isset($filter['offset'])) ? $filter['offset'] . ',' : '') . $filter['limit'];
-            unset($filter['limit']);
-            unset($filter['offset']);
         }
+        unset($filter['limit']);
+        unset($filter['offset']);
         
         foreach ($filter as $key => $value) {
             $filter[$key] = "$key = '$value'";
@@ -170,16 +171,17 @@ WHERE $where $limit";
         
         $sql = "
 SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4, selisih FROM (
-    SELECT dil.idpel as idpel as kodearea, $select 0.05 * a.jamnyala as selisih
+    SELECT dil.IDPEL as idpel, dil.KODEAREA as kodearea, $select 0.05 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
         
         $query = $this->db->query($sql);
+        if (!$returnData) return $query;
         return array('data' => $query->result_array(), 'num' => $query->num_rows());
     }
     
-    public function getTrenTurun($filter = array()) {
+    public function getTrenTurun($filter = array(), $returnData = true) {
         $tables = $this->getSortedLastNSorekTables(6);
         
         $select = '';
@@ -198,9 +200,9 @@ WHERE $where $limit";
         $limit = '';
         if (isset($filter['limit'])) {
             $limit = 'LIMIT ' . ((isset($filter['offset'])) ? $filter['offset'] . ',' : '') . $filter['limit'];
-            unset($filter['limit']);
-            unset($filter['offset']);
         }
+        unset($filter['limit']);
+        unset($filter['offset']);
         
         foreach ($filter as $key => $value) {
             $filter[$key] = "$key = '$value'";
@@ -210,12 +212,13 @@ WHERE $where $limit";
         
         $sql = "
 SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4 selisih FROM (
-    SELECT dil.idpel as idpel, $select 0.25 * a.jamnyala as selisih
+    SELECT dil.IDPEL as idpel, dil.KODEAREA as kodearea, $select 0.25 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
 WHERE $where $limit";
         
         $query = $this->db->query($sql);
+        if (!$returnData) return $query;
         return array('data' => $query->result_array(), 'num' => $query->num_rows());
     }
     
@@ -228,6 +231,28 @@ WHERE $where $limit";
         sort($tables);
         
         return $tables;
+    }
+
+    public function filterMenu3($filter, $returnData = true) {
+        $tren = $filter['tren'];
+        unset($filter['tren']);
+        switch($tren){
+            case 1 :
+                return $this->getTrenNaik($filter, $returnData);
+                break;
+            case 2 :
+                return $this->getTrenTurun($filter, $returnData);
+                break;
+            case 3 :
+                return $this->getTrenFlat($filter, $returnData);
+                break;
+        }
+    }
+    
+    public function countFilterMenu3($filter) {
+        $filter['limit'] = null;
+        $filter['offset'] = null;
+        return $this->filterMenu3($filter, false)->num_rows();
     }
 }
 
