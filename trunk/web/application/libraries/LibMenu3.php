@@ -10,6 +10,7 @@ class LibMenu3 {
     
     public function __construct() {
         $this->ci =& get_instance();
+        $this->ci->load->library(array('LibExport'));
     }
 
     public function getListTren($value = false) {
@@ -68,7 +69,6 @@ class LibMenu3 {
     public function export($filter) {
         $fileName = $filter['controller'] . $filter['kodearea'] . $filter['tren'] . '.xlsx';
         if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
-            $filter = $this->filter($filter);
             $filter['limit'] = 50000;
 
             $export = new LibExport();
