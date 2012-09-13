@@ -103,6 +103,7 @@ class Sorek extends CI_Model {
         $tables = $this->getSortedLastNSorekTables(6);
         
         $select = '';
+        $select2 = '';
         $join = '';
         $where = '';
         $alias = 'a';
@@ -110,6 +111,7 @@ class Sorek extends CI_Model {
         foreach ($tables as $i => $t) {
             $join .= "$t $alias ON dil.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
             $select .= "$alias.jamnyala as jamnyala" . ($i + 1) . ', ';
+            $select2 .= "jamnyala" . ($i + 1) . ', ';
             $alias++;
             if ($i >= $n - 1) continue;
             $where .= 'jamnyala' . ($i + 2) . ' - jamnyala' . ($i + 1) . ' > selisih ' . (($i < $n - 2) ? 'AND ' : '');
@@ -129,7 +131,7 @@ class Sorek extends CI_Model {
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4, selisih FROM (
+SELECT idpel, $select2 selisih FROM (
     SELECT dil.IDPEL as idpel, dil.KODEAREA as kodearea, $select 0.25 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
@@ -144,6 +146,7 @@ WHERE $where $limit";
         $tables = $this->getSortedLastNSorekTables(6);
         
         $select = '';
+        $select2 = '';
         $join = '';
         $where = '';
         $alias = 'a';
@@ -151,6 +154,7 @@ WHERE $where $limit";
         foreach ($tables as $i => $t) {
             $join .= "$t $alias ON dil.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
             $select .= "$alias.jamnyala as jamnyala" . ($i + 1) . ', ';
+            $select2 .= "jamnyala" . ($i + 1) . ', ';
             $alias++;
             if ($i >= $n - 1) continue;
             $where .= 'ABS(jamnyala' . ($i + 1) . ' - jamnyala' . ($i + 2) . ') <= selisih ' . (($i < $n - 2) ? 'AND ' : '');
@@ -170,7 +174,7 @@ WHERE $where $limit";
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4, selisih FROM (
+SELECT idpel, $select2 selisih FROM (
     SELECT dil.IDPEL as idpel, dil.KODEAREA as kodearea, $select 0.05 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
@@ -185,6 +189,7 @@ WHERE $where $limit";
         $tables = $this->getSortedLastNSorekTables(6);
         
         $select = '';
+        $select2 = '';
         $join = '';
         $where = '';
         $alias = 'a';
@@ -192,6 +197,7 @@ WHERE $where $limit";
         foreach ($tables as $i => $t) {
             $join .= "$t $alias ON dil.idpel = $alias.idpel " . (($i < $n - 1) ? 'JOIN ' : '');
             $select .= "$alias.jamnyala as jamnyala" . ($i + 1) . ', ';
+            $select2 .= "jamnyala" . ($i + 1) . ', ';
             $alias++;
             if ($i >= $n - 1) continue;
             $where .= 'jamnyala' . ($i + 1) . ' - jamnyala' . ($i + 2) . ' > selisih ' . (($i < $n - 2) ? 'AND ' : '');
@@ -211,7 +217,7 @@ WHERE $where $limit";
         $where = implode(' AND ', $filter);
         
         $sql = "
-SELECT idpel, jamnyala1, jamnyala2, jamnyala3, jamnyala4 selisih FROM (
+SELECT idpel, $select2 selisih FROM (
     SELECT dil.IDPEL as idpel, dil.KODEAREA as kodearea, $select 0.25 * a.jamnyala as selisih
     FROM dil JOIN $join
 ) s 
