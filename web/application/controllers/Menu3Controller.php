@@ -61,8 +61,8 @@ class Menu3Controller extends CI_Controller {
         );
         $filter = $lib->validateInput($filter);
         $filename = md5($filter['kodearea'].$filter['tren'].implode('', $this->sorek->getTrenLabels())).'.php';
-        if (file_exists($filename)) {
-            $this->load->view("menu3/$filename");
+        if (file_exists(FCPATH."application/views/menu3/cache/$filename")) {
+            $this->load->view("menu3/cache/$filename");
         } else {
             $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
             $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
@@ -79,7 +79,7 @@ class Menu3Controller extends CI_Controller {
                 'aaData' => $aaData,
             );
             $output = json_encode($output);
-            $file = fopen(FCPATH."application/views/menu3/$filename", 'w');
+            $file = fopen(FCPATH."application/views/menu3/cache/$filename", 'w');
             fwrite($file, $output);
             fclose($file);
             echo $output;
