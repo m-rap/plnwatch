@@ -60,21 +60,30 @@ class Menu3Controller extends CI_Controller {
             'tren' => $this->input->get('tren'),
         );
         $filter = $lib->validateInput($filter);
-        $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
-        $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
-        
-        $data = $lib->getData($filter);
-        $aaData = array();
-        foreach ($data['data'] as $d) {
-            $aaData[] = array_values($d);
+        $filename = md5($filter['kodearea'].$filter['tren'].implode('', $this->sorek->getTrenLabels())).'.php';
+        if (file_exists($filename)) {
+            $this->load->view("menu3/$filename");
+        } else {
+            $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
+            $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
+
+            $data = $lib->getData($filter);
+            $aaData = array();
+            foreach ($data['data'] as $d) {
+                $aaData[] = array_values($d);
+            }
+            $output = array(
+                "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
+                "iTotalRecords" => $data['num'],
+                "iTotalDisplayRecords" => $data['num'],
+                'aaData' => $aaData,
+            );
+            $output = json_encode($output);
+            $file = fopen(FCPATH."application/views/menu3/$filename", 'w');
+            fwrite($file, $output);
+            fclose($file);
+            echo $output;
         }
-        $output = array(
-            "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
-            "iTotalRecords" => $data['num'],
-            "iTotalDisplayRecords" => $data['num'],
-            'aaData' => $aaData,
-        );
-        echo json_encode($output);
     }
     
     public function export() {
