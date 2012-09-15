@@ -60,13 +60,13 @@ class Menu3Controller extends CI_Controller {
             'tren' => $this->input->get('tren'),
         );
         $filter = $lib->validateInput($filter);
-        $filename = md5($filter['kodearea'].$filter['tren'].implode('', $this->sorek->getTrenLabels())).'.php';
+        $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
+        $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
+        $labels = implode('', $this->sorek->getTrenLabels());
+        $filename = $filter['offset'].'l'.$filter['limit'].$filter['kodearea'].$filter['tren'].$labels.'.php';
         if (file_exists(FCPATH."application/views/menu3/cache/$filename")) {
             $this->load->view("menu3/cache/$filename");
         } else {
-            $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
-            $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
-
             $data = $lib->getData($filter);
             $aaData = array();
             foreach ($data['data'] as $d) {
