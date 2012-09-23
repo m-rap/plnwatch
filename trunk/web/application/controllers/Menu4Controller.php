@@ -94,8 +94,8 @@ class Menu4Controller extends CI_Controller {
             "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
             "iTotalRecords" => $data['num'],
             "iTotalDisplayRecords" => $data['num'],
+            "aaData" => $aaData,
         );
-        $output['aaData'] = $aaData;
         echo json_encode($output);
     }
 
