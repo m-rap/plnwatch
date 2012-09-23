@@ -77,16 +77,6 @@
                         </div>
                         <div id="header_pln_kanan_2" align="right">
                             <img src="<?php echo base_url(); ?>static/images/header_pln_03_02.jpg" align="right"/><br />
-                            <table>
-                                <tr>
-                                    <td>
-                                        <input type="text" name="q" size="31" style="height:22px;"/>
-                                    </td>
-                                    <td>
-                                        <input type="submit" name="sa" value="Cari" align="absbottom"  class="buttonCari"/>
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
                     </div>
                 </div>
