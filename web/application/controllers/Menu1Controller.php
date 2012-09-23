@@ -114,10 +114,8 @@ class Menu1Controller extends CI_Controller {
         $output = array(
             "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
             "iTotalRecords" => $data['num'],
-            "iTotalDisplayRecords" => $data['num'],
-                //"aaData" => $data['data']
+            "aaData" => $aaData,
         );
-        $output['aaData'] = $aaData;
         echo json_encode($output);
     }
 
