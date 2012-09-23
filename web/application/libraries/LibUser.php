@@ -65,7 +65,7 @@ class LibUser {
                 $config[] = array(
                     'field' => 'user[password2]',
                     'label' => 'Password Baru',
-                    'rules' => 'required|matches[user[password3]]|xss_clean'
+                    'rules' => 'required|callback__matchPasswordCheck]|xss_clean'
                 );
                 $config[] = array(
                     'field' => 'user[password3]',
