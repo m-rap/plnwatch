@@ -41,7 +41,7 @@ class LibMenu3 {
         $k2 = array_keys($list['tren']);
         $defaultValue = array(
             'kodearea' => $list['kodearea'][$k[0]],
-            'tren' => $k2[0],
+            'tren' => $k2[1],
         );
 
         foreach (array_keys($input) as $i) {

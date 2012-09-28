@@ -33,11 +33,15 @@ class Menu3Controller extends CI_Controller {
     
     public function view() {
         $lib = new LibMenu3();
+        $list = array(
+            'kodearea' => $this->libarea->getList(),
+            'tren' => $this->libmenu3->getListTren(),
+        );
         $input = array(
             'kodearea' => $this->input->get('area'),
             'tren' => $this->input->get('tren'),
         );
-        $input = $lib->validateInput($input);
+        $input = $lib->validateInput($input, $list);
         
         $label = $this->sorek->getTrenLabels();
         array_unshift($label, 'ID Pelanggan');
@@ -46,10 +50,12 @@ class Menu3Controller extends CI_Controller {
             'label' => $label,
             'sAjaxSource' => site_url('menu3/data?area='.$input['kodearea'].'&tren='.$input['tren']),
         );
-        $data['sidebar']['dropdownData'] = array(
-            'area' => $this->libarea->getList(),
-            'tren' => $this->libmenu3->getListTren()
-        );
+        foreach (array_keys($input) as $k) {
+            $data['sidebar']['dropdownData'][$k] = array(
+                'input' => $input[$k],
+                'list' => $list[$k],
+            );
+        }
         $this->layout->render('main', $data);
     }
     
