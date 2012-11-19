@@ -1,11 +1,10 @@
 DROP TABLE IF EXISTS `DPH`;
-
 -- phpMyAdmin SQL Dump
 -- version 2.11.7
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 19, 2012 at 10:41 PM
+-- Generation Time: Nov 20, 2012 at 12:15 AM
 -- Server version: 5.0.51
 -- PHP Version: 5.2.6
 
@@ -26,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `dph` (
   `JMLBELI` int(11) default NULL,
   `PEMKWH` double default NULL,
   `RPTAG` double default NULL,
-  `TGLBAYAR` date default NULL,
-  `JAMBAYAR` time default NULL,
+  `TGLBAYAR` datetime default NULL,
   PRIMARY KEY  (`IDPEL`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
