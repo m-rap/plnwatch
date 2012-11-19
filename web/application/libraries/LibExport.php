@@ -24,7 +24,7 @@ class LibExport {
         $this->wdir = FCPATH . 'static/export/' . $this->wdir;
     }
 
-    public function generate($filter) {
+    public function generateX($filter) {
         if (!file_exists($this->wdir)) {
             mkdir($this->wdir);
         }
@@ -167,23 +167,60 @@ class LibExport {
         $this->removeWdirRecursive($path);
     }
 
-    public function generateHtml($filter) {
-        $start = "<html><head></head><body><table>";
-        $model = new Dil();
-        $label = $model->attributeLabels();
+    public function generate($filter) {
+        $controller = $filter['controller'];unset($filter['controller']);
+        if ($controller == 'Menu1') {
+            $model = new Dil();
+            $label = $model->attributeLabels();
+            $select = $filter['select'];
+        } else if ($controller == 'Menu2') {
+            $dil = new Dil();
+            $model = new Sorek();
+            $label = array_merge($model->attributeLabels(), $dil->attributeLabels());
+            $select = $filter['select'];
+        } else if ($controller == 'Menu3') {
+            $model = new Sorek();
+            $select = $model->getTrenLabels();
+            array_unshift($select, 'ID Pelanggan');
+        } else if ($controller == 'Menu4') {
+            $dph = new Dph();
+            $model = new Dil();
+            $label = array_merge($model->attributeLabels(), $dph->attributeLabels());
+            $select = $filter['select'];
+        }
+        
+        $start = "<html><head></head><body><table border='1'>";
         $header = "<tr>";
-        foreach ($filter['select'] as $col) {
-            $header .= "<td>" . $label[$col] . "</td>";
+        foreach ($select as $col) {
+            $header .= "<td><strong>" . $label[$col] . "</strong></td>";
         }
         $header .= "</tr>";
-
         $body = "";
-        $n = $model->count($filter);
+        
+        // count n data without LIMIT
+        if ($controller == 'Menu1')
+            $n = $model->countFilterMenu1($filter);
+        else if ($controller == 'Menu2')
+            $n = $model->countFilterMenu2($filter);
+        else if ($controller == 'Menu3')
+            $n = $model->countFilterMenu3($filter);
+        else if ($controller == 'Menu4')
+            $n = $model->countFilterMenu4($filter);
+        
         $part = $filter['limit'];
         $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
         for ($i = 0; $i <= $n + $part; $i+=$part) {
             $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
-            $q = $model->filterMenu1($filter, false);   //return object
+            
+            if ($controller == 'Menu1')
+                $q = $model->filterMenu1($filter, false);   //return query object
+            else if ($controller == 'Menu2')
+                $q = $model->filterMenu2($filter, false);   //return query object
+            else if ($controller == 'Menu3')
+                $q = $model->filterMenu3($filter, false);   //return query object
+            else if ($controller == 'Menu4')
+                $q = $model->filterMenu4($filter, false);   //return query object
+            
             while ($row = @mysql_fetch_object($q->result_id)) {
                 $body .= "<tr>";
                 foreach ($row as $col) {
@@ -195,10 +232,10 @@ class LibExport {
 
         $end = "</table></body></html>";
 
-        file_put_contents('static/export/' . strtolower($filter['controller']) . '/' . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
+        file_put_contents('static/export/' . strtolower($controller) . '/' . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
         //header('Content-type: application/ms-excel');
         //header('Content-Disposition: attachment; filename=' . $this->fileName);
-        //echo $start . $header . $body . $end;
+        //echo $start . $header . $body . $end.die();
     }
 
 }

@@ -79,7 +79,7 @@ class LibMenu2 {
 
     public function export($filter) {
         $currentBLTH = $this->ci->sorek->currentBLTH();
-        $fileName = $filter['controller'] . $currentBLTH . $filter['area'] . $filter['jamNyala'] . '.xlsx';
+        $fileName = $filter['controller'] . $currentBLTH . $filter['area'] . $filter['jamNyala'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 10000;

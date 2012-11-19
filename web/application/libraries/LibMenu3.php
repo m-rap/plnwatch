@@ -67,7 +67,7 @@ class LibMenu3 {
     }
     
     public function export($filter) {
-        $fileName = $filter['controller'] . $filter['kodearea'] . $filter['tren'] . '.xlsx';
+        $fileName = $filter['controller'] . $filter['kodearea'] . $filter['tren'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
             $filter['limit'] = 50000;
 
