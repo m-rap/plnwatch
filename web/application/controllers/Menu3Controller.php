@@ -46,7 +46,7 @@ class Menu3Controller extends CI_Controller {
         $label = $this->sorek->getTrenLabels();
         array_unshift($label, 'ID Pelanggan');
         $data = array(
-            'pageTitle' => 'Menu 3',
+            'pageTitle' => 'Menu 3 - Analisa Tren Pemakaian KWH',
             'label' => $label,
             'sAjaxSource' => site_url('menu3/data?area='.$input['kodearea'].'&tren='.$input['tren']),
         );
@@ -68,28 +68,34 @@ class Menu3Controller extends CI_Controller {
         $filter = $lib->validateInput($filter);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
-        $labels = implode('', $this->sorek->getTrenLabels());
-        $filename = $filter['offset'].'l'.$filter['limit'].$filter['kodearea'].$filter['tren'].$labels.'.php';
-        if (file_exists(FCPATH."application/views/menu3/cache/$filename")) {
-            $this->load->view("menu3/cache/$filename");
-        } else {
-            $data = $lib->getData($filter);
-            $aaData = array();
-            foreach ($data['data'] as $d) {
-                $aaData[] = array_values($d);
+        //$labels = implode('', $this->sorek->getTrenLabels());
+        //$filename = $filter['offset'].'l'.$filter['limit'].$filter['kodearea'].$filter['tren'].$labels.'.php';
+
+        $sOrder = "";
+        if (isset($_GET['iSortCol_0'])) {
+            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
+                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
+                    $sOrder .= "`" . $filter['select'][intval($_GET['iSortCol_' . $i])] . "` " .
+                            mysql_real_escape_string($_GET['sSortDir_' . $i]);
+                }
+                if ($i != 0 && $i + 1 == intval($_GET['iSortingCols']))
+                    $sOrder .= ', ';
             }
-            $output = array(
-                "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
-                "iTotalRecords" => $data['num'],
-                "iTotalDisplayRecords" => $data['num'],
-                'aaData' => $aaData,
-            );
-            $output = json_encode($output);
-            $file = fopen(FCPATH."application/views/menu3/cache/$filename", 'w');
-            fwrite($file, $output);
-            fclose($file);
-            echo $output;
         }
+
+        $filter['order'] = $sOrder;
+        $data = $lib->getData($filter);
+        $aaData = array();
+        foreach ($data['data'] as $d) {
+            $aaData[] = array_values($d);
+        }
+        $output = array(
+            "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
+            "iTotalRecords" => $data['num'],
+            "iTotalDisplayRecords" => $data['num'],
+            'aaData' => $aaData,
+        );
+        echo json_encode($output);
     }
     
     public function export() {

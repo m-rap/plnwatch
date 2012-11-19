@@ -111,7 +111,7 @@ top: 0;
 /* Sub level menu links style */
 .jqueryslidemenu ul li ul li a{
 font: tahoma 13px Verdana;
-width: 200px; /*width of sub menus*/
+width: 250px; /*width of sub menus*/
 padding: 8px;
 margin-left: 0px;
 background: #EDEDED; /*background of tabs (default state)*/

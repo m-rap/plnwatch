@@ -18,10 +18,6 @@ class LibExport {
         $this->ci->load->library(array('LibMenu1'));
         $this->ci->load->dbutil();
         $this->ci->load->model(array('dil'));
-
-        $this->template = FCPATH . 'static/export/' . $this->template;
-        $this->activeSheet = FCPATH . 'static/export/' . $this->wdir . '/xl/worksheets/' . $this->activeSheet;
-        $this->wdir = FCPATH . 'static/export/' . $this->wdir;
     }
 
     public function generateX($filter) {
@@ -73,7 +69,8 @@ class LibExport {
         if (!$xml)
             return false;
 
-        $controller = $filter['controller'];unset($filter['controller']);
+        $controller = $filter['controller'];
+        unset($filter['controller']);
         if ($controller == 'Menu1') {
             $model = new Dil();
             $label = $model->attributeLabels();
@@ -168,7 +165,8 @@ class LibExport {
     }
 
     public function generate($filter) {
-        $controller = $filter['controller'];unset($filter['controller']);
+        $controller = $filter['controller'];
+        unset($filter['controller']);
         if ($controller == 'Menu1') {
             $model = new Dil();
             $label = $model->attributeLabels();
@@ -188,45 +186,35 @@ class LibExport {
             $label = array_merge($model->attributeLabels(), $dph->attributeLabels());
             $select = $filter['select'];
         }
-        
+
         $start = "<html><head></head><body><table border='1'>";
-        $header = "<tr>";
+        $header = "<tr><td><strong>No</strong></td>";
         foreach ($select as $col) {
             $header .= "<td><strong>" . $label[$col] . "</strong></td>";
         }
         $header .= "</tr>";
         $body = "";
-        
-        // count n data without LIMIT
-        if ($controller == 'Menu1')
-            $n = $model->countFilterMenu1($filter);
-        else if ($controller == 'Menu2')
-            $n = $model->countFilterMenu2($filter);
-        else if ($controller == 'Menu3')
-            $n = $model->countFilterMenu3($filter);
-        else if ($controller == 'Menu4')
-            $n = $model->countFilterMenu4($filter);
-        
+
+        //count all data according to filter. used to write partially.
+        $countFilterMenu = 'countFilter' . $controller;
+        $n = $model->$countFilterMenu($filter);
+
         $part = $filter['limit'];
         $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
-        for ($i = 0; $i <= $n + $part; $i+=$part) {
+        for ($i = 0, $no = 1; $i <= $n + $part; $i+=$part) {
             $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
-            
-            if ($controller == 'Menu1')
-                $q = $model->filterMenu1($filter, false);   //return query object
-            else if ($controller == 'Menu2')
-                $q = $model->filterMenu2($filter, false);   //return query object
-            else if ($controller == 'Menu3')
-                $q = $model->filterMenu3($filter, false);   //return query object
-            else if ($controller == 'Menu4')
-                $q = $model->filterMenu4($filter, false);   //return query object
-            
+
+            //query data
+            $filterMenu = 'filter' . $controller;
+            $q = $model->$filterMenu($filter, false);
+
             while ($row = @mysql_fetch_object($q->result_id)) {
-                $body .= "<tr>";
+                $body .= "<tr><td>" . $no . "</td>";
                 foreach ($row as $col) {
                     $body .= "<td>" . $col . "</td>";
                 }
                 $body .= "</tr>";
+                $no++;
             }
         }
 

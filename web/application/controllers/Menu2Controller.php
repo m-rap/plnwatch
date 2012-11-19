@@ -43,7 +43,7 @@ class Menu2Controller extends CI_Controller {
         $input = $lib->validateInput($input, $list);
 
         $data = array(
-            'pageTitle' => 'Menu 2',
+            'pageTitle' => 'Menu 2 - Analisa Jam Nyala',
             'label' => array_merge($this->sorek->attributeLabels(), $this->dil->attributeLabels()),
             'sAjaxSource' => site_url('menu2/data?area=' . $input['area'] . '&jamNyala=' . $input['jamNyala']),
         );
@@ -65,7 +65,7 @@ class Menu2Controller extends CI_Controller {
             'jamNyala' => $this->input->get('jamNyala'),
         );
         $filter = $lib->validateInput($filter);
-        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG');
+        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'FAKM', 'JAMNYALA');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
 
@@ -88,9 +88,10 @@ class Menu2Controller extends CI_Controller {
             $aaData[] = array(
                 $d->IDPEL,
                 $d->NAMA,
+                $d->TARIF,
+                $d->DAYA,
+                $d->FAKM,
                 $d->JAMNYALA,
-                $d->KDGARDU,
-                $d->NOTIANG
             );
         }
         $output = array(

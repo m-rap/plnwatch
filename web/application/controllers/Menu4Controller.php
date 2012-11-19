@@ -43,7 +43,7 @@ class Menu4Controller extends CI_Controller {
         $input = $lib->validateInput($input, $list);
 
         $data = array(
-            'pageTitle' => 'Menu 4',
+            'pageTitle' => 'Menu 4 - LPB',
             'label' => array_merge($this->dil->attributeLabels(), $this->dph->attributeLabels()),
             'sAjaxSource' => site_url('menu4/data?area=' . $input['area'] . '&mutasi=' . $input['mutasi']),
         );
@@ -62,7 +62,7 @@ class Menu4Controller extends CI_Controller {
             'mutasi' => $this->input->get('mutasi'),
         );
         $filter = $this->libmenu4->validateInput($filter);
-        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'JMLBELI', 'KDGARDU', 'NOTIANG');
+        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'RPTAG', 'TANGGAL', 'PEMKWH');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
 
@@ -85,9 +85,11 @@ class Menu4Controller extends CI_Controller {
             $aaData[] = array(
                 $d->IDPEL,
                 $d->NAMA,
-                ($d->JMLBELI == null ? '0' : $d->JMLBELI),
-                $d->KDGARDU,
-                $d->NOTIANG
+                $d->TARIF,
+                $d->DAYA,
+                $d->RPTAG,
+                $d->TANGGAL,
+                $d->PEMKWH,
             );
         }
         $output = array(

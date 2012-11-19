@@ -18,9 +18,11 @@
         <tr>
             <th><?php echo $label['IDPEL'] ?></th>
             <th><?php echo $label['NAMA'] ?></th>
-            <th><?php echo $label['JMLBELI'] ?></th>
-            <th><?php echo $label['KDGARDU'] ?></th>
-            <th><?php echo $label['NOTIANG'] ?></th>
+            <th><?php echo $label['TARIF'] ?></th>
+            <th><?php echo $label['DAYA'] ?></th>
+            <th><?php echo $label['RPTAG'] ?></th>
+            <th><?php echo $label['TANGGAL'] ?></th>
+            <th><?php echo $label['PEMKWH'] ?></th>
         </tr>
     </thead>
     <tbody>

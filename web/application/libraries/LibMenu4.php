@@ -54,7 +54,7 @@ class LibMenu4 {
 
     private function filter($filter) {
         $mutasi = $this->getListMutasi(true);
-        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'JMLBELI', 'KDGARDU', 'NOTIANG') : $filter['select']);
+        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'RPTAG', 'TANGGAL', 'PEMKWH') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'DIL.IDPEL' : $filter['order']);
         $explode = explode(' AS ', $filter['order']);
         $filter['order'] = $explode[0];
