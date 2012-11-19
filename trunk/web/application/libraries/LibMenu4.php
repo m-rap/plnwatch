@@ -73,7 +73,7 @@ class LibMenu4 {
 
     public function export($filter) {
         $dilBLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['mutasi'] . '.xlsx';
+        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['mutasi'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/menu4/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 10000;

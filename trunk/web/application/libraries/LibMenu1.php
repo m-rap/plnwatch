@@ -92,8 +92,8 @@ class LibMenu1 {
 
     public function export($filter) {
         $BLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xlsx';
-        if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
+        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xls';
+        if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 50000;
 
@@ -101,7 +101,7 @@ class LibMenu1 {
             $export->fileName = $fileName;
             $export->generate($filter);
         }
-        redirect('static/export/' . $filter['controller'] . '/' . $fileName);
+        redirect('static/export/' . strtolower($filter['controller']) . '/' . $fileName);
     }
 
 }
