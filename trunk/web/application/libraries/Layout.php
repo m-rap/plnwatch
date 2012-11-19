@@ -8,8 +8,8 @@
 class Layout {
     
     private $ci = null;
-    public $activeLayout = '2column';
-    public $pageTitle = 'PLN Watch | PT PLN (Persero) | Distribusi Jatim';
+    public $activeLayout = '1column';
+    public $pageTitle = 'APEL DJATIM | PT PLN (Persero) | Distribusi Jatim';
     public $controller = null;
     private $activeUser = null;
     

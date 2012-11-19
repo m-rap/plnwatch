@@ -60,7 +60,7 @@ class LibMenu2 {
 
     private function filter($filter) {
         $jamNyala = $this->getListRangeJamNyala(true);
-        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'JAMNYALA', 'KDGARDU', 'NOTIANG') : $filter['select']);
+        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'FAKM', 'JAMNYALA') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
         $explode = explode(' AS ', $filter['order']);
         $filter['order'] = $explode[0];

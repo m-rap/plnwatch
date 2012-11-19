@@ -22,12 +22,18 @@ class Dil extends CI_Model {
             'NAMA' => 'Nama Pelanggan',
             'TARIF' => 'Tarif',
             'DAYA' => 'Daya',
+            'ALAMAT' => 'Alamat',
+            'NOTELP' => 'No Telp',
+            'KODEPOS' => 'Kode Pos',
             'TGLPASANG_KWH' => 'Tgl. Pasang',
-            'MEREK_KWH' => 'Merek KWH',
             'KDPEMBMETER' => 'Meteran',
+            'MEREK_KWH' => 'Merek KWH',
             'KDGARDU' => 'Kode Gardu',
             'NOTIANG' => 'No. Tiang',
             'KODEAREA' => 'Kode Area',
+            'TGLPDL' => 'Tgl. PDL',
+            'TGLNYALA_PB' => 'Tgl. Nyala',
+            'TGLRUBAH_MK' => 'Tgl. Ubah',
         );
     }
 
@@ -41,9 +47,14 @@ class Dil extends CI_Model {
     /*
      * ---------------------------------------------- Menu 1 ----------------------------------------------
      */
+
     public function filterMenu1Condition($filter) {
         $year = date('Y');
         $where = "KODEAREA = '" . $filter['area'] . "'";
+
+        //array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%".$filter['mutasi']."%"),
+        $where .= " AND SUBSTR(DIL.TARIF, 3, 1) " . ($filter['praPasca'] == 1 ? '=' : '<>') . " 'T'";
+
         $where .= " AND DAYA ";
         if (array_key_exists('max', $filter['daya'])) {
             $where .= "BETWEEN " . $filter['daya']['min'] . " AND " . $filter['daya']['max'];
@@ -57,6 +68,7 @@ class Dil extends CI_Model {
         } else {
             $where .= ">= " . $filter['tglPasang']['min'];
         }
+
         return $where;
     }
 
@@ -66,7 +78,7 @@ class Dil extends CI_Model {
         $this->db->select(implode(',', $filter['select']));
         $this->db->order_by($filter['order']);
         $q = $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset']);
-        if($returnData){
+        if ($returnData) {
             return $q->result();
         }
         return $q;
@@ -81,24 +93,23 @@ class Dil extends CI_Model {
     /*
      * ---------------------------------------------- Menu 4 ----------------------------------------------
      */
+
     public function filterMenu4($filter, $returnData = true) {
         $this->db->select(implode(',', $filter['select']));
         $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'LEFT');
         $this->db->order_by($filter['order']);
-        
-        $q = $this->db->get_where($this->table,
-                array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%".$filter['mutasi']."%"),
-                $filter['limit'],
-                $filter['offset']);
-        if($returnData){
+
+        $q = $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%"), $filter['limit'], $filter['offset']);
+        if ($returnData) {
             return $q->result();
         }
         return $q;
     }
-    
+
     public function countFilterMenu4($filter) {
-        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%".$filter['mutasi']."%"))->num_rows();
+        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%"))->num_rows();
     }
+
 }
 
 ?>

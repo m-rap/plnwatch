@@ -16,9 +16,9 @@ class LibMenu3 {
     public function getListTren($value = false) {
         if ($value) {
             return array(
-                1 => array('min' => 450, 'max' => 5500),
-                2 => array('min' => 6600, 'max' => 33000),
-                3 => array('min' => 41500),
+                1 => 'naik',
+                2 => 'turun',
+                3 => 'flat',
             );
         } else {
             return array(

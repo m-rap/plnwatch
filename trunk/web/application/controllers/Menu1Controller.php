@@ -49,19 +49,21 @@ class Menu1Controller extends CI_Controller {
             'area' => $this->input->get('area'),
             'daya' => $this->input->get('daya'),
             'tglPasang' => $this->input->get('tglPasang'),
+            'praPasca' => $this->input->get('praPasca'),
         );
         $list = array(
             'area' => $this->libarea->getList(),
             'daya' => $lib->getListRangeDaya(),
             'tglPasang' => $lib->getListRangeTglPasang(),
+            'praPasca' => $lib->getListPraPasca(),
         );
         $input = $lib->validateInput($input, $list);
 
         $data = array(
-            'pageTitle' => 'Menu 1',
+            'pageTitle' => 'Menu 1 - Analisa Usia APP',
             'label' => $this->dil->attributeLabels(),
             'select' => array('IDPEL', 'NAMA', 'KDPEMBMETER', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG'),
-            'sAjaxSource' => site_url("menu1/data?area=" . $input['area'] . "&daya=" . $input['daya'] . "&tglPasang=" . $input['tglPasang']),
+            'sAjaxSource' => site_url("menu1/data?area=" . $input['area'] . "&daya=" . $input['daya'] . "&tglPasang=" . $input['tglPasang'] . "&praPasca=" . $input['praPasca']),
         );
 
         foreach (array_keys($input) as $k) {
@@ -71,7 +73,6 @@ class Menu1Controller extends CI_Controller {
             );
         }
         $data['blth'] = $this->option->getValue('DilBLTH');
-        $this->layout->activeLayout = '1column';
         $this->layout->render('main', $data);
     }
 
@@ -80,6 +81,7 @@ class Menu1Controller extends CI_Controller {
             'area' => $this->input->get('area'),
             'daya' => $this->input->get('daya'),
             'tglPasang' => $this->input->get('tglPasang'),
+            'praPasca' => $this->input->get('praPasca'),
         );
         $filter = $this->libmenu1->validateInput($filter);
         $filter['select'] = array('IDPEL', 'NAMA', 'KDPEMBMETER', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG');
@@ -125,6 +127,7 @@ class Menu1Controller extends CI_Controller {
             'area' => $this->input->get('area'),
             'daya' => $this->input->get('daya'),
             'tglPasang' => $this->input->get('tglPasang'),
+            'praPasca' => $this->input->get('praPasca'),
         );
         $filter = $this->libmenu1->validateInput($filter);
         $filter['controller'] = $this->controller;

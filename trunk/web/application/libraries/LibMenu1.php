@@ -46,6 +46,20 @@ class LibMenu1 {
             );
         }
     }
+    
+    public function getListPraPasca($value = false) {
+        if ($value) {
+            return array(
+                1 => 'ada T nya',
+                2 => 'gak ada T nya',
+            );
+        } else {
+            return array(
+                1 => 'Pra',
+                2 => 'Pasca',
+            );
+        }
+    }
 
     public function validateInput($input, $list = null) {
         if ($list == null) {
@@ -53,6 +67,7 @@ class LibMenu1 {
                 'area' => $this->ci->libarea->getList(),
                 'daya' => $this->getListRangeDaya(),
                 'tglPasang' => $this->getListRangeTglPasang(),
+                'praPasca' => $this->getListPraPasca(),
             );
         }
         $k = array_keys($list['area']);
@@ -60,6 +75,7 @@ class LibMenu1 {
             'area' => $list['area'][$k[0]],
             'daya' => 1,
             'tglPasang' => 1,
+            'praPasca' => 1,
         );
 
         foreach (array_keys($input) as $i) {
@@ -92,7 +108,7 @@ class LibMenu1 {
 
     public function export($filter) {
         $BLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . '.xls';
+        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . $filter['praPasca'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['limit'] = 50000;
