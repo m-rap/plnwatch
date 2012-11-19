@@ -1,3 +1,10 @@
+tambahan di ddl:
+dil: TGLPDL, TGLNYALA_PB, TGLRUBAH_MK (untuk eksport menu 2)
+sorek: FAKM (buat faktor kali mungkin), KWHLWBP, KWHWBP, KWHKVARH
+dph: PEMKWH, RPTAG (sebetulnya banyak field RP lainnya), TGLBAYAR, JAMBAYAR (ada opsi lain TGL_TRANSAKSI, sementara pake ini dulu karena value nya lebih duluan)
+
+
+
 menu 1 - Analisa Usia APP
 filter: area, rentang daya, rentang tgl pasang, lpb/pb (pra/pasca)
 =========================================================================================
@@ -44,9 +51,9 @@ no urut | id | nama pelanggan | meteran | daya | tanggal pasang | kode gardu | n
 
 menu 2 - Analisa Jam Nyala
 filter: area, rentang daya, rentang tgl pasang, lpb/pb (pra/pasca)
-=========================================================================================================================================================================
-no urut | id | nama pelanggan | tarif | daya | faktor kali | jam nyala | kode pemb meter | alamat | kddk | no gardu | no tiang | tgl nyala | tgl pdl | tgl rubah/pasang |
-=========================================================================================================================================================================
+===============================================================================================================================================================================
+no urut | id | nama pelanggan | tarif | daya | faktor kali | jam nyala | kode pemb meter | alamat | kddk | no gardu | no tiang | tgl nyala | tgl pdl | tgl rubah | tgl pasang |
+===============================================================================================================================================================================
 
 menu 3 - Analisa Tren Pemakaian KWH
 filter: area, naik/flat/turun
@@ -57,9 +64,9 @@ no urut | id | nama pelanggan |       blth         |       blth         | ... | 
 
 menu 4 - LPB
 filter: area, migrasi/pasang baru
-======================================================================================================================================================================================================================
-no urut | id | nama pelanggan | tarif | daya | rupiah token trakhir | tgl beli token terakhir | kwh token terakhir | tanggal pasang/rubah | kode gardu | no tiang | alamat | kode kedudukan (kddk) | kode pemb meter |
-======================================================================================================================================================================================================================
+========================================================================================================================================================================================================================
+no urut | id | nama pelanggan | tarif | daya | rupiah token trakhir | tgl beli token terakhir | kwh token terakhir | tanggal pasang | rubah | kode gardu | no tiang | alamat | kode kedudukan (kddk) | kode pemb meter |
+========================================================================================================================================================================================================================
 
 menu 5 - EIS
 sama kayak menu 1
