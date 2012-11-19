@@ -1,0 +1,31 @@
+menu 1 - Analisa Usia APP
+filter: area, rentang daya, rentang tgl pasang, lpb/pb (pra/pasca)
+=========================================================================================
+no urut | id | nama pelanggan | meteran | daya | tanggal pasang | kode gardu | no tiang |
+=========================================================================================
+
+menu 2 - Analisa Jam Nyala
+filter: area, rentang daya, rentang tgl pasang, lpb/pb (pra/pasca)
+========================================================================
+no urut | id | nama pelanggan | tarif | daya | faktor kali | jam nyala |
+========================================================================
+
+menu 3 - Analisa Tren Pemakaian KWH
+filter: area, naik/flat/turun
+===============================================================================
+no urut | id | nama pelanggan |       blth         |       blth         | ... |
+        |    |                | LWBP | WBP | kVArh | LWBP | WBP | kVArh |     |
+===============================================================================
+
+menu 4 - LPB
+filter: area, migrasi/pasang baru
+====================================================================================================================
+no urut | id | nama pelanggan | tarif | daya | rupiah token trakhir | tgl beli token terakhir | kwh token terakhir |
+====================================================================================================================
+
+menu 5 - EIS
+====================================================================
+no urut | area | jumlah pelanggan total |   jumlah pelanggan tren  |
+        |      |    pra    |    pasca   |  naik  | turun  |  flat  |
+====================================================================
+        |      |           |            |        |        |        | jamnyala: ... export
