@@ -48,7 +48,7 @@ namespace PlnWatchDataImporter
         MYSQLNOTFOUND
     }
 
-    public class MdbReader
+    public class Importer
     {
         #region attributes
         string mysqlpath;
@@ -138,7 +138,7 @@ namespace PlnWatchDataImporter
                 ProgressTextChanged(this, e);
         }
 
-        public MdbReader()
+        public Importer()
         {
             Initialize();
             mySqlConnection = new MySqlConnection("server=" + mysqlhost + ";User Id=" + mysqluser + ";password=" + mysqlpass + ";database=" + mysqldb);
@@ -196,12 +196,12 @@ namespace PlnWatchDataImporter
             RunCmd("/c asdasd");
         }
 
-        public MdbReadResult ReadDil()
+        public MdbReadResult ImportDil()
         {
             MdbReadResult result;
             try
             {
-                #region update DilBlTh
+                #region update DilBlTh in option
                 mySqlConnection.Open();
                 MySqlCommand mycmd = new MySqlCommand("SELECT `OptionValue` FROM `Option` WHERE `OptionKey` = 'DilBlTh';", mySqlConnection);
                 MySqlDataReader myreader = mycmd.ExecuteReader();
@@ -234,9 +234,10 @@ namespace PlnWatchDataImporter
 
                 oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + DilMdbPath);
                 oleDbConnection.Open();
-                OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG FROM " + DilTableName, oleDbConnection);
+                OleDbCommand cmd = new OleDbCommand("SELECT JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KDDK, TGLPDL, TGLNYALA_PB, TGLRUBAH_MK FROM " + DilTableName, oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
+                StringBuilder sb = new StringBuilder("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, ALAMAT, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA, KDDK, TGLPDL, TGLNYALA_PB, TGLRUBAH_MK) VALUES ");
                 if (batchMode)
                 {
                     #region
@@ -248,39 +249,14 @@ namespace PlnWatchDataImporter
                         ProgressText = "Mengeksekusi reader dan menulis file dump..";
                         OnProgressTextChanged(null);
 
-                        dilStreamWriter.WriteLine("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ");
+                        dilStreamWriter.WriteLine(sb.ToString());
 
                         while (reader.Read())
                         {
-                            DateTime tglpsg;
-                            if (reader["TGLPASANG_KWH"].ToString() != "")
-                                tglpsg = (DateTime)reader["TGLPASANG_KWH"];
-                            else
-                                tglpsg = new DateTime();
-
-                            StringBuilder sb = new StringBuilder();
+                            sb = new StringBuilder();
                             if (i > 0)
                                 sb.Append(", ");
-                            sb.Append("('")
-                                .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', ")
-                                .Append(reader["DAYA"].ToString()).Append(", '")
-                                .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
-                                .Append(reader["KDPEMBMETER"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(DilKodeArea).Append("')");
+                            sb.Append(PopulateDilValueSQL(reader));
                             dilStreamWriter.WriteLine(sb.ToString());
 
                             string n = (++i).ToString();
@@ -345,35 +321,10 @@ namespace PlnWatchDataImporter
 
                         while (reader.Read())
                         {
-                            StringBuilder sb = new StringBuilder("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, PNJ, NAMAPNJ, NOBANG, RT, RW, LINGKUNGAN, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA) VALUES ('");
-                            DateTime tglpsg;
-                            if (reader["TGLPASANG_KWH"].ToString() != "")
-                                tglpsg = (DateTime)reader["TGLPASANG_KWH"];
-                            else
-                                tglpsg = new DateTime();
+                            StringBuilder fullSql = new StringBuilder();
+                            fullSql.Append(sb).Append(PopulateDilValueSQL(reader)).Append(";");
 
-                            sb
-                                .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', ")
-                                .Append(reader["DAYA"].ToString()).Append(", '")
-                                .Append(reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["RT"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["RW"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["LINGKUNGAN"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
-                                .Append(reader["KDPEMBMETER"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
-                                .Append(DilKodeArea).Append("');");
-
-                            mycmd.CommandText = sb.ToString();
+                            mycmd.CommandText = fullSql.ToString();
                             mycmd.ExecuteNonQuery();
 
                             string n = (++i).ToString();
@@ -417,6 +368,7 @@ namespace PlnWatchDataImporter
                     dilStreamWriter.WriteLine("*/\n");
                 }
 
+                #region save dml
                 //Console.WriteLine("Apakah Anda ingin menyimpan file DML DIL? (y/n)");
 
                 //string input;
@@ -434,6 +386,7 @@ namespace PlnWatchDataImporter
                 //        break;
                 //    }
                 //}
+                #endregion
 
                 oleDbConnection.Close();
             }
@@ -446,7 +399,68 @@ namespace PlnWatchDataImporter
             return result;
         }
 
-        public MdbReadResult ReadSorek()
+        public StringBuilder PopulateDilValueSQL(OleDbDataReader reader)
+        {
+            StringBuilder sb = new StringBuilder();
+            DateTime tglpsg;
+            if (reader["TGLPASANG_KWH"].ToString() != "")
+                tglpsg = (DateTime)reader["TGLPASANG_KWH"];
+            else
+                tglpsg = new DateTime();
+
+            StringBuilder alamat = new StringBuilder();
+            string tempAlamat = reader["PNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
+            if (tempAlamat != "")
+                alamat.Append(tempAlamat);
+            tempAlamat = reader["NAMAPNJ"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
+            if (tempAlamat != "")
+                alamat.Append(" ").Append(tempAlamat);
+            tempAlamat = reader["NOBANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
+            if (tempAlamat != "")
+                alamat.Append(tempAlamat);
+
+            DateTime tglpdl;
+            if (reader["TGLPDL"].ToString() != "")
+                tglpdl = (DateTime)reader["TGLPDL"];
+            else
+                tglpdl = new DateTime();
+
+            DateTime tglnyala;
+            if (reader["TGLNYALA_PB"].ToString() != "")
+                tglnyala = (DateTime)reader["TGLNYALA_PB"];
+            else
+                tglnyala = new DateTime();
+
+            DateTime tglrubah;
+            if (reader["TGLRUBAH_MK"].ToString() != "")
+                tglrubah = (DateTime)reader["TGLRUBAH_MK"];
+            else
+                tglrubah = new DateTime();
+
+            sb.Append("('")
+                .Append(reader["JENIS_MK"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["NAMA"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["TARIF"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', ")
+                .Append(reader["DAYA"].ToString()).Append(", '")
+                .Append(alamat).Append("', '")
+                .Append(reader["NOTELP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["KODEPOS"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(tglpsg.Year.ToString("0000")).Append("-").Append(tglpsg.Month.ToString("00")).Append("-").Append(tglpsg.Day.ToString("00")).Append("', '")
+                .Append(reader["KDPEMBMETER"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["MEREK_KWH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["KDGARDU"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(reader["NOTIANG"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(DilKodeArea).Append("', '")
+                .Append(reader["KDDK"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                .Append(tglpdl.Year.ToString("0000")).Append("-").Append(tglpdl.Month.ToString("00")).Append("-").Append(tglpdl.Day.ToString("00")).Append("', '")
+                .Append(tglnyala.Year.ToString("0000")).Append("-").Append(tglnyala.Month.ToString("00")).Append("-").Append(tglnyala.Day.ToString("00")).Append("', '")
+                .Append(tglrubah.Year.ToString("0000")).Append("-").Append(tglrubah.Month.ToString("00")).Append("-").Append(tglrubah.Day.ToString("00")).Append("'")
+                .Append(")");
+            return sb;
+        }
+
+        public MdbReadResult ImportSorek()
         {
             MdbReadResult result;
             MySqlCommand mycmd = null;
@@ -727,7 +741,7 @@ namespace PlnWatchDataImporter
             return result;
         }
 
-        public MdbReadResult ReadPpob()
+        public MdbReadResult ImportPpob()
         {
             MdbReadResult result = MdbReadResult.FAILED;
             try

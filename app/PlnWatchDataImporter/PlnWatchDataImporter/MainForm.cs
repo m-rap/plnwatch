@@ -19,7 +19,7 @@ namespace PlnWatchDataImporter
         [DllImport("kernel32")]
         static extern bool FreeConsole();
 
-        MdbReader mdbReader;
+        Importer impoter;
         OptionsForm optionsForm;
 
         public MainForm()
@@ -114,40 +114,40 @@ namespace PlnWatchDataImporter
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            mdbReader = new MdbReader();
+            impoter = new Importer();
             if (dilCheckBox.Checked)
             {
-                mdbReader.DilMdbPath = dilMdbPathTextBox.Text;
-                mdbReader.DilKodeArea = dilKodeAreaTextBox.Text;
-                mdbReader.DilBlTh = dilBulanTextBox.Text + dilTahunTextBox.Text;
-                mdbReader.DilTableName = dilTableNameTextBox.Text;
+                impoter.DilMdbPath = dilMdbPathTextBox.Text;
+                impoter.DilKodeArea = dilKodeAreaTextBox.Text;
+                impoter.DilBlTh = dilBulanTextBox.Text + dilTahunTextBox.Text;
+                impoter.DilTableName = dilTableNameTextBox.Text;
             }
             if (sorekCheckBox.Checked)
             {
-                mdbReader.SorekMdbPath = sorekMdbPathTextBox.Text;
-                mdbReader.SorekKodeArea = sorekKodeAreaTextBox.Text;
-                mdbReader.SorekBlTh = sorekBulanTextBox.Text + sorekTahunTextBox.Text;
-                mdbReader.SorekTableName = sorekTableNameTextBox.Text;
+                impoter.SorekMdbPath = sorekMdbPathTextBox.Text;
+                impoter.SorekKodeArea = sorekKodeAreaTextBox.Text;
+                impoter.SorekBlTh = sorekBulanTextBox.Text + sorekTahunTextBox.Text;
+                impoter.SorekTableName = sorekTableNameTextBox.Text;
             }
             if (ppobCheckBox.Checked)
             {
-                mdbReader.PpobMdbPath = ppobMdbPathTextBox.Text;
-                mdbReader.PpobBlTh = ppobBulanTextBox.Text + ppobTahunTextBox.Text;
-                mdbReader.PpobTableName = ppobTableNameTextBox.Text;
+                impoter.PpobMdbPath = ppobMdbPathTextBox.Text;
+                impoter.PpobBlTh = ppobBulanTextBox.Text + ppobTahunTextBox.Text;
+                impoter.PpobTableName = ppobTableNameTextBox.Text;
             }
-            mdbReader.ProgressTextChanged += mdbReader_ProgressTextChanged;
+            impoter.ProgressTextChanged += mdbReader_ProgressTextChanged;
             AllocConsole();
             if (dilCheckBox.Checked)
             {
-                mdbReader.ReadDil();
+                impoter.ImportDil();
             }
             if (sorekCheckBox.Checked)
             {
-                mdbReader.ReadSorek();
+                impoter.ImportSorek();
             }
             if (ppobCheckBox.Checked)
             {
-                mdbReader.ReadPpob();
+                impoter.ImportPpob();
             }
             Console.Write("Tekan Enter...");
             while (Console.ReadKey().Key != ConsoleKey.Enter);
@@ -158,7 +158,7 @@ namespace PlnWatchDataImporter
         {
             if (e != null && e.ClearCurrentLine)
                 Program.ClearCurrentConsoleLine(e.Left, e.Width);
-            Console.WriteLine(mdbReader.ProgressText);
+            Console.WriteLine(impoter.ProgressText);
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)

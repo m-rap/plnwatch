@@ -46,9 +46,9 @@ namespace PlnWatchDataImporter
             config.AppSettings.Settings.Add("mysqlpath", mySqlPathTextBox.Text);
             config.AppSettings.Settings.Remove("batchmode");
             if (batchModeRadioButton.Checked)
-                config.AppSettings.Settings.Add("mysqlpath", "1");
+                config.AppSettings.Settings.Add("batchmode", "1");
             else
-                config.AppSettings.Settings.Add("mysqlpath", "0");
+                config.AppSettings.Settings.Add("batchmode", "0");
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
             Close();
