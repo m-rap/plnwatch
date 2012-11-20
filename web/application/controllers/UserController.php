@@ -92,6 +92,7 @@ class UserController extends CI_Controller {
         $data['sidebar'] = $this->activeUser;
 
         $layout = new Layout(array('controller' => strtolower($this->controller)));
+        $layout->activeLayout = '2column';
         $layout->render('profile', $data);
     }
 

@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://apledjatim.com';
+$config['base_url']	= 'http://apeldjatim.com';
 
 /*
 |--------------------------------------------------------------------------

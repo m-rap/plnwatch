@@ -5,5 +5,6 @@ Structure
 - doc	: Document
 - web	: Web Source Code
 
-*ubah DocumentRoot virtual host apache jadi "C:/xampp/htdocs/plnwatch/web/"
-*database:plnwatch; user:root; pass:
+* sesuaikan DocumentRoot virtual host apache pada file "httpd-vhosts.conf" dengan folder "web", misal "C:/xampp/htdocs/plnwatch/web/"
+* tambahkan baris "127.0.0.1 apeldjatim.com" apda file "hosts"
+* database:plnwatch; user:root; pass:
