@@ -21,7 +21,7 @@
             <th><?php echo $label['TARIF'] ?></th>
             <th><?php echo $label['DAYA'] ?></th>
             <th><?php echo $label['RPTAG'] ?></th>
-            <th><?php echo $label['TANGGAL'] ?></th>
+            <th><?php echo $label['TGLBAYAR'] ?></th>
             <th><?php echo $label['PEMKWH'] ?></th>
         </tr>
     </thead>

@@ -48,7 +48,7 @@ class Menu4Controller extends CI_Controller {
             'sAjaxSource' => site_url('menu4/data?area=' . $input['area'] . '&mutasi=' . $input['mutasi']),
         );
         foreach (array_keys($input) as $k) {
-            $data['sidebar']['dropdownData'][$k] = array(
+            $data['dropdownData'][$k] = array(
                 'input' => $input[$k],
                 'list' => $list[$k],
             );

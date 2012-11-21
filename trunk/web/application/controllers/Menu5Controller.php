@@ -13,7 +13,7 @@ class Menu5Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('layout', array('controller' => strtolower($this->controller)));
-        //$this->load->library(array('LibMenu1', 'LibArea', 'LibExport'));
+        $this->load->library(array('LibMenu2', 'LibMenu5', 'LibArea', 'LibExport'));
         //$this->load->helper(array('form', 'file'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
@@ -35,6 +35,7 @@ class Menu5Controller extends CI_Controller {
             'pageTitle' => 'Menu 5 - EIS',
             'sAjaxSource' => site_url("menu5/data"),
             'data' => $this->libmenu5->getData(),
+            'jamNyala' => $this->libmenu2->getListRangeJamNyala(),
         );
         
         $this->layout->activeLayout = '1column';

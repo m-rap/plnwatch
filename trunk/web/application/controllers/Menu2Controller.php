@@ -48,12 +48,12 @@ class Menu2Controller extends CI_Controller {
             'sAjaxSource' => site_url('menu2/data?area=' . $input['area'] . '&jamNyala=' . $input['jamNyala']),
         );
         foreach (array_keys($input) as $k) {
-            $data['sidebar']['dropdownData'][$k] = array(
+            $data['dropdownData'][$k] = array(
                 'input' => $input[$k],
                 'list' => $list[$k],
             );
         }
-        $data['sidebar']['blth'] = $this->sorek->currentBLTH();
+        $data['blth'] = $this->sorek->currentBLTH();
 
         $this->layout->render('main', $data);
     }
