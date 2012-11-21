@@ -37,8 +37,6 @@ class Menu5Controller extends CI_Controller {
             'data' => $this->libmenu5->getData(),
             'jamNyala' => $this->libmenu2->getListRangeJamNyala(),
         );
-        
-        $this->layout->activeLayout = '1column';
         $this->layout->render('main', $data);
     }
 

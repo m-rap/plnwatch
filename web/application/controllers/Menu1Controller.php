@@ -14,7 +14,7 @@ class Menu1Controller extends CI_Controller {
         parent::__construct();
         $this->load->library('layout', array('controller' => strtolower($this->controller)));
         $this->load->library(array('LibMenu1', 'LibArea', 'LibExport'));
-        $this->load->helper(array('form', 'file'));
+        $this->load->helper(array('form', 'file', 'url'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
     }
@@ -44,6 +44,11 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function view() {
+		if($this->input->get('download')){
+			$this->export();
+			exit;
+		}
+		
         $lib = new LibMenu1();
         $input = array(
             'area' => $this->input->get('area'),
