@@ -31,6 +31,11 @@ class Menu2Controller extends CI_Controller {
     }
 
     public function view() {
+		if($this->input->get('download')){
+			$this->export();
+			exit;
+		}
+		
         $lib = new LibMenu2();
         $list = array(
             'area' => $this->libarea->getList('sorek'),

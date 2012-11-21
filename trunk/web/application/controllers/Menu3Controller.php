@@ -32,6 +32,11 @@ class Menu3Controller extends CI_Controller {
     }
     
     public function view() {
+		if($this->input->get('download')){
+			$this->export();
+			exit;
+		}
+		
         $lib = new LibMenu3();
         $list = array(
             'kodearea' => $this->libarea->getList(),

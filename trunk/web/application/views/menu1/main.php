@@ -13,16 +13,15 @@
 </script>
 
 <h2><?php echo $pageTitle ?></h2>
-
 <?php
 echo form_open('', array('method' => 'get'));
-echo 'BLTH terbaru : ' . form_input('blth', substr($blth, 0, 2) . ' ' . substr($blth, 2), 'disabled size="6"')
+echo 'BLTH : ' . form_input('blth', substr($blth, 0, 2) . ' ' . substr($blth, 2), 'disabled size="6"')
  . ' Area : ' . form_dropdown('area', $dropdownData['area']['list'], $dropdownData['area']['input'])
- . ' Rentang Daya : ' . form_dropdown('daya', $dropdownData['daya']['list'], $dropdownData['daya']['input'])
- . ' Rentang Tgl. Pasang : ' . form_dropdown('tglPasang', $dropdownData['tglPasang']['list'], $dropdownData['tglPasang']['input'])
- . ' '.  form_dropdown('praPasca', $dropdownData['praPasca']['list'], $dropdownData['praPasca']['input'])
+ . ' Daya : ' . form_dropdown('daya', $dropdownData['daya']['list'], $dropdownData['daya']['input'])
+ . ' Tgl. Pasang : ' . form_dropdown('tglPasang', $dropdownData['tglPasang']['list'], $dropdownData['tglPasang']['input'])
+ . ' LPB/PB : '.  form_dropdown('praPasca', $dropdownData['praPasca']['list'], $dropdownData['praPasca']['input'])
  . ' ' . form_submit('submit', 'lihat data', 'class="button"')
- . ' ' . anchor('menu1/export/?area=' . $dropdownData['area']['input'] . '&daya=' . $dropdownData['daya']['input'] . '&tglPasang=' . $dropdownData['tglPasang']['input'] . "&praPasca=" . $dropdownData['praPasca']['input'], 'download');
+ . ' ' . form_submit('download', 'download', 'class="button"');
 echo form_close();
 ?>
 <hr />

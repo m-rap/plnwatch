@@ -7,8 +7,8 @@
         <tr>
             <th rowspan="2">Area</th>
             <th colspan="2">Jumlah Pelanggan Total</th>
-            <th colspan="3">Jumlah Pelanggan Tren</th>
-            <th rowspan="2">Download</th>
+            <th colspan="3">Jumlah Tren Pelanggan</th>
+            <th rowspan="2">Download<br />(berdasarkan jam nyala)</th>
         </tr>
         <tr>
             <th>Pra</th>
@@ -27,7 +27,7 @@
                 <td><?php echo $row->NAIK ?></td>
                 <td><?php echo $row->TURUN ?></td>
                 <td><?php echo $row->FLAT ?></td>
-                <td><?php echo form_hidden('kodeArea', $row->KODEAREA) . form_dropdown('jamNyala', $jamNyala) . ' ' . form_submit('download', 'download', 'class="button"') ?></td>
+                <td align="center"><?php echo form_hidden('kodeArea', $row->KODEAREA) . form_dropdown('jamNyala', $jamNyala) . ' ' . form_submit('download', 'download', 'class="button"') ?></td>
             </tr>
             <?php echo form_close();
         endforeach;
