@@ -110,6 +110,22 @@ class Dil extends CI_Model {
         return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%"))->num_rows();
     }
 
+    /*
+     * ---------------------------------------------- Menu 4 ----------------------------------------------
+     */
+
+    public function filterMenu5($sorekTable) {
+        $this->db->select("DIL.KODEAREA AS KODEAREA,
+	SUM(IF(SUBSTR(DIL.TARIF, 3, 1) = 'T', 1, 0)) AS PRA,
+	SUM(IF(SUBSTR(DIL.TARIF, 3, 1) <> 'T', 1, 0)) AS PASCA,
+	SUM(IF(" . $sorekTable . ".TREN = 'naik', 1, 0)) AS NAIK,
+	SUM(IF(" . $sorekTable . ".TREN = 'turun', 1, 0)) AS TURUN,
+	SUM(IF(" . $sorekTable . ".TREN = 'flat', 1, 0)) AS FLAT", FALSE);
+        $this->db->from($this->table);
+        $this->db->join($sorekTable, 'DIL.IDPEL = ' . $sorekTable . '.IDPEL', 'LEFT');
+        return $this->db->get();
+    }
+
 }
 
 ?>

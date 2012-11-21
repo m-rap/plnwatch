@@ -19,6 +19,18 @@
         </tr>
     </thead>
     <tbody>
-
+        <?php foreach ($data->result() as $row) : echo form_open('menu5/export', array('method' => 'get', '_target' => 'blank')); ?>
+            <tr>
+                <td><?php echo $row->KODEAREA ?></td>
+                <td><?php echo $row->PRA ?></td>
+                <td><?php echo $row->PASCA ?></td>
+                <td><?php echo $row->NAIK ?></td>
+                <td><?php echo $row->TURUN ?></td>
+                <td><?php echo $row->FLAT ?></td>
+                <td><?php echo form_hidden('kodeArea', $row->KODEAREA) . form_dropdown('jamNyala', $jamNyala) . ' ' . form_submit('download', 'download', 'class="button"') ?></td>
+            </tr>
+            <?php echo form_close();
+        endforeach;
+        ?>
     </tbody>
 </table>

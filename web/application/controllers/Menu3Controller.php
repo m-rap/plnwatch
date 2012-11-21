@@ -51,7 +51,7 @@ class Menu3Controller extends CI_Controller {
             'sAjaxSource' => site_url('menu3/data?area='.$input['kodearea'].'&tren='.$input['tren']),
         );
         foreach (array_keys($input) as $k) {
-            $data['sidebar']['dropdownData'][$k] = array(
+            $data['dropdownData'][$k] = array(
                 'input' => $input[$k],
                 'list' => $list[$k],
             );
