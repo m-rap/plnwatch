@@ -877,7 +877,7 @@ namespace PlnWatchDataImporter
 
                 oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + PpobMdbPath);
                 oleDbConnection.Open();
-                OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, PEMKWH, RPTAG, TGLBAYAR, JAMBAYAR FROM " + PpobTableName, oleDbConnection);
+                OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, PEMKWH, RPTAG, TGLBAYAR, JAMBAYAR FROM " + PpobTableName + " ORDER BY IDPEL ASC", oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 #region truncate ppob
@@ -989,52 +989,70 @@ namespace PlnWatchDataImporter
                         //DataRowBuilder dphRowBuilder = 
                         string idpel = "";
                         DateTime tglbayar = DateTime.MinValue;
-                        float pemkwh, rptag;
+                        float pemkwh = 0, rptag = 0;
+                        int jmlbeli = 0;
+                        CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("en-US");
+                        int j = 0;
                         while (reader.Read())
                         {
                             string tempIdpel = reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
-                            if (idpel != tempIdpel)
+                            if (j == 0)
+                                idpel = tempIdpel;
+                            string tglBayarString = reader["TGLBAYAR"].ToString();
+                            string jamBayarString = reader["JAMBAYAR"].ToString();
+                            DateTime tempTglBayar = DateTime.MinValue;
+                            if (tglBayarString != "")
                             {
-                                string tglBayarString = reader["TGLBAYAR"].ToString();
-                                string jamBayarString = reader["JAMBAYAR"].ToString();
-                                if (tglBayarString != "")
+                                int[] tglBayarArrayInt = { int.Parse(tglBayarString.Substring(0, 4)), int.Parse(tglBayarString.Substring(4, 2)), int.Parse(tglBayarString.Substring(6)) };
+                                if (jamBayarString != "")
                                 {
-                                    int[] tglBayarArrayInt = {int.Parse(tglBayarString.Substring(0, 4)), int.Parse(tglBayarString.Substring(4, 2)), int.Parse(tglBayarString.Substring(6))};
-                                    DateTime tempTglBayar;
-                                    if (jamBayarString != "")
-                                    {
-                                        int[] jamBayarArrayInt = {int.Parse(jamBayarString.Substring(0, 2)), int.Parse(jamBayarString.Substring(2, 2)), int.Parse(jamBayarString.Substring(4))};
-                                        tempTglBayar = new DateTime(tglBayarArrayInt[0], tglBayarArrayInt[1], tglBayarArrayInt[2], jamBayarArrayInt[0], jamBayarArrayInt[1], jamBayarArrayInt[2]);
-                                    }
-                                    else
-                                    {
-                                        tempTglBayar = new DateTime(tglBayarArrayInt[0], tglBayarArrayInt[1], tglBayarArrayInt[2]);
-                                    }
-                                    if (tglbayar == null || tglbayar < tempTglBayar)
-                                    {
-                                        tglbayar = tempTglBayar;
-                                        pemkwh = float.Parse(reader["PEMKWH"].ToString());
-                                        rptag = float.Parse(reader["RPTAG"].ToString());
-                                        tglbayar = tempTglBayar;
-                                    }
+                                    int[] jamBayarArrayInt = { int.Parse(jamBayarString.Substring(0, 2)), int.Parse(jamBayarString.Substring(2, 2)), int.Parse(jamBayarString.Substring(4)) };
+                                    tempTglBayar = new DateTime(tglBayarArrayInt[0], tglBayarArrayInt[1], tglBayarArrayInt[2], jamBayarArrayInt[0], jamBayarArrayInt[1], jamBayarArrayInt[2]);
+                                }
+                                else
+                                {
+                                    tempTglBayar = new DateTime(tglBayarArrayInt[0], tglBayarArrayInt[1], tglBayarArrayInt[2]);
                                 }
                             }
-
-                            StringBuilder sb = new StringBuilder("INSERT INTO DPH (IDPEL, JMLBELI) VALUES  ('");
-                            
-                            sb
-                                .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', ")
-                                .Append(reader["JMLBELI"].ToString()).Append(");");
-
-                            mycmd.CommandText = sb.ToString();
-                            mycmd.ExecuteNonQuery();
-
-                            string n = (++i).ToString();
-                            ProgressText = "Jumlah record:" + n + "";
-                            if (i > 1)
-                                OnProgressTextChanged(new MdbReaderProgressEventArgs(true, 14, n.Length));
+                            if (idpel == tempIdpel)
+                            {
+                                if (tglbayar < tempTglBayar)
+                                {
+                                    tglbayar = tempTglBayar;
+                                    pemkwh = float.Parse(reader["PEMKWH"].ToString());
+                                    rptag = float.Parse(reader["RPTAG"].ToString());
+                                    tglbayar = tempTglBayar;
+                                }
+                                jmlbeli++;
+                            }
                             else
-                                OnProgressTextChanged(null);
+                            {
+
+                                StringBuilder sb = new StringBuilder("INSERT INTO DPH (IDPEL, JMLBELI, PEMKWH, RPTAG, TGLBAYAR) VALUES  ('");
+
+                                sb
+                                    .Append(idpel).Append("', ")
+                                    .Append(jmlbeli).Append(", ")
+                                    .Append(pemkwh.ToString(cultureInfo)).Append(", ")
+                                    .Append(rptag.ToString(cultureInfo)).Append(", '")
+                                    .Append(tglbayar.ToString("yyyy-MM-dd HH:mm")).Append("'")
+                                    .Append(");");
+
+                                idpel = tempIdpel;
+                                tglbayar = DateTime.MinValue;
+                                jmlbeli = 0;
+
+                                mycmd.CommandText = sb.ToString();
+                                mycmd.ExecuteNonQuery();
+
+                                string n = (++i).ToString();
+                                ProgressText = "Jumlah record:" + n + "";
+                                if (i > 1)
+                                    OnProgressTextChanged(new MdbReaderProgressEventArgs(true, 14, n.Length));
+                                else
+                                    OnProgressTextChanged(null);
+                            }
+                            j++;
                         }
 
                         ProgressText = "Transaksi berakhir, melakukan commit.";
