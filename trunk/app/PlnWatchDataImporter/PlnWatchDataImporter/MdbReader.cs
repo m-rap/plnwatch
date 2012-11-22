@@ -481,17 +481,22 @@ namespace PlnWatchDataImporter
 
                 oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + SorekMdbPath);
                 oleDbConnection.Open();
-                OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, TGLBACA, PEMKWH FROM " + SorekTableName, oleDbConnection);
+                OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, TGLBACA, PEMKWH, FAKM, KWHLWBP, KWHWBP, KWHKVARH FROM " + SorekTableName, oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("en-US");
+                StringBuilder joinSql = new StringBuilder(), selectSql = new StringBuilder();
+                List<String> sorekTables = new List<string>();
+                bool hitungTren = false;
 
-                #region //cek tabel sorek
+                #region cek tabel sorek
                 try
                 {
+                    mySqlConnection.Open();
+                    
                     ProgressText = "Mengecek keberadaan tabel " + sorekTableName + " di MySql dengan kode area " + SorekKodeArea;
                     OnProgressTextChanged(null);
-                    mySqlConnection.Open();
+                    
                     mycmd = mySqlConnection.CreateCommand();
                     mycmd.CommandText = "SHOW TABLES WHERE Tables_in_" + mysqldb + " like '" + sorekTableName + "';";
                     myreader = mycmd.ExecuteReader();
@@ -510,6 +515,35 @@ namespace PlnWatchDataImporter
                         OnProgressTextChanged(null);
                         myreader.Close();
                     }
+
+                    #region membuat sql join sorek 6 bln
+                    mycmd.CommandText = "SHOW TABLES WHERE Tables_in_" + mysqldb + " LIKE 'SOREK_%' AND Tables_in_" + mysqldb + " <  '" + sorekTableName + "';";
+                    myreader = mycmd.ExecuteReader();
+                    int count = 0;
+
+                    // sorek_0912 s3 left join sorek_0812 s2 on s3.idpel = s2.idpel left join sorek_0712 s1 on s2.idpel = s1.idpel 
+                    
+                    while (myreader.Read())
+                    {
+                        sorekTables.Add(myreader[0].ToString());
+                        count++;
+                    }
+                    for (int j = count - 1; j >= 0 && j >= count - 6; j--)
+                    {
+                        if (j != count - 1)
+                        {
+                            joinSql.Append(" LEFT JOIN ").Append(sorekTables[j]).Append(" s").Append(j).Append(" ON s").Append(j + 1).Append(".IDPEL = s").Append(j).Append(".IDPEL");
+                            selectSql.Append(", ");
+                        }
+                        else
+                        {
+                            joinSql.Append(sorekTables[j]).Append(" s").Append(j);
+                            hitungTren = true;
+                        }
+                        selectSql.Append("s").Append(j).Append(".KWHLWBP + s").Append(j).Append(".KWHWBP + s").Append(j).Append(".KWHKVARH as KWH").Append(j);
+                    }
+                    #endregion
+
                     mySqlConnection.Close();
                 }
                 catch (Exception ex)
@@ -518,7 +552,8 @@ namespace PlnWatchDataImporter
                     OnProgressTextChanged(null);
                 }
                 #endregion
-
+                
+                batchMode = false; //////// force to non batch mode. 
                 if (batchMode)
                 {
                     #region
@@ -642,12 +677,17 @@ namespace PlnWatchDataImporter
 
                         mycmd.CommandText = "" +
                             "CREATE TABLE IF NOT EXISTS `" + sorekTableName + "` (\n" +
-                            "    `IDPEL` varchar(12) NOT NULL,\n" +
-                            "    `TGLBACA` date default NULL,\n" +
-                            "    `PEMKWH` double default NULL,\n" +
-                            "    `KODEAREA` varchar(5) default NULL,\n" +
-                            "    `JAMNYALA` double default NULL,\n" +
-                            "    PRIMARY KEY  (`IDPEL`)\n" +
+                            "  `IDPEL` varchar(12) NOT NULL,\n" +
+                            "  `TGLBACA` date default NULL,\n" +
+                            "  `PEMKWH` int(11) default NULL,\n" +
+                            "  `KODEAREA` varchar(5) default NULL,\n" +
+                            "  `JAMNYALA` INT(11) default NULL,\n" +
+                            "  `FAKM` varchar(10) default NULL,\n" +
+                            "  `KWHLWBP` int(11) default NULL,\n" +
+                            "  `KWHWBP` int(11) default NULL,\n" +
+                            "  `KWHKVARH` int(11) default NULL,\n" +
+                            "  `TREN` enum('naik','turun','flat') NULL,\n" +
+                            "  PRIMARY KEY  (`IDPEL`)\n" +
                             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;";
                         mycmd.ExecuteNonQuery();
 
@@ -670,21 +710,75 @@ namespace PlnWatchDataImporter
 
                             mycmd.CommandText = "SELECT daya FROM dil WHERE IDPEL = '" + idpel + "';";
                             myreader = mycmd.ExecuteReader();
-                            double daya = -1;
+                            float daya = -1;
                             while (myreader.Read())
-                                daya = double.Parse(myreader["DAYA"].ToString());
+                                daya = float.Parse(myreader["DAYA"].ToString());
                             myreader.Close();
-                            double pemkwh = double.Parse(reader["PEMKWH"].ToString()),
-                                    jamnyala = (daya == -1) ? -1 : pemkwh * 1000 / daya;
+                            int pemkwh = int.Parse(reader["PEMKWH"].ToString());
+                            float jamnyala = (daya == -1) ? -1 : pemkwh * 1000 / daya;
 
-                            StringBuilder sb = new StringBuilder("INSERT INTO `" + sorekTableName + "` (IDPEL, TGLBACA, PEMKWH, KODEAREA, JAMNYALA) VALUES ('");
+                            string tren = "NULL";
+                            if (hitungTren)
+                            {
+                                float average = 0;
+                                mycmd.CommandText = "SELECT " + selectSql.ToString() + " FROM " + joinSql.ToString() + " WHERE s" + (sorekTables.Count - 1) + ".IDPEL = '" + idpel + "';";
+                                myreader = mycmd.ExecuteReader();
+                                if (myreader.Read())
+                                {
+                                    for (int j = sorekTables.Count - 1; j >= sorekTables.Count - 6 && j >= 0; j--)
+                                    {
+                                        try
+                                        {
+                                            average += Convert.ToInt32(myreader["KWH" + j].ToString());
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            ProgressText = ex.Message;
+                                            OnProgressTextChanged(null);
+                                        }
+                                    }
+                                    average /= ((sorekTables.Count >= 6) ? 6 : sorekTables.Count);
+                                    float kwh = 0;
+                                    try
+                                    {
+                                        kwh += Convert.ToInt32(reader["KWHLWBP"].ToString());
+                                    }
+                                    catch (Exception ex) { }
+                                    try
+                                    {
+                                        kwh += Convert.ToInt32(reader["KWHWBP"].ToString());
+                                    }
+                                    catch (Exception ex) { }
+                                    try
+                                    {
+                                        kwh += Convert.ToInt32(reader["KWHKVARH"].ToString());
+                                    }
+                                    catch (Exception ex) { }
+
+                                    float ratio = (kwh - average) / average;
+                                    if (ratio < -0.25)
+                                        tren = "turun";
+                                    else if (ratio >= -0.05 && ratio <= 0.05)
+                                        tren = "flat";
+                                    else if (ratio > 0.25)
+                                        tren = "naik";
+                                }
+                                myreader.Close();
+                            }
+
+                            StringBuilder sb = new StringBuilder("INSERT INTO `" + sorekTableName + "` (IDPEL, TGLBACA, PEMKWH, KODEAREA, JAMNYALA, FAKM, KWHLWBP, KWHWBP, KWHKVARH, TREN) VALUES ('");
 
                             sb
                                 .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(tglbaca).Append("', ")
-                                .Append(reader["PEMKWH"].ToString()).Append(", '")
+                                .Append(pemkwh).Append(", '")
                                 .Append(SorekKodeArea).Append("', ")
-                                .Append(jamnyala.ToString(cultureInfo)).Append(")");
+                                .Append(Math.Round(jamnyala)).Append(", '")
+                                .Append(reader["FAKM"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                                .Append(reader["KWHLWBP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                                .Append(reader["KWHWBP"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
+                                .Append(reader["KWHKVARH"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', ")
+                                .Append((tren == "NULL") ? tren : "'" + tren + "'").Append(")");
 
                             mycmd.CommandText = sb.ToString();
                             mycmd.ExecuteNonQuery();

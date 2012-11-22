@@ -27,11 +27,11 @@ namespace PlnWatchDataImporter
             if (ConfigurationManager.AppSettings["batchmode"] == "1")
                 batchModeRadioButton.Checked = true;
             else
-                transactionRadioButton.Checked = true;
+                transactionRadioButton.Checked = false;
             mySqlPathTextBox.Enabled = mySqlPathBrowseButton.Enabled = batchModeRadioButton.Checked;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        public void SaveConfig()
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.AppSettings.Settings.Remove("mysqlhost");
@@ -51,6 +51,11 @@ namespace PlnWatchDataImporter
                 config.AppSettings.Settings.Add("batchmode", "0");
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            SaveConfig();
             Close();
         }
 
