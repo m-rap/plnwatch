@@ -41,7 +41,13 @@ class Menu5Controller extends CI_Controller {
     }
 
     public function export() {
-        
+        $filter = array(
+            'area' => $this->input->get('area'),
+            'jamNyala' => $this->input->get('jamNyala'),
+        );
+        $filter = $this->libmenu5->validateInput($filter);
+        $filter['controller'] = $this->controller;
+        $this->libmenu5->export($filter);
     }
 
 }

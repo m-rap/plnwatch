@@ -22,17 +22,17 @@ class LibMenu5 {
     }
 
     public function export($filter) {
-        /* $BLTH = $this->ci->option->getValue('DilBLTH');
-          $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . $filter['praPasca'] . '.xls';
-          if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
-          $filter = $this->filter($filter);
-          $filter['limit'] = 50000;
+        $fileName = $filter['controller'] . $filter['area'] . $filter['jamNyala'] . '.xls';
+        if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
+            $filter = $this->filter($filter);
+            $filter['select'] = null;
+            $filter['limit'] = 50000;
 
-          $export = new LibExport();
-          $export->fileName = $fileName;
-          $export->generate($filter);
-          }
-          redirect('static/export/' . strtolower($filter['controller']) . '/' . $fileName); */
+            $export = new LibExport();
+            $export->fileName = $fileName;
+            $export->generate($filter);
+        }
+        redirect('static/export/' . strtolower($filter['controller']) . '/' . $fileName); 
     }
 
 }

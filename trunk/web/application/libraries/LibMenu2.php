@@ -82,7 +82,9 @@ class LibMenu2 {
         $fileName = $filter['controller'] . $currentBLTH . $filter['area'] . $filter['jamNyala'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
+            $filter['select'] = array('TGLNYALA_PB', 'TGLPDL', 'TGLRUBAH_MK');
             $filter['limit'] = 10000;
+
             $export = new LibExport();
             $export->fileName = $fileName;
             $export->generate($filter);

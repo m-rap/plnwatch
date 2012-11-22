@@ -31,6 +31,7 @@ class Dil extends CI_Model {
             'KDGARDU' => 'Kode Gardu',
             'NOTIANG' => 'No. Tiang',
             'KODEAREA' => 'Kode Area',
+            'KDDK' => 'Kode Kedudukan',
             'TGLPDL' => 'Tgl. PDL',
             'TGLNYALA_PB' => 'Tgl. Nyala',
             'TGLRUBAH_MK' => 'Tgl. Ubah',
@@ -42,6 +43,12 @@ class Dil extends CI_Model {
         $this->db->select('KODEAREA');
         $this->db->order_by('KODEAREA');
         return $this->db->get_where($this->table)->result();
+    }
+
+    public function export($filter){
+        $this->db->select($filter['select']);
+        $this->db->from($this->table);
+        $this->db->join('');
     }
 
     /*
@@ -73,11 +80,9 @@ class Dil extends CI_Model {
     }
 
     public function filterMenu1($filter, $returnData = true) {
-        $where = $this->filterMenu1Condition($filter);
-        //die($filter['limit'].'-'.$filter['offset']);
         $this->db->select(implode(',', $filter['select']));
         $this->db->order_by($filter['order']);
-        $q = $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset']);
+        $q = $this->db->get_where($this->table, $this->filterMenu1Condition($filter), $filter['limit'], $filter['offset']);
         if ($returnData) {
             return $q->result();
         }
@@ -94,12 +99,16 @@ class Dil extends CI_Model {
      * ---------------------------------------------- Menu 4 ----------------------------------------------
      */
 
+    public function filterMenu4Condition($filter){
+        return array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%");
+    }
+
     public function filterMenu4($filter, $returnData = true) {
         $this->db->select(implode(',', $filter['select']));
         $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'LEFT');
         $this->db->order_by($filter['order']);
 
-        $q = $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%"), $filter['limit'], $filter['offset']);
+        $q = $this->db->get_where($this->table, $this->filterMenu4Condition($filter), $filter['limit'], $filter['offset']);
         if ($returnData) {
             return $q->result();
         }
@@ -111,8 +120,12 @@ class Dil extends CI_Model {
     }
 
     /*
-     * ---------------------------------------------- Menu 4 ----------------------------------------------
+     * ---------------------------------------------- Menu 5 ----------------------------------------------
      */
+
+    public function filterMenu5Condition($filter) {
+        return array('KODEAREA' => $filter['KODEAREA'], 'JAMNYALA' => $filter['JAMNYALA']);
+    }
 
     public function filterMenu5($sorekTable) {
         $this->db->select("DIL.KODEAREA AS KODEAREA,

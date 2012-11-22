@@ -111,8 +111,9 @@ class LibMenu1 {
         $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . $filter['praPasca'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
+            $filter['select'] = null;
             $filter['limit'] = 50000;
-
+            
             $export = new LibExport();
             $export->fileName = $fileName;
             $export->generate($filter);

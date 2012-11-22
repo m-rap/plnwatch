@@ -30,6 +30,21 @@ class Sorek extends CI_Model {
         );
     }
 
+    public function getSortedSorekTables() {
+        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
+        foreach ($tables as $key => $value) {
+            $tables[$key] = array_values($value);
+            $tables[$key] = $tables[$key][0];
+        }
+        sort($tables);
+        return $tables;
+    }
+
+    public function getSortedLastNSorekTables($n) {
+        $tables = $this->getSortedSorekTables();
+        return array_values(array_slice($tables, -$n));
+    }
+
     public function currentBLTH() {
         $bl = date('m');
         $th = date('Y');
@@ -62,6 +77,18 @@ class Sorek extends CI_Model {
         return $this->db->get_where($this->table)->result();
     }
 
+    public function export($filter){
+        $this->db->select($filter['select']);
+        $this->db->from('DIL');
+        $this->db->join($this->table, 'DIL.IDPEL = '.$this->table.'.IDPEL', 'LEFT');
+        $this->db->where($filter['condition']);
+        return $this->db->get();
+    }
+
+    /*
+     * ---------------------------------------------- Menu 2 ----------------------------------------------
+     */
+
     public function filterMenu2Condition($filter) {
         $where = $this->table . ".KODEAREA = '" . $filter['area'] . "'";
         $where .= " AND " . $this->table . ".JAMNYALA ";
@@ -74,11 +101,10 @@ class Sorek extends CI_Model {
     }
 
     public function filterMenu2($filter, $returnData = true) {
-        $where = $this->filterMenu2Condition($filter);
         $this->db->select(implode(',', $filter['select']));
         $this->db->join('DIL', $this->table . '.IDPEL = DIL.IDPEL', 'left');
         $this->db->order_by($filter['order']);
-        $q = $this->db->get_where($this->table, $where, $filter['limit'], $filter['offset']);
+        $q = $this->db->get_where($this->table, $this->filterMenu2Condition($filter), $filter['limit'], $filter['offset']);
         if ($returnData) {
             return $q->result();
         }
@@ -90,21 +116,11 @@ class Sorek extends CI_Model {
         return $this->db->get_where($this->table, $where)->num_rows();
     }
 
-    public function getSortedSorekTables() {
-        $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
-        foreach ($tables as $key => $value) {
-            $tables[$key] = array_values($value);
-            $tables[$key] = $tables[$key][0];
-        }
-        sort($tables);
-        return $tables;
-    }
+    /*
+     * ---------------------------------------------- Menu 3 ----------------------------------------------
+     */
 
-    public function getSortedLastNSorekTables($n) {
-        $tables = $this->getSortedSorekTables();
-        return array_values(array_slice($tables, -$n));
-    }
-
+    /*
     public function getTrenNaik($filter, $returnData = true) {
         $tables = $this->getSortedLastNSorekTables(6);
 
@@ -239,6 +255,7 @@ WHERE $where $limit";
             return $query;
         return array('data' => $query->result_array(), 'num' => $query->num_rows());
     }
+    */
 
     public function getTrenLabels() {
         $tables = $this->db->query("SHOW TABLES LIKE 'SOREK_%'")->result_array();
@@ -251,15 +268,16 @@ WHERE $where $limit";
         return $tables;
     }
 
+    public function filterMenu3Condition($filter) {
+        return array('KODEAREA' => $filter['area'], 'TREN' => $filter['tren']);
+    }
+
     public function filterMenu3($filter, $returnData = true) {
         $this->db->select(implode(',', $filter['select']));
         $this->db->join('DIL', 'DIL.IDPEL = ' . $this->table . '.IDPEL', 'LEFT');
         $this->db->order_by($filter['order']);
 
-        $q = $this->db->get_where($this->table, array(
-            'KODEAREA' => $filter['area'],
-            'TREN' => $filter['tren'],
-            ), $filter['limit'], $filter['offset']);
+        $q = $this->db->get_where($this->table, $this->filterMenu3Condition($filter), $filter['limit'], $filter['offset']);
         if ($returnData) {
             return $q->result();
         }

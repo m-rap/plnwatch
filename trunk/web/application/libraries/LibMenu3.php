@@ -52,23 +52,18 @@ class LibMenu3 {
 
         return $input;
     }
-    
+
     public function getData($filter) {
-        $tren = $filter['tren'];
-        unset($filter['tren']);
-        switch ($tren) {
-            case '1':
-                return $this->ci->sorek->getTrenNaik($filter);
-            case '2':
-                return $this->ci->sorek->getTrenTurun($filter);
-            case '3':
-                return $this->ci->sorek->getTrenFlat($filter);
-        }
+        return array(
+            'data' => $this->ci->sorek->filterMenu3($filter),
+            'num' => $this->ci->sorek->countFilterMenu3($filter),
+        );
     }
     
     public function export($filter) {
         $fileName = $filter['controller'] . $filter['kodearea'] . $filter['tren'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
+            $filter['select'] = null;
             $filter['limit'] = 50000;
 
             $export = new LibExport();

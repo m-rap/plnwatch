@@ -8,18 +8,18 @@
 class LibExport {
 
     private $ci = null;
-    public $template = 'template.xlsx';
+    /*public $template = 'template.xlsx';
     public $activeSheet = 'sheet1.xml';
-    public $wdir = 'wdir';
+    public $wdir = 'wdir';*/
     public $fileName = 'file.xls';
 
     function __construct() {
         $this->ci = & get_instance();
-        $this->ci->load->library(array('LibMenu1'));
         $this->ci->load->dbutil();
-        $this->ci->load->model(array('dil'));
+        $this->ci->load->model(array('dil', 'sorek', 'dph', 'option'));
     }
 
+    /*
     public function generateX($filter) {
         if (!file_exists($this->wdir)) {
             mkdir($this->wdir);
@@ -163,34 +163,42 @@ class LibExport {
     private function removeWdir($path) {
         $this->removeWdirRecursive($path);
     }
+    */
 
     public function generate($filter) {
+        $dil = new Dil();
+        $sorek = new Sorek();
+        $label = array_merge($dil->attributeLabels(), $sorek->attributeLabels());
+
         $controller = $filter['controller'];
         unset($filter['controller']);
         if ($controller == 'Menu1') {
-            $model = new Dil();
-            $label = $model->attributeLabels();
-            $select = $filter['select'];
+            $model = $dil;
         } else if ($controller == 'Menu2') {
-            $dil = new Dil();
-            $model = new Sorek();
-            $label = array_merge($model->attributeLabels(), $dil->attributeLabels());
-            $select = $filter['select'];
+            $model = $sorek;
         } else if ($controller == 'Menu3') {
-            $model = new Sorek();
-            $select = $model->getTrenLabels();
+            $model = $sorek;
             array_unshift($select, 'ID Pelanggan');
         } else if ($controller == 'Menu4') {
+            $model = $dil;
             $dph = new Dph();
-            $model = new Dil();
-            $label = array_merge($model->attributeLabels(), $dph->attributeLabels());
-            $select = $filter['select'];
+            $label = array_merge($label, $dph->attributeLabels());
+        } else if ($controller == 'Menu5') {
+            $model = $dil;
         }
 
-        $start = "<html><head></head><body><table border='1'>";
+        //prepare select filter
+        $BLTH = $this->ci->option->getValue('DilBLTH');
+        $select = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'SOREK_'.$BLTH.'.FAKM AS FAKM', 'SOREK_'.$BLTH.'.JAMNYALA AS JAMNYALA', 'KDPEMBMETER', 'ALAMAT', 'KDDK', 'KDGARDU', 'NOTIANG');
+        $filter['select'] = ($filter['select'] == null ? $select : array_merge($select, $filter['select']));
+
+        //prepare html format and start labelling table header
+        $start = "<html><head><title>".$this->filename."</title></head><body><table border='1'>";
         $header = "<tr><td><strong>No</strong></td>";
-        foreach ($select as $col) {
-            $header .= "<td><strong>" . $label[$col] . "</strong></td>";
+        foreach($filter['select'] as $col){
+            $explode = explode(' AS ', $col);
+            $col = (array_key_exists(1, $explode) ? $explode[1] : $explode[0]);
+            $header .= "<td style='align:center'><strong>" . $label[$col] . "</strong></td>";
         }
         $header .= "</tr>";
         $body = "";
@@ -199,15 +207,20 @@ class LibExport {
         $countFilterMenu = 'countFilter' . $controller;
         $n = $model->$countFilterMenu($filter);
 
+        //part
         $part = $filter['limit'];
         $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
+
+        //condition
+        $filterMenuCondition = 'filter' . $controller . 'Condition';
+        $filter['condition'] = $model->$filterMenuCondition($filter);
+
+        //writing partially
         for ($i = 0, $no = 1; $i <= $n + $part; $i+=$part) {
             $filter['offset'] = ($i < $n || $n == $filter['limit'] ? $i : $n);
 
             //query data
-            $filterMenu = 'filter' . $controller;
-            $q = $model->$filterMenu($filter, false);
-
+            $q = $sorek->export($filter);
             while ($row = @mysql_fetch_object($q->result_id)) {
                 $body .= "<tr><td>" . $no . "</td>";
                 foreach ($row as $col) {
