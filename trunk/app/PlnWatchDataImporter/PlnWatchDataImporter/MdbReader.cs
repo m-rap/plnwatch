@@ -716,8 +716,8 @@ namespace PlnWatchDataImporter
                             while (myreader.Read())
                                 daya = float.Parse(myreader["DAYA"].ToString());
                             myreader.Close();
-                            int pemkwh = int.Parse(reader["PEMKWH"].ToString());
-                            float jamnyala = (daya == -1) ? -1 : pemkwh * 1000 / daya;
+                            float pemkwh = float.Parse(reader["PEMKWH"].ToString()),
+                                  jamnyala = (daya == -1) ? -1 : pemkwh * 1000 / daya;
 
                             string tren = "NULL";
                             if (hitungTren)
@@ -985,9 +985,11 @@ namespace PlnWatchDataImporter
                         ProgressText = "Mulai memasukkan data..";
                         OnProgressTextChanged(null);
                         //TODO: from date and time string to datetime, get max datetime, insert to mysql
-                        DataRow dphRow = new DataRow();
+                        //DataRow dphRow = new 
+                        //DataRowBuilder dphRowBuilder = 
                         string idpel = "";
-                        DateTime tglbayar;
+                        DateTime tglbayar = DateTime.MinValue;
+                        float pemkwh, rptag;
                         while (reader.Read())
                         {
                             string tempIdpel = reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
@@ -1011,9 +1013,9 @@ namespace PlnWatchDataImporter
                                     if (tglbayar == null || tglbayar < tempTglBayar)
                                     {
                                         tglbayar = tempTglBayar;
-                                        dphRow["PEMKWH"] = reader["PEMKWH"];
-                                        dphRow["RPTAG"] = reader["RPTAG"];
-                                        dphRow["TGLBAYAR"] = reader["TGLBAYAR"];
+                                        pemkwh = float.Parse(reader["PEMKWH"].ToString());
+                                        rptag = float.Parse(reader["RPTAG"].ToString());
+                                        tglbayar = tempTglBayar;
                                     }
                                 }
                             }
