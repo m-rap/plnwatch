@@ -238,6 +238,8 @@ namespace PlnWatchDataImporter
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 StringBuilder sb = new StringBuilder("INSERT INTO dil (JENIS_MK, IDPEL, NAMA, TARIF, DAYA, ALAMAT, NOTELP, KODEPOS, TGLPASANG_KWH, KDPEMBMETER, MEREK_KWH, KDGARDU, NOTIANG, KODEAREA, KDDK, TGLPDL, TGLNYALA_PB, TGLRUBAH_MK) VALUES ");
+
+                batchMode = false;
                 if (batchMode)
                 {
                     #region
@@ -767,11 +769,11 @@ namespace PlnWatchDataImporter
                             }
 
                             StringBuilder sb = new StringBuilder("INSERT INTO `" + sorekTableName + "` (IDPEL, TGLBACA, PEMKWH, KODEAREA, JAMNYALA, FAKM, KWHLWBP, KWHWBP, KWHKVARH, TREN) VALUES ('");
-
+                            
                             sb
                                 .Append(reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
                                 .Append(tglbaca).Append("', ")
-                                .Append(pemkwh).Append(", '")
+                                .Append(pemkwh.ToString(cultureInfo)).Append(", '")
                                 .Append(SorekKodeArea).Append("', ")
                                 .Append(Math.Round(jamnyala)).Append(", '")
                                 .Append(reader["FAKM"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim()).Append("', '")
@@ -875,7 +877,7 @@ namespace PlnWatchDataImporter
 
                 oleDbConnection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + PpobMdbPath);
                 oleDbConnection.Open();
-                OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, COUNT(IDPEL) AS JMLBELI FROM " + PpobTableName + " GROUP BY IDPEL", oleDbConnection);
+                OleDbCommand cmd = new OleDbCommand("SELECT IDPEL, PEMKWH, RPTAG, TGLBAYAR, JAMBAYAR FROM " + PpobTableName, oleDbConnection);
                 OleDbDataReader reader = cmd.ExecuteReader();
 
                 #region truncate ppob
@@ -898,7 +900,8 @@ namespace PlnWatchDataImporter
                     OnProgressTextChanged(null);
                 }
                 #endregion
-
+                
+                batchMode = false;
                 if (batchMode)
                 {
                     #region
@@ -981,9 +984,40 @@ namespace PlnWatchDataImporter
 
                         ProgressText = "Mulai memasukkan data..";
                         OnProgressTextChanged(null);
-
+                        //TODO: from date and time string to datetime, get max datetime, insert to mysql
+                        DataRow dphRow = new DataRow();
+                        string idpel = "";
+                        DateTime tglbayar;
                         while (reader.Read())
                         {
+                            string tempIdpel = reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
+                            if (idpel != tempIdpel)
+                            {
+                                string tglBayarString = reader["TGLBAYAR"].ToString();
+                                string jamBayarString = reader["JAMBAYAR"].ToString();
+                                if (tglBayarString != "")
+                                {
+                                    int[] tglBayarArrayInt = {int.Parse(tglBayarString.Substring(0, 4)), int.Parse(tglBayarString.Substring(4, 2)), int.Parse(tglBayarString.Substring(6))};
+                                    DateTime tempTglBayar;
+                                    if (jamBayarString != "")
+                                    {
+                                        int[] jamBayarArrayInt = {int.Parse(jamBayarString.Substring(0, 2)), int.Parse(jamBayarString.Substring(2, 2)), int.Parse(jamBayarString.Substring(4))};
+                                        tempTglBayar = new DateTime(tglBayarArrayInt[0], tglBayarArrayInt[1], tglBayarArrayInt[2], jamBayarArrayInt[0], jamBayarArrayInt[1], jamBayarArrayInt[2]);
+                                    }
+                                    else
+                                    {
+                                        tempTglBayar = new DateTime(tglBayarArrayInt[0], tglBayarArrayInt[1], tglBayarArrayInt[2]);
+                                    }
+                                    if (tglbayar == null || tglbayar < tempTglBayar)
+                                    {
+                                        tglbayar = tempTglBayar;
+                                        dphRow["PEMKWH"] = reader["PEMKWH"];
+                                        dphRow["RPTAG"] = reader["RPTAG"];
+                                        dphRow["TGLBAYAR"] = reader["TGLBAYAR"];
+                                    }
+                                }
+                            }
+
                             StringBuilder sb = new StringBuilder("INSERT INTO DPH (IDPEL, JMLBELI) VALUES  ('");
                             
                             sb
