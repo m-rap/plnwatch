@@ -76,8 +76,10 @@ class LibMenu4 {
         $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['mutasi'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/menu4/' . $fileName)) {
             $filter = $this->filter($filter);
+            $filter['select'] = null;
             $filter['limit'] = 10000;
             $filter['dilBLTH'] = $dilBLTH;
+            
             $export = new LibExport();
             $export->fileName = $fileName;
             $export->generate($filter);
