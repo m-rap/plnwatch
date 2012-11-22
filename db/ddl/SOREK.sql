@@ -23,13 +23,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `sorek_062012` (
   `IDPEL` varchar(12) NOT NULL,
   `TGLBACA` date default NULL,
-  `PEMKWH` double default NULL,
+  `PEMKWH` int(11) default NULL,
   `KODEAREA` varchar(5) default NULL,
   `JAMNYALA` int(11) default NULL,
   `FAKM` varchar(10) default NULL,
   `KWHLWBP` int(11) default NULL,
   `KWHWBP` int(11) default NULL,
   `KWHKVARH` int(11) default NULL,
-  `TREN` enum('naik','turun','flat') NOT NULL,
+  `TREN` enum('naik','turun','flat') NULL,
   PRIMARY KEY  (`IDPEL`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
