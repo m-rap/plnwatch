@@ -56,7 +56,7 @@ class LibMenu3 {
     private function filter($filter) {
         $tren = $this->getListTren(true);
         //$filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'KDPEMBMETER', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG') : $filter['select']);
-        $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
+        $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'DIL.IDPEL' : $filter['order']);
         $filter['tren'] = $tren[$filter['tren']];
 
         return $filter;
@@ -77,7 +77,7 @@ class LibMenu3 {
             $export->fileName = $fileName;
             $export->generate($filter);
         }
-        redirect('static/export/' . $filter['controller'] . '/' . $fileName);
+        redirect(base_url().'static/export/' . $filter['controller'] . '/' . $fileName);
     }
 }
 

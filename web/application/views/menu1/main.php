@@ -34,6 +34,7 @@ echo form_close();
             <th><?php echo $label['KDPEMBMETER'] ?></th>
             <th><?php echo $label['DAYA'] ?></th>
             <th><?php echo $label['TGLPASANG_KWH'] ?></th>
+            <th>Umur</th>
             <th><?php echo $label['KDGARDU'] ?></th>
             <th><?php echo $label['NOTIANG'] ?></th>
         </tr>

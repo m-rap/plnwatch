@@ -278,18 +278,12 @@ WHERE $where $limit";
 
     public function filterMenu3($filter, $count = false) {
         $tren = $this->getTrenLabels();
-        $select = array('DIL.IDPEL', 'NAMA');
-        foreach ($tren as $v) {
-            $select[] = 'SOREK_' . $v . '.KWHLWBP AS SOREK_' . $v . 'KWHLWBP';
-            $select[] = 'SOREK_' . $v . '.KWHWBP AS SOREK_' . $v . 'KWHWBP';
-            $select[] = 'SOREK_' . $v . '.KWHKVARH AS SOREK_' . $v . 'KWHKVARH';
-        }
-        $this->db->select($select);
+        $this->db->select($filter['select']);
         $this->db->join('DIL', 'DIL.IDPEL = SOREK_' . $tren[0] . '.IDPEL', 'LEFT');
         for($i=1;$i<count($tren);$i++) {
             $this->db->join('SOREK_' . $tren[$i], 'SOREK_' . $tren[$i-1] . '.IDPEL = SOREK_' . $tren[$i] . '.IDPEL', 'LEFT');
         }
-        //$this->db->order_by($filter['order']);
+        $this->db->order_by($filter['order']);
         $q = $this->db->get_where('SOREK_' . $tren[0], $this->filterMenu3Condition($filter), $filter['limit'], $filter['offset']);
         $return = array('data' => $q->result_array());
         if ($count) {

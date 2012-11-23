@@ -9,7 +9,7 @@ class Layout {
     
     private $ci = null;
     public $activeLayout = '1column';
-    public $pageTitle = 'APEL DJATIM | PT PLN (Persero) | Distribusi Jatim';
+    public $pageTitle = ' | PT PLN (Persero) | Distribusi Jatim';
     public $controller = null;
     private $activeUser = null;
     
@@ -17,6 +17,7 @@ class Layout {
         $this->ci =& get_instance();
         $this->activeLayout = (array_key_exists('activeLayout', $params) ? $params['activeLayout'] : $this->activeLayout);
         $this->controller = (array_key_exists('controller', $params) ? strtolower($params['controller']) : null);
+        $this->pageTitle = $this->ci->config->item('appName').$this->pageTitle;
         
         // LibUser already loaded by AutoLoad when the Controller was called
         $this->activeUser = $this->ci->libuser->activeUser;

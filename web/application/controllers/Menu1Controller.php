@@ -103,7 +103,6 @@ class Menu1Controller extends CI_Controller {
                     $sOrder .= ', ';
             }
         }
-
         $filter['order'] = $sOrder;
         $data = $this->libmenu1->getData($filter);
         $aaData = array();
@@ -111,13 +110,15 @@ class Menu1Controller extends CI_Controller {
             $aaData[] = array(
                 $d->IDPEL,
                 $d->NAMA,
-                ($d->KDPEMBMETER == "A" ? "AMR" : ($d->KDPEMBMETER == "E" ? "Elektronik" : ($d->KDPEMBMETER == "M" ? "Mekanik" : "Blank"))),
+                ($d->KDPEMBMETER == "A" ? "AMR" : ($d->KDPEMBMETER == "E" ? "Elektronik" : ($d->KDPEMBMETER == "M" ? "Mekanik" : "-"))),
                 $d->DAYA,
                 $d->TGLPASANG_KWH,
+                round(((12-date('n', strtotime($d->TGLPASANG_KWH))+date('n') + (date('Y')-date('Y', strtotime($d->TGLPASANG_KWH))) * 12) / 12), 1).' thn',
                 $d->KDGARDU,
                 $d->NOTIANG
             );
         }
+
         $output = array(
             "sEcho" => (isset($_GET['sEcho']) ? intval($_GET['sEcho']) : 1),
             "iTotalRecords" => $data['num'],

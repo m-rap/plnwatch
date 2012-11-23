@@ -1,5 +1,8 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+$config['appName']	= 'APEL DISJATIM';
+$config['appTag']	= 'Analisa Pelanggan PLN Distribusi Jawa Timur';
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -14,7 +17,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://apeldjatim.com';
+$config['base_url']	= 'http://apeldisjatim.com';
 
 /*
 |--------------------------------------------------------------------------
