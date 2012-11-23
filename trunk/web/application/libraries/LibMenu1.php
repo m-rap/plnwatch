@@ -100,10 +100,7 @@ class LibMenu1 {
 
     public function getData($filter) {
         $filter = $this->filter($filter);
-        return array(
-            'data' => $this->ci->dil->filterMenu1($filter),
-            'num' => $this->ci->dil->countFilterMenu1($filter),
-        );
+        return $this->ci->dil->filterMenu1($filter, true);
     }
 
     public function export($filter) {
@@ -112,8 +109,7 @@ class LibMenu1 {
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['select'] = null;
-            $filter['limit'] = 50000;
-            
+
             $export = new LibExport();
             $export->fileName = $fileName;
             $export->generate($filter);

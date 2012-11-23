@@ -54,7 +54,7 @@ class LibMenu4 {
 
     private function filter($filter) {
         $mutasi = $this->getListMutasi(true);
-        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'RPTAG', 'TANGGAL', 'PEMKWH') : $filter['select']);
+        $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'RPTAG', 'TGLBAYAR', 'PEMKWH') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'DIL.IDPEL' : $filter['order']);
         $explode = explode(' AS ', $filter['order']);
         $filter['order'] = $explode[0];
@@ -65,10 +65,7 @@ class LibMenu4 {
 
     public function getData($filter) {
         $filter = $this->filter($filter);
-        return array(
-            'data' => $this->ci->dil->filterMenu4($filter),
-            'num' => $this->ci->dil->countFilterMenu4($filter),
-        );
+        return $this->ci->dil->filterMenu4($filter, true);
     }
 
     public function export($filter) {
@@ -77,7 +74,6 @@ class LibMenu4 {
         if (!file_exists(FCPATH . 'static/export/menu4/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['select'] = null;
-            $filter['limit'] = 10000;
             $filter['dilBLTH'] = $dilBLTH;
             
             $export = new LibExport();

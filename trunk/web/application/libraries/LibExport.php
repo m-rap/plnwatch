@@ -178,22 +178,21 @@ class LibExport {
             $model = $sorek;
         } else if ($controller == 'Menu3') {
             $model = $sorek;
-            array_unshift($select, 'ID Pelanggan');
         } else if ($controller == 'Menu4') {
             $model = $dil;
             $dph = new Dph();
             $label = array_merge($label, $dph->attributeLabels());
         } else if ($controller == 'Menu5') {
-            $model = $dil;
+            $model = $sorek;
         }
 
         //prepare select filter
         $BLTH = $this->ci->option->getValue('DilBLTH');
-        $select = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'SOREK_'.$BLTH.'.FAKM AS FAKM', 'SOREK_'.$BLTH.'.JAMNYALA AS JAMNYALA', 'KDPEMBMETER', 'ALAMAT', 'KDDK', 'KDGARDU', 'NOTIANG');
+        $select = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'FAKM', 'JAMNYALA', 'KDPEMBMETER', 'ALAMAT', 'KDDK', 'KDGARDU', 'NOTIANG');
         $filter['select'] = ($filter['select'] == null ? $select : array_merge($select, $filter['select']));
 
         //prepare html format and start labelling table header
-        $start = "<html><head><title>".$this->filename."</title></head><body><table border='1'>";
+        $start = "<html><head><title>".$this->fileName."</title></head><body><table border='1'>";
         $header = "<tr><td><strong>No</strong></td>";
         foreach($filter['select'] as $col){
             $explode = explode(' AS ', $col);
@@ -203,17 +202,16 @@ class LibExport {
         $header .= "</tr>";
         $body = "";
 
+        //condition
+        $filterMenuCondition = 'filter' . ($controller == 'Menu5' ? 'Menu2' : $controller) . 'Condition';
+        $filter['condition'] = $model->$filterMenuCondition($filter);
+
         //count all data according to filter. used to write partially.
-        $countFilterMenu = 'countFilter' . $controller;
-        $n = $model->$countFilterMenu($filter);
+        $n = $sorek->countExport($filter);
 
         //part
-        $part = $filter['limit'];
-        $filter['limit'] = ($filter['limit'] > $n ? $n : $filter['limit']);
-
-        //condition
-        $filterMenuCondition = 'filter' . $controller . 'Condition';
-        $filter['condition'] = $model->$filterMenuCondition($filter);
+        $part = (array_key_exists('limit', $filter) ? $filter['limit'] : 50000);
+        $filter['limit'] = ($part > $n ? $n : $part);
 
         //writing partially
         for ($i = 0, $no = 1; $i <= $n + $part; $i+=$part) {

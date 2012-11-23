@@ -15,7 +15,7 @@ class Menu3Controller extends CI_Controller {
         $this->load->library('layout', array('controller' => strtolower($this->controller)));
         $this->load->library(array('LibMenu3', 'LibArea'));
         $this->load->helper(array('form'));
-        $this->load->model('sorek');
+        $this->load->model(array('dil', 'sorek'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
     }
@@ -48,11 +48,10 @@ class Menu3Controller extends CI_Controller {
         );
         $input = $lib->validateInput($input, $list);
         
-        $label = $this->sorek->getTrenLabels();
-        array_unshift($label, 'ID Pelanggan');
         $data = array(
             'pageTitle' => 'Menu 3 - Analisa Tren Pemakaian KWH',
-            'label' => $label,
+            'tren' => $this->sorek->getTrenLabels(),
+            'label' => array_merge($this->sorek->attributeLabels(), $this->dil->attributeLabels()),
             'sAjaxSource' => site_url('menu3/data?area='.$input['kodearea'].'&tren='.$input['tren']),
         );
         foreach (array_keys($input) as $k) {
@@ -76,19 +75,6 @@ class Menu3Controller extends CI_Controller {
         //$labels = implode('', $this->sorek->getTrenLabels());
         //$filename = $filter['offset'].'l'.$filter['limit'].$filter['kodearea'].$filter['tren'].$labels.'.php';
 
-        $sOrder = "";
-        if (isset($_GET['iSortCol_0'])) {
-            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
-                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
-                    $sOrder .= "`" . $filter['select'][intval($_GET['iSortCol_' . $i])] . "` " .
-                            mysql_real_escape_string($_GET['sSortDir_' . $i]);
-                }
-                if ($i != 0 && $i + 1 == intval($_GET['iSortingCols']))
-                    $sOrder .= ', ';
-            }
-        }
-
-        $filter['order'] = $sOrder;
         $data = $lib->getData($filter);
         $aaData = array();
         foreach ($data['data'] as $d) {
@@ -104,13 +90,14 @@ class Menu3Controller extends CI_Controller {
     }
     
     public function export() {
+        $lib = new LibMenu3();
         $filter = array(
             'kodearea' => $this->input->get('area'),
             'tren' => $this->input->get('tren'),
         );
-        $filter = $this->libmenu3->validateInput($filter);
+        $filter = $lib->validateInput($filter);
         $filter['controller'] = $this->controller;
-        $this->libmenu3->export($filter);
+        $lib->export($filter);
     }
 
 }

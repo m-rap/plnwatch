@@ -46,7 +46,7 @@ class Sorek extends CI_Model {
     }
 
     public function currentBLTH() {
-        $bl = date('m');
+        $bl = '08'; //date('m');
         $th = date('Y');
         $table = explode(',', strtoupper(implode(',', $this->db->list_tables())));
         $i = 0;
@@ -79,10 +79,18 @@ class Sorek extends CI_Model {
 
     public function export($filter){
         $this->db->select($filter['select']);
-        $this->db->from('DIL');
         $this->db->join($this->table, 'DIL.IDPEL = '.$this->table.'.IDPEL', 'LEFT');
-        $this->db->where($filter['condition']);
-        return $this->db->get();
+        $this->db->order_by($filter['order']);
+        if(array_key_exists('limit', $filter) && array_key_exists('offset', $filter)){
+            return $this->db->get_where('DIL', $filter['condition'], $filter['limit'], $filter['offset']);
+        }
+        return $this->db->get_where('DIL', $filter['condition']);
+    }
+
+    public function countExport($filter){
+        unset($filter['limit']);
+        unset($filter['offset']);
+        return $this->export($filter)->num_rows();
     }
 
     /*
@@ -100,20 +108,16 @@ class Sorek extends CI_Model {
         return $where;
     }
 
-    public function filterMenu2($filter, $returnData = true) {
+    public function filterMenu2($filter, $count = false) {
         $this->db->select(implode(',', $filter['select']));
-        $this->db->join('DIL', $this->table . '.IDPEL = DIL.IDPEL', 'left');
+        $this->db->join('DIL', 'DIL.IDPEL = ' . $this->table . '.IDPEL', 'left');
         $this->db->order_by($filter['order']);
         $q = $this->db->get_where($this->table, $this->filterMenu2Condition($filter), $filter['limit'], $filter['offset']);
-        if ($returnData) {
-            return $q->result();
+        $return = array('data' => $q->result());
+        if ($count) {
+            $return['num'] = $this->db->get_where($this->table, $this->filterMenu2Condition($filter))->num_rows();
         }
-        return $q;
-    }
-
-    public function countFilterMenu2($filter) {
-        $where = $this->filterMenu2Condition($filter);
-        return $this->db->get_where($this->table, $where)->num_rows();
+        return $return;
     }
 
     /*
@@ -263,31 +267,35 @@ WHERE $where $limit";
             $tables[$key] = array_values($value);
             $tables[$key] = substr($tables[$key][0], -6);
         }
-        sort($tables);
+        $tables = array_reverse($tables);
 
         return $tables;
     }
 
     public function filterMenu3Condition($filter) {
-        return array('KODEAREA' => $filter['area'], 'TREN' => $filter['tren']);
+        return array($this->table . '.KODEAREA' => $filter['kodearea'], $this->table.'.TREN' => $filter['tren']);
     }
 
-    public function filterMenu3($filter, $returnData = true) {
-        $this->db->select(implode(',', $filter['select']));
-        $this->db->join('DIL', 'DIL.IDPEL = ' . $this->table . '.IDPEL', 'LEFT');
-        $this->db->order_by($filter['order']);
-
-        $q = $this->db->get_where($this->table, $this->filterMenu3Condition($filter), $filter['limit'], $filter['offset']);
-        if ($returnData) {
-            return $q->result();
+    public function filterMenu3($filter, $count = false) {
+        $tren = $this->getTrenLabels();
+        $select = array('DIL.IDPEL', 'NAMA');
+        foreach ($tren as $v) {
+            $select[] = 'SOREK_' . $v . '.KWHLWBP AS SOREK_' . $v . 'KWHLWBP';
+            $select[] = 'SOREK_' . $v . '.KWHWBP AS SOREK_' . $v . 'KWHWBP';
+            $select[] = 'SOREK_' . $v . '.KWHKVARH AS SOREK_' . $v . 'KWHKVARH';
         }
-        return $q;
-    }
-
-    public function countFilterMenu3($filter) {
-        $filter['limit'] = null;
-        $filter['offset'] = null;
-        return $this->filterMenu3($filter, false)->num_rows();
+        $this->db->select($select);
+        $this->db->join('DIL', 'DIL.IDPEL = SOREK_' . $tren[0] . '.IDPEL', 'LEFT');
+        for($i=1;$i<count($tren);$i++) {
+            $this->db->join('SOREK_' . $tren[$i], 'SOREK_' . $tren[$i-1] . '.IDPEL = SOREK_' . $tren[$i] . '.IDPEL', 'LEFT');
+        }
+        //$this->db->order_by($filter['order']);
+        $q = $this->db->get_where('SOREK_' . $tren[0], $this->filterMenu3Condition($filter), $filter['limit'], $filter['offset']);
+        $return = array('data' => $q->result_array());
+        if ($count) {
+            $return['num'] = $this->db->get_where('SOREK_' . $tren[0], $this->filterMenu3Condition($filter))->num_rows();
+        }
+        return $return;
     }
 
 }

@@ -11,8 +11,7 @@ class LibMenu5 {
 
     public function __construct() {
         $this->ci = & get_instance();
-        $this->ci->load->model(array('dil', 'sorek', 'option'));
-        $this->ci->load->library(array('LibExport'));
+        $this->ci->load->library(array('LibMenu2', 'LibExport'));
     }
 
     public function getData() {
@@ -24,9 +23,8 @@ class LibMenu5 {
     public function export($filter) {
         $fileName = $filter['controller'] . $filter['area'] . $filter['jamNyala'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
-            $filter = $this->filter($filter);
+            $filter = $this->ci->libmenu2->filter($filter);
             $filter['select'] = null;
-            $filter['limit'] = 50000;
 
             $export = new LibExport();
             $export->fileName = $fileName;

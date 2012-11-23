@@ -14,7 +14,7 @@
 <h2><?php echo $pageTitle ?></h2>
 <?php
 echo form_open('', array('method' => 'get'));
-echo 'BLTH : ' . form_input('blth', substr($blth, 0, 2).' '.substr($blth, 2), 'disabled size="4"')
+echo 'BLTH Sorek : ' . form_input('blth', substr($blth, 0, 2).' '.substr($blth, 2), 'disabled size="4"')
  . ' Area : ' . form_dropdown('area', $dropdownData['area']['list'], $dropdownData['area']['input'])
  . ' Jam Nyala : ' . form_dropdown('jamNyala', $dropdownData['jamNyala']['list'], $dropdownData['jamNyala']['input'])
  . ' ' . form_submit('', 'lihat data', 'class="button"')

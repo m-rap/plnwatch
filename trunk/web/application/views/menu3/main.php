@@ -23,7 +23,18 @@ echo form_close();
 <hr />
 <table id="menu3" class="display">
     <thead>
-        <tr><?php foreach ($label as $l) echo '<th>' . $l . '</th>'; ?></tr>
+        <tr>
+            <th rowspan="2"><?php echo $label['IDPEL'] ?></th>
+            <th rowspan="2"><?php echo $label['NAMA'] ?></th>
+            <?php foreach ($tren as $t) echo '<th colspan="3">' . $t . '</th>'; ?>
+        </tr>
+        <tr>
+        <?php foreach ($tren as $t): ?>
+            <th>LWBP</th>
+            <th>WBP</th>
+            <th>KVARH</th>
+        <?php endforeach; ?>
+        </tr>
     </thead>
     <tbody>
 
