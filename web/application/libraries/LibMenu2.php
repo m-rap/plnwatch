@@ -58,7 +58,7 @@ class LibMenu2 {
         return $input;
     }
 
-    private function filter($filter) {
+    public function filter($filter) {
         $jamNyala = $this->getListRangeJamNyala(true);
         $filter['select'] = (!array_key_exists('select', $filter) ? array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'FAKM', 'JAMNYALA') : $filter['select']);
         $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
@@ -71,10 +71,7 @@ class LibMenu2 {
 
     public function getData($filter) {
         $filter = $this->filter($filter);
-        return array(
-            'data' => $this->ci->sorek->filterMenu2($filter),
-            'num' => $this->ci->sorek->countFilterMenu2($filter),
-        );
+        return $this->ci->sorek->filterMenu2($filter, true);
     }
 
     public function export($filter) {
@@ -83,7 +80,6 @@ class LibMenu2 {
         if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
             $filter = $this->filter($filter);
             $filter['select'] = array('TGLNYALA_PB', 'TGLPDL', 'TGLRUBAH_MK');
-            $filter['limit'] = 10000;
 
             $export = new LibExport();
             $export->fileName = $fileName;

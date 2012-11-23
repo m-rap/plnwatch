@@ -67,7 +67,7 @@ class Menu4Controller extends CI_Controller {
             'mutasi' => $this->input->get('mutasi'),
         );
         $filter = $this->libmenu4->validateInput($filter);
-        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'RPTAG', 'TANGGAL', 'PEMKWH');
+        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'RPTAG', 'TGLBAYAR', 'PEMKWH');
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
 
@@ -93,7 +93,7 @@ class Menu4Controller extends CI_Controller {
                 $d->TARIF,
                 $d->DAYA,
                 $d->RPTAG,
-                $d->TANGGAL,
+                $d->TGLBAYAR,
                 $d->PEMKWH,
             );
         }
@@ -107,13 +107,14 @@ class Menu4Controller extends CI_Controller {
     }
 
     public function export() {
+        $lib = new LibMenu4();
         $filter = array(
             'area' => $this->input->get('area'),
             'mutasi' => $this->input->get('mutasi'),
         );
-        $filter = $this->libmenu4->validateInput($filter);
+        $filter = $lib->validateInput($filter);
         $filter['controller'] = $this->controller;
-        $this->libmenu4->export($filter);
+        $lib->export($filter);
     }
 
 }

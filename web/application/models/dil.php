@@ -57,7 +57,7 @@ class Dil extends CI_Model {
 
     public function filterMenu1Condition($filter) {
         $year = date('Y');
-        $where = "KODEAREA = '" . $filter['area'] . "'";
+        $where = "DIL.KODEAREA = '" . $filter['area'] . "'";
 
         //array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%".$filter['mutasi']."%"),
         $where .= " AND SUBSTR(DIL.TARIF, 3, 1) " . ($filter['praPasca'] == 1 ? '=' : '<>') . " 'T'";
@@ -79,20 +79,15 @@ class Dil extends CI_Model {
         return $where;
     }
 
-    public function filterMenu1($filter, $returnData = true) {
+    public function filterMenu1($filter, $count = false) {
         $this->db->select(implode(',', $filter['select']));
         $this->db->order_by($filter['order']);
         $q = $this->db->get_where($this->table, $this->filterMenu1Condition($filter), $filter['limit'], $filter['offset']);
-        if ($returnData) {
-            return $q->result();
+        $return = array('data' => $q->result());
+        if ($count) {
+            $return['num'] = $this->db->get_where($this->table, $this->filterMenu1Condition($filter))->num_rows();
         }
-        return $q;
-    }
-
-    // count all according to filter without limit
-    public function countFilterMenu1($filter) {
-        $where = $this->filterMenu1Condition($filter);
-        return $this->db->get_where($this->table, $where)->num_rows();
+        return $return;
     }
 
     /*
@@ -100,23 +95,19 @@ class Dil extends CI_Model {
      */
 
     public function filterMenu4Condition($filter){
-        return array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%");
+        return array('DIL.KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%");
     }
 
-    public function filterMenu4($filter, $returnData = true) {
+    public function filterMenu4($filter, $count = false) {
         $this->db->select(implode(',', $filter['select']));
         $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'LEFT');
         $this->db->order_by($filter['order']);
-
         $q = $this->db->get_where($this->table, $this->filterMenu4Condition($filter), $filter['limit'], $filter['offset']);
-        if ($returnData) {
-            return $q->result();
+        $return = array('data' => $q->result());
+        if ($count) {
+            $return['num'] = $this->db->get_where($this->table, $this->filterMenu4Condition($filter))->num_rows();
         }
-        return $q;
-    }
-
-    public function countFilterMenu4($filter) {
-        return $this->db->get_where($this->table, array('KODEAREA' => $filter['area'], "SUBSTR(DIL.TARIF, 3, 1) = " => 'T', 'JENIS_MK LIKE ' => "%" . $filter['mutasi'] . "%"))->num_rows();
+        return $return;
     }
 
     /*
@@ -124,7 +115,7 @@ class Dil extends CI_Model {
      */
 
     public function filterMenu5Condition($filter) {
-        return array('KODEAREA' => $filter['KODEAREA'], 'JAMNYALA' => $filter['JAMNYALA']);
+        return array('DIL.KODEAREA' => $filter['KODEAREA'], 'JAMNYALA' => $filter['JAMNYALA']);
     }
 
     public function filterMenu5($sorekTable) {

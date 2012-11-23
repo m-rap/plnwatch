@@ -53,18 +53,25 @@ class LibMenu3 {
         return $input;
     }
 
+    private function filter($filter) {
+        $tren = $this->getListTren(true);
+        //$filter['select'] = (!array_key_exists('select', $filter) ? array('IDPEL', 'NAMA', 'KDPEMBMETER', 'DAYA', 'TGLPASANG_KWH', 'KDGARDU', 'NOTIANG') : $filter['select']);
+        $filter['order'] = (!array_key_exists('order', $filter) || $filter['order'] == "" ? 'IDPEL' : $filter['order']);
+        $filter['tren'] = $tren[$filter['tren']];
+
+        return $filter;
+    }
+
     public function getData($filter) {
-        return array(
-            'data' => $this->ci->sorek->filterMenu3($filter),
-            'num' => $this->ci->sorek->countFilterMenu3($filter),
-        );
+        $filter = $this->filter($filter);
+        return $this->ci->sorek->filterMenu3($filter, true);
     }
     
     public function export($filter) {
         $fileName = $filter['controller'] . $filter['kodearea'] . $filter['tren'] . '.xls';
         if (!file_exists(FCPATH . 'static/export/' . $filter['controller'] . '/' . $fileName)) {
+            $filter = $this->filter($filter);
             $filter['select'] = null;
-            $filter['limit'] = 50000;
 
             $export = new LibExport();
             $export->fileName = $fileName;

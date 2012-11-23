@@ -15,7 +15,7 @@
 <h2><?php echo $pageTitle ?></h2>
 <?php
 echo form_open('', array('method' => 'get'));
-echo 'BLTH : ' . form_input('blth', substr($blth, 0, 2) . ' ' . substr($blth, 2), 'disabled size="6"')
+echo 'BLTH DIL : ' . form_input('blth', substr($blth, 0, 2) . ' ' . substr($blth, 2), 'disabled size="6"')
  . ' Area : ' . form_dropdown('area', $dropdownData['area']['list'], $dropdownData['area']['input'])
  . ' Daya : ' . form_dropdown('daya', $dropdownData['daya']['list'], $dropdownData['daya']['input'])
  . ' Tgl. Pasang : ' . form_dropdown('tglPasang', $dropdownData['tglPasang']['list'], $dropdownData['tglPasang']['input'])

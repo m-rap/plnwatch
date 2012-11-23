@@ -14,7 +14,7 @@ class Menu5Controller extends CI_Controller {
         parent::__construct();
         $this->load->library('layout', array('controller' => strtolower($this->controller)));
         $this->load->library(array('LibMenu2', 'LibMenu5', 'LibArea', 'LibExport'));
-        //$this->load->helper(array('form', 'file'));
+        $this->load->helper(array('form'));
         $this->activeUser = $this->libuser->activeUser;
         $this->_accessRules();
     }
@@ -45,7 +45,7 @@ class Menu5Controller extends CI_Controller {
             'area' => $this->input->get('area'),
             'jamNyala' => $this->input->get('jamNyala'),
         );
-        $filter = $this->libmenu5->validateInput($filter);
+        $filter = $this->libmenu2->validateInput($filter);
         $filter['controller'] = $this->controller;
         $this->libmenu5->export($filter);
     }

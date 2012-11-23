@@ -128,15 +128,16 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function export() {
+        $lib = new LibMenu1();
         $filter = array(
             'area' => $this->input->get('area'),
             'daya' => $this->input->get('daya'),
             'tglPasang' => $this->input->get('tglPasang'),
             'praPasca' => $this->input->get('praPasca'),
         );
-        $filter = $this->libmenu1->validateInput($filter);
+        $filter = $lib->validateInput($filter);
         $filter['controller'] = $this->controller;
-        $this->libmenu1->export($filter);
+        $lib->export($filter);
     }
 
 }
