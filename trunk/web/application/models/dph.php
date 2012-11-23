@@ -19,8 +19,8 @@ class Dph extends CI_Model {
             'IDPEL' => 'ID Pelanggan',
             'JMLBELI' => 'Jumlah Beli',
             'PEMKWH' => 'Pemakaian KWH',
-            'RPTAG' => 'Tagihan',
-            'TGLBAYAR' => 'Tgl. Bayar',
+            'RPTAG' => 'Rp. Beli',
+            'TGLBAYAR' => 'Tgl. Beli',
         );
     }
 

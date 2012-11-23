@@ -85,7 +85,7 @@ class LibMenu2 {
             $export->fileName = $fileName;
             $export->generate($filter);
         }
-        redirect('static/export/' . strtolower($filter['controller']) . '/' . $fileName);
+        redirect(base_url().'static/export/' . strtolower($filter['controller']) . '/' . $fileName);
     }
 
 }

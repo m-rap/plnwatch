@@ -80,7 +80,7 @@ class LibMenu4 {
             $export->fileName = $fileName;
             $export->generate($filter);
         }
-        redirect('static/export/menu4/' . $fileName);
+        redirect(base_url().'static/export/menu4/' . $fileName);
     }
 
 }

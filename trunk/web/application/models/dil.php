@@ -100,7 +100,7 @@ class Dil extends CI_Model {
 
     public function filterMenu4($filter, $count = false) {
         $this->db->select(implode(',', $filter['select']));
-        $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'LEFT');
+        $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'RIGHT');
         $this->db->order_by($filter['order']);
         $q = $this->db->get_where($this->table, $this->filterMenu4Condition($filter), $filter['limit'], $filter['offset']);
         $return = array('data' => $q->result());
@@ -127,6 +127,7 @@ class Dil extends CI_Model {
 	SUM(IF(" . $sorekTable . ".TREN = 'flat', 1, 0)) AS FLAT", FALSE);
         $this->db->from($this->table);
         $this->db->join($sorekTable, 'DIL.IDPEL = ' . $sorekTable . '.IDPEL', 'LEFT');
+	$this->db->group_by('KODEAREA');
         return $this->db->get();
     }
 

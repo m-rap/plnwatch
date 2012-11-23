@@ -70,11 +70,30 @@ class Menu3Controller extends CI_Controller {
             'tren' => $this->input->get('tren'),
         );
         $filter = $lib->validateInput($filter);
+        $tren = $this->sorek->getTrenLabels();
+        $filter['select'] = array('DIL.IDPEL AS IDPEL', 'DIL.NAMA AS NAMA');
+        foreach ($tren as $v) {
+            $filter['select'][] = 'SOREK_' . $v . '.KWHLWBP AS SOREK_' . $v . 'KWHLWBP';
+            $filter['select'][] = 'SOREK_' . $v . '.KWHWBP AS SOREK_' . $v . 'KWHWBP';
+            $filter['select'][] = 'SOREK_' . $v . '.KWHKVARH AS SOREK_' . $v . 'KWHKVARH';
+        }
         $filter['offset'] = (isset($_GET['iDisplayStart']) ? intval($_GET['iDisplayStart']) : 0);
         $filter['limit'] = (isset($_GET['iDisplayLength']) && $_GET['iDisplayLength'] != -1 ? intval($_GET['iDisplayLength']) : 25);
         //$labels = implode('', $this->sorek->getTrenLabels());
         //$filename = $filter['offset'].'l'.$filter['limit'].$filter['kodearea'].$filter['tren'].$labels.'.php';
-
+        $sOrder = "";
+        if (isset($_GET['iSortCol_0'])) {
+            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
+                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
+                    $exp = explode(' AS ', $filter['select'][intval($_GET['iSortCol_' . $i])]);
+                    $sOrder .= "`" . $exp[0] . "` " .
+                            mysql_real_escape_string($_GET['sSortDir_' . $i]);
+                }
+                if ($i != 0 && $i + 1 == intval($_GET['iSortingCols']))
+                    $sOrder .= ', ';
+            }
+        }
+        $filter['order'] = $sOrder;
         $data = $lib->getData($filter);
         $aaData = array();
         foreach ($data['data'] as $d) {

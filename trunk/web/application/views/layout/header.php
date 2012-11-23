@@ -53,8 +53,8 @@
                         <a  href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>static/images/pln-logo.jpg"  style="background-repeat:no-repeat;float:left;border:0px;"/></a>
                             <div>
                                 <span style="margin-left:40px;">
-                                    <h1 style="font:Tahoma, Geneva, sans-serif; font-size:18px;margin-left:0px;margin-top:35px;text-align:left;">APEL DJATIM</h1>
-                                    <h3 style="font:Tahoma, Geneva, sans-serif; font-size:14px;margin-left:0px;text-align:left;">Analisa Pelanggan PLN Distribusi Jawa Timur</h3>
+                                    <h1 style="font:Tahoma, Geneva, sans-serif; font-size:18px;margin-left:0px;margin-top:35px;text-align:left;"><?php echo $this->config->item('appName'); ?></h1>
+                                    <h3 style="font:Tahoma, Geneva, sans-serif; font-size:14px;margin-left:0px;text-align:left;"><?php echo $this->config->item('appTag'); ?></h3>
                                     <h3 style="font:Tahoma, Geneva, sans-serif; font-size:14px;margin-left:0px;text-align:left;">PT PLN (Persero) Distribusi Jawa Timur</h3>
                                 </span>
                             </div>
@@ -86,16 +86,16 @@
                         <div class="jqueryslidemenu_aw"></div>
                         <div id="myslidemenu" class="jqueryslidemenu">
                             <ul>
-                                <li><a href="<?php echo base_url(); ?>" class="first" >Beranda</a></li>
+                                <li><a href="<?php echo site_url(); ?>" class="first" >Beranda</a></li>
                                 <?php if($user['active'] == 1) : ?>
                                 <li>
                                     <a href="#" class="level1">Menu</a>
                                     <ul style="z-index: 1000;">
-                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu1"><span style='margin-left:15px;'>Menu 1 - Analisa Usia APP</span></a></li>
-                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu2"><span style='margin-left:15px;'>Menu 2 - Analisa Jam Nyala</span></a></li>
-                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu3"><span style='margin-left:15px;'>Menu 3 - Analisa Tren Pemakaian KWH</span></a></li>
-                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu4"><span style='margin-left:15px;'>Menu 4 - LPB</span></a></li>
-                                        <li style="z-index: 1000;"><a href="<?php echo base_url(); ?>menu5"><span style='margin-left:15px;'>Menu 5 - EIS</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo site_url('menu1'); ?>"><span style='margin-left:15px;'>Menu 1 - Analisa Usia APP</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo site_url('menu2'); ?>"><span style='margin-left:15px;'>Menu 2 - Analisa Jam Nyala</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo site_url('menu3'); ?>"><span style='margin-left:15px;'>Menu 3 - Analisa Tren Pemakaian KWH</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo site_url('menu4'); ?>"><span style='margin-left:15px;'>Menu 4 - LPB</span></a></li>
+                                        <li style="z-index: 1000;"><a href="<?php echo site_url('menu5'); ?>"><span style='margin-left:15px;'>Menu 5 - EIS</span></a></li>
                                     </ul>
                                 </li>
                                 <li><?php echo anchor('user/profile', 'Profil') ?></li>

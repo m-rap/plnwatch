@@ -16,7 +16,7 @@
 <div style="width:250px;margin:0 auto;">
     <fieldset style="padding:5px">
         <legend>Autentikasi</legend>
-        <form method="post" action="<?php echo base_url() ?>user/login">
+        <form method="post" action="<?php echo site_url('user/login') ?>">
             <table>
                 <tr>
                     <td>Username</td>
