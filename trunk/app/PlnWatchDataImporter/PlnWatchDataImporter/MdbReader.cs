@@ -887,8 +887,8 @@ namespace PlnWatchDataImporter
                     OnProgressTextChanged(null);
                     mySqlConnection.Open();
                     mycmd = mySqlConnection.CreateCommand();
-
-                    mycmd.CommandText = "TRUNCATE TABLE PPOB;";
+                    mycmd.CommandText = "TRUNCATE TABLE DPH;";
+                    mycmd.ExecuteNonQuery();
                     ProgressText = "Truncate tabel PPOB sukses";
                     OnProgressTextChanged(null);
 
@@ -998,8 +998,8 @@ namespace PlnWatchDataImporter
                             string tempIdpel = reader["IDPEL"].ToString().Replace("'", "''").Replace("\\", "\\\\").Trim();
                             if (j == 0)
                                 idpel = tempIdpel;
-                            string tglBayarString = reader["TGLBAYAR"].ToString();
-                            string jamBayarString = reader["JAMBAYAR"].ToString();
+                            string tglBayarString = reader["TGLBAYAR"].ToString().Trim();
+                            string jamBayarString = reader["JAMBAYAR"].ToString().Trim();
                             DateTime tempTglBayar = DateTime.MinValue;
                             if (tglBayarString != "")
                             {
