@@ -105,6 +105,7 @@ class Dil extends CI_Model {
         $q = $this->db->get_where($this->table, $this->filterMenu4Condition($filter), $filter['limit'], $filter['offset']);
         $return = array('data' => $q->result());
         if ($count) {
+            $this->db->join('DPH', 'DIL.IDPEL = DPH.IDPEL', 'RIGHT');
             $return['num'] = $this->db->get_where($this->table, $this->filterMenu4Condition($filter))->num_rows();
         }
         return $return;
@@ -127,7 +128,8 @@ class Dil extends CI_Model {
 	SUM(IF(" . $sorekTable . ".TREN = 'flat', 1, 0)) AS FLAT", FALSE);
         $this->db->from($this->table);
         $this->db->join($sorekTable, 'DIL.IDPEL = ' . $sorekTable . '.IDPEL', 'LEFT');
-	$this->db->group_by('KODEAREA');
+        $this->db->group_by('KODEAREA');
+        $this->db->order_by('KODEAREA', 'DESC');
         return $this->db->get();
     }
 

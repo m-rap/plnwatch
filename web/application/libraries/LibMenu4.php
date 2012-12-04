@@ -69,18 +69,21 @@ class LibMenu4 {
     }
 
     public function export($filter) {
-        $dilBLTH = $this->ci->option->getValue('DilBLTH');
-        $fileName = $filter['controller'] . $dilBLTH . $filter['area'] . $filter['mutasi'] . '.xls';
-        if (!file_exists(FCPATH . 'static/export/menu4/' . $fileName)) {
+        $BLTH = $this->ci->option->getValue('PpobBlTh');
+        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['mutasi'] . '.xls';
+        $location  = 'static/export/' . strtolower($filter['controller']) . '/' . $BLTH . '/';
+        if (!file_exists(FCPATH . $location . $fileName)) {
             $filter = $this->filter($filter);
             $filter['select'] = null;
             $filter['dilBLTH'] = $dilBLTH;
             
             $export = new LibExport();
             $export->fileName = $fileName;
+            $export->location = $location;
+            $export->BLTH = $BLTH;
             $export->generate($filter);
         }
-        redirect(base_url().'static/export/menu4/' . $fileName);
+        redirect(base_url() . $location . $fileName);
     }
 
 }

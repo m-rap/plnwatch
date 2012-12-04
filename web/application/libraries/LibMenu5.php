@@ -21,16 +21,20 @@ class LibMenu5 {
     }
 
     public function export($filter) {
-        $fileName = $filter['controller'] . $filter['area'] . $filter['jamNyala'] . '.xls';
-        if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
+        $BLTH = $this->ci->option->getValue('DilBLTH'); //table sorek di ambil dari dil terakhir
+        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['jamNyala'] . '.xls';
+        $location  = 'static/export/' . strtolower($filter['controller']) . '/' . $BLTH . '/';
+        if (!file_exists(FCPATH . $location . $fileName)) {
             $filter = $this->ci->libmenu2->filter($filter);
             $filter['select'] = null;
 
             $export = new LibExport();
             $export->fileName = $fileName;
+            $export->location = $location;
+            $export->BLTH = $BLTH;
             $export->generate($filter);
         }
-        redirect(base_url().'static/export/' . strtolower($filter['controller']) . '/' . $fileName); 
+        redirect(base_url() . $location . $fileName);
     }
 
 }

@@ -75,17 +75,20 @@ class LibMenu2 {
     }
 
     public function export($filter) {
-        $currentBLTH = $this->ci->sorek->currentBLTH();
-        $fileName = $filter['controller'] . $currentBLTH . $filter['area'] . $filter['jamNyala'] . '.xls';
-        if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
+        $BLTH = $this->ci->sorek->currentBLTH();
+        $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['jamNyala'] . '.xls';
+        $location  = 'static/export/' . strtolower($filter['controller']) . '/' . $BLTH . '/';
+        if (!file_exists(FCPATH . $location . $fileName)) {
             $filter = $this->filter($filter);
             $filter['select'] = array('TGLNYALA_PB', 'TGLPDL', 'TGLRUBAH_MK');
 
             $export = new LibExport();
             $export->fileName = $fileName;
+            $export->location = $location;
+            $export->BLTH = $BLTH;
             $export->generate($filter);
         }
-        redirect(base_url().'static/export/' . strtolower($filter['controller']) . '/' . $fileName);
+        redirect(base_url() . $location . $fileName);
     }
 
 }
