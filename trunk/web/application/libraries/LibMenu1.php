@@ -106,15 +106,18 @@ class LibMenu1 {
     public function export($filter) {
         $BLTH = $this->ci->option->getValue('DilBLTH');
         $fileName = $filter['controller'] . $BLTH . $filter['area'] . $filter['daya'] . $filter['tglPasang'] . $filter['praPasca'] . '.xls';
-        if (!file_exists(FCPATH . 'static/export/' . strtolower($filter['controller']) . '/' . $fileName)) {
+        $location  = 'static/export/' . strtolower($filter['controller']) . '/' . $BLTH . '/';
+        if (!file_exists(FCPATH . $location . $fileName)) {
             $filter = $this->filter($filter);
             $filter['select'] = null;
 
             $export = new LibExport();
             $export->fileName = $fileName;
+            $export->location = $location;
+            $export->BLTH = $BLTH;
             $export->generate($filter);
         }
-        redirect(base_url().'static/export/' . strtolower($filter['controller']) . '/' . $fileName);
+        redirect(base_url() . $location . $fileName);
     }
 
 }

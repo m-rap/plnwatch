@@ -12,6 +12,8 @@ class LibExport {
     public $activeSheet = 'sheet1.xml';
     public $wdir = 'wdir';*/
     public $fileName = 'file.xls';
+    public $location = 'static/export/';
+    public $BLTH = '012012';
 
     function __construct() {
         $this->ci = & get_instance();
@@ -145,13 +147,14 @@ class LibExport {
         if (file_put_contents($ws, $xml->asXML()) !== false)
             return true;
     }
+    */
 
-    private function removeWdirRecursive($path) {
+    private function removeDir($path) {
         $dir = opendir($path);
         while ($file = readdir($dir)) {
             if ($file != "." && $file != "..") {
                 if (is_dir($path . '/' . $file)) {
-                    $this->removeWdirRecursive($path . '/' . $file);
+                    $this->removeDir($path . '/' . $file);
                 } else {
                     unlink($path . '/' . $file);
                 }
@@ -159,11 +162,6 @@ class LibExport {
         }
         rmdir($path);
     }
-
-    private function removeWdir($path) {
-        $this->removeWdirRecursive($path);
-    }
-    */
 
     public function generate($filter) {
         $dil = new Dil();
@@ -187,7 +185,6 @@ class LibExport {
         }
 
         //prepare select filter
-        $BLTH = $this->ci->option->getValue('DilBLTH');
         $select = array('DIL.IDPEL AS IDPEL', 'NAMA', 'TARIF', 'DAYA', 'FAKM', 'JAMNYALA', 'KDPEMBMETER', 'ALAMAT', 'KDDK', 'KDGARDU', 'NOTIANG');
         $filter['select'] = ($filter['select'] == null ? $select : array_merge($select, $filter['select']));
 
@@ -231,7 +228,23 @@ class LibExport {
 
         $end = "</table></body></html>";
 
-        file_put_contents('static/export/' . strtolower($controller) . '/' . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
+        // create BLTH folder if not exist
+        if (!file_exists(FCPATH . $this->location)){
+            mkdir(FCPATH . $this->location);
+        }
+
+        // start writing file to the specified location
+        file_put_contents($this->location . $this->fileName, $start . $header . $body . $end, FILE_APPEND | LOCK_EX);
+        
+        // remove the old BLTH folder
+        $m = substr($this->BLTH, 0, 2) - 1;
+        $y = substr($this->BLTH, 2, 4);
+        $y = ($m == 0 ? $y-1 : $y);
+        $m = ($m == 0 ? 12 : ($m <= 9 ? '0'.$m : $m));
+        if (file_exists(FCPATH . 'static/export/' . strtolower($controller) . '/' . $m.$y)){
+            $this->removeDir(FCPATH . 'static/export/' . strtolower($controller) . '/' . $m.$y);
+        }
+
         //header('Content-type: application/ms-excel');
         //header('Content-Disposition: attachment; filename=' . $this->fileName);
         //echo $start . $header . $body . $end.die();
