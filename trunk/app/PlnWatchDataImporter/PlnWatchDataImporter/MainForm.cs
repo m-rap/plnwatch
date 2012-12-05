@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace PlnWatchDataImporter
 {
@@ -15,6 +16,9 @@ namespace PlnWatchDataImporter
     {
         [DllImport("kernel32")]
         static extern bool AllocConsole();
+
+        [DllImport("kernel32")]
+        static extern bool AttachConsole(int pid);
 
         [DllImport("kernel32")]
         static extern bool FreeConsole();
@@ -114,6 +118,7 @@ namespace PlnWatchDataImporter
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            Enabled = false;
             impoter = new Importer();
             if (dilCheckBox.Checked)
             {
@@ -136,7 +141,16 @@ namespace PlnWatchDataImporter
                 impoter.PpobTableName = ppobTableNameTextBox.Text;
             }
             impoter.ProgressTextChanged += mdbReader_ProgressTextChanged;
+            
             AllocConsole();
+            StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput());
+            standardOutput.AutoFlush = true;
+            Console.SetOut(standardOutput);
+            StreamWriter standardErrorOutput = new StreamWriter(Console.OpenStandardError());
+            standardErrorOutput.AutoFlush = true;
+            Console.SetError(standardErrorOutput);
+            StreamReader standardInput = new StreamReader(Console.OpenStandardInput());
+            Console.SetIn(standardInput);
             if (dilCheckBox.Checked)
             {
                 impoter.ImportDil();
@@ -150,8 +164,9 @@ namespace PlnWatchDataImporter
                 impoter.ImportPpob();
             }
             Console.Write("Tekan Enter...");
-            while (Console.ReadKey().Key != ConsoleKey.Enter);
+            while (Console.Read() != (int) ConsoleKey.Enter);
             FreeConsole();
+            Enabled = true;
         }
 
         void mdbReader_ProgressTextChanged(object sender, MdbReaderProgressEventArgs e)
