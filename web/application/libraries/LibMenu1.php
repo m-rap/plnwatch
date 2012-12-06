@@ -61,6 +61,14 @@ class LibMenu1 {
         }
     }
 
+	public function translateKodePembMeter($code = null){
+		$data = array('A' => 'AMR', 'E' => 'Elektronik', 'M' => 'Mekanik');
+        if(array_key_exists($code, $data) && $code != null){
+            return $data[$code];
+        }
+        return '-';
+	}
+	
     public function validateInput($input, $list = null) {
         if ($list == null) {
             $list = array(

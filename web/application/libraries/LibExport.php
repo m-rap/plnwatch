@@ -19,6 +19,7 @@ class LibExport {
         $this->ci = & get_instance();
         $this->ci->load->dbutil();
         $this->ci->load->model(array('dil', 'sorek', 'dph', 'option'));
+        $this->ci->load->library(array('libmenu1'));
     }
 
     /*
@@ -218,7 +219,9 @@ class LibExport {
             $q = $sorek->export($filter);
             while ($row = @mysql_fetch_object($q->result_id)) {
                 $body .= "<tr><td>" . $no . "</td>";
-                foreach ($row as $col) {
+                foreach ($row as $key => $col) {
+					if($key == "KDPEMBMETER")
+                        $col = $this->ci->libmenu1->translateKodePembMeter($col);
                     $body .= "<td>" . $col . "</td>";
                 }
                 $body .= "</tr>";

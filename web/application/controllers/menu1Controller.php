@@ -82,6 +82,7 @@ class Menu1Controller extends CI_Controller {
     }
 
     public function data() {
+        $lib = new LibMenu1();
         $filter = array(
             'area' => $this->input->get('area'),
             'daya' => $this->input->get('daya'),
@@ -104,13 +105,13 @@ class Menu1Controller extends CI_Controller {
             }
         }
         $filter['order'] = $sOrder;
-        $data = $this->libmenu1->getData($filter);
+        $data = $lib->getData($filter);
         $aaData = array();
         foreach ($data['data'] as $d) {
             $aaData[] = array(
                 $d->IDPEL,
                 $d->NAMA,
-                ($d->KDPEMBMETER == "A" ? "AMR" : ($d->KDPEMBMETER == "E" ? "Elektronik" : ($d->KDPEMBMETER == "M" ? "Mekanik" : "-"))),
+                $lib->translateKodePembMeter($d->KDPEMBMETER),
                 $d->DAYA,
                 $d->TGLPASANG_KWH,
                 round(((12-date('n', strtotime($d->TGLPASANG_KWH))+date('n') + (date('Y')-date('Y', strtotime($d->TGLPASANG_KWH))) * 12) / 12), 1).' thn',
