@@ -988,9 +988,9 @@ namespace PlnWatchDataImporter
                         //DataRow dphRow = new 
                         //DataRowBuilder dphRowBuilder = 
                         string idpel = "";
-                        DateTime tglbayar = DateTime.MinValue;
-                        float pemkwh = 0, rptag = 0;
-                        int jmlbeli = 0;
+                        DateTime tglbayar = DateTime.MinValue; //tglbayar terakhir
+                        float pemkwh = 0, rptag = 0; //pemkwh & rptag terakhir
+                        int jmlbeli = 0; //jmlbeli dalam sebulan
                         CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("en-US");
                         int j = 0;
                         while (reader.Read())
@@ -1038,12 +1038,15 @@ namespace PlnWatchDataImporter
                                     .Append(tglbayar.ToString("yyyy-MM-dd HH:mm")).Append("'")
                                     .Append(");");
 
-                                idpel = tempIdpel;
-                                tglbayar = DateTime.MinValue;
-                                jmlbeli = 0;
-
                                 mycmd.CommandText = sb.ToString();
                                 mycmd.ExecuteNonQuery();
+
+                                idpel = tempIdpel;
+                                tglbayar = tempTglBayar;
+                                pemkwh = float.Parse(reader["PEMKWH"].ToString());
+                                rptag = float.Parse(reader["RPTAG"].ToString());
+                                tglbayar = tempTglBayar;
+                                jmlbeli = 0;
 
                                 string n = (++i).ToString();
                                 ProgressText = "Jumlah record:" + n + "";
