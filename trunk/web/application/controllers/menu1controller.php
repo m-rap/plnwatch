@@ -114,7 +114,7 @@ class Menu1Controller extends CI_Controller {
                 $lib->translateKodePembMeter($d->KDPEMBMETER),
                 $d->DAYA,
                 $d->TGLPASANG_KWH,
-                round(((12-date('n', strtotime($d->TGLPASANG_KWH))+date('n') + (date('Y')-date('Y', strtotime($d->TGLPASANG_KWH))) * 12) / 12), 1).' thn',
+                round(((12-date('n', strtotime($d->TGLPASANG_KWH))+date('n') + (date('Y')-date('Y', strtotime($d->TGLPASANG_KWH))) * 12) / 12) - 1, 1).' thn',
                 $d->KDGARDU,
                 $d->NOTIANG
             );

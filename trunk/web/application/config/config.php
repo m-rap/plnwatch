@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+date_default_timezone_set('Asia/Jakarta');
 $config['appName']	= 'APEL DISJATIM';
 $config['appTag']	= 'Analisa Pelanggan PLN Distribusi Jawa Timur';
 
