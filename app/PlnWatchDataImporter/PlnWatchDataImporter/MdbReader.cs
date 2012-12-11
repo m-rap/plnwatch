@@ -983,9 +983,7 @@ namespace PlnWatchDataImporter
 
                         ProgressText = "Mulai memasukkan data..";
                         OnProgressTextChanged(null);
-                        //TODO: from date and time string to datetime, get max datetime, insert to mysql
-                        //DataRow dphRow = new 
-                        //DataRowBuilder dphRowBuilder = 
+
                         string idpel = "";
                         DateTime tglbayar = DateTime.MinValue; //tglbayar terakhir
                         float pemkwh = 0, rptag = 0; //pemkwh & rptag terakhir
