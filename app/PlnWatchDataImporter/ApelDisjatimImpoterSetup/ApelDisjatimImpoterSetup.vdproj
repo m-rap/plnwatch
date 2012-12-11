@@ -256,7 +256,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:APEL DISJATIM Impoter"
         "ProductCode" = "8:{B337777E-907A-45C1-9FC5-24D9B3440C09}"
-        "PackageCode" = "8:{D63B8C2D-3DAA-4E30-ADF0-06919B04892E}"
+        "PackageCode" = "8:{30F938F8-B768-4CAD-BD74-7459D7944316}"
         "UpgradeCode" = "8:{A9069334-1471-4564-AB09-9E613068D4F2}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
