@@ -972,7 +972,6 @@ namespace PlnWatchDataImporter
                     {
                         ProgressText = "Membuka koneksi ke server MySql";
                         OnProgressTextChanged(null);
-
                         mySqlConnection.Open();
                         mycmd = mySqlConnection.CreateCommand();
                         mycmd.Connection = mySqlConnection;

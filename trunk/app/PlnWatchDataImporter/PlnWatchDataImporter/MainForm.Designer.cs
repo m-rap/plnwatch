@@ -497,7 +497,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "PLN Watch Data Importer";
+            this.Text = "APEL DISJATIM Importer";
             this.dilGroupBox.ResumeLayout(false);
             this.dilGroupBox.PerformLayout();
             this.sorekGroupBox.ResumeLayout(false);

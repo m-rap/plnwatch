@@ -27,8 +27,10 @@ namespace PlnWatchDataImporter
             if (ConfigurationManager.AppSettings["batchmode"] == "1")
                 batchModeRadioButton.Checked = true;
             else
-                transactionRadioButton.Checked = false;
+                transactionRadioButton.Checked = true;
+            transactionRadioButton.Checked = true;
             mySqlPathTextBox.Enabled = mySqlPathBrowseButton.Enabled = batchModeRadioButton.Checked;
+            SaveConfig();
         }
 
         public void SaveConfig()
