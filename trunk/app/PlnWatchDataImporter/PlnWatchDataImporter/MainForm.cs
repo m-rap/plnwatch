@@ -36,25 +36,6 @@ namespace PlnWatchDataImporter
             ppobGroupBox.Enabled = ppobCheckBox.Checked;
         }
 
-        private void SetAccessRights(string file)
-        {
-            FileSecurity fileSecurity = File.GetAccessControl(file);
-            AuthorizationRuleCollection rules = fileSecurity.GetAccessRules(true, true, typeof(NTAccount));
-
-            foreach (FileSystemAccessRule rule in rules)
-            {
-                string name = rule.IdentityReference.Value;
-
-                if (rule.FileSystemRights != FileSystemRights.FullControl)
-                {
-                    FileSecurity newFileSecurity = File.GetAccessControl(file);
-                    FileSystemAccessRule newRule = new FileSystemAccessRule(name, FileSystemRights.FullControl, AccessControlType.Allow);
-                    newFileSecurity.AddAccessRule(newRule);
-                    File.SetAccessControl(file, newFileSecurity);
-                }
-            }
-        }
-
         private void dilCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             dilGroupBox.Enabled = dilCheckBox.Checked;

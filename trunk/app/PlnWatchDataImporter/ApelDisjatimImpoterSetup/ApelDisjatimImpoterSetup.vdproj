@@ -34,13 +34,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_18192A77953BAC6266EB1D7FDA88B04E"
+        "OwnerKey" = "8:_FECA3C7CDE8B4CF6BA1886AD4CC919CA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FECA3C7CDE8B4CF6BA1886AD4CC919CA"
+        "OwnerKey" = "8:_18192A77953BAC6266EB1D7FDA88B04E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -68,6 +68,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -243,7 +256,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:APEL DISJATIM Impoter"
         "ProductCode" = "8:{B337777E-907A-45C1-9FC5-24D9B3440C09}"
-        "PackageCode" = "8:{C580CD17-96BE-4681-A1B3-5CCB79F3B921}"
+        "PackageCode" = "8:{D63B8C2D-3DAA-4E30-ADF0-06919B04892E}"
         "UpgradeCode" = "8:{A9069334-1471-4564-AB09-9E613068D4F2}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
