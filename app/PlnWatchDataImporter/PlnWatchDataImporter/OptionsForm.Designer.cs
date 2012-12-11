@@ -62,7 +62,7 @@
             this.mySqlGroupBox.Controls.Add(this.mySqlUserTextBox);
             this.mySqlGroupBox.Controls.Add(this.mySqlDbTextBox);
             this.mySqlGroupBox.Controls.Add(this.mySqlHostTextBox);
-            this.mySqlGroupBox.Location = new System.Drawing.Point(12, 90);
+            this.mySqlGroupBox.Location = new System.Drawing.Point(12, 12);
             this.mySqlGroupBox.Name = "mySqlGroupBox";
             this.mySqlGroupBox.Size = new System.Drawing.Size(260, 177);
             this.mySqlGroupBox.TabIndex = 0;
@@ -77,6 +77,7 @@
             this.mySqlPathBrowseButton.TabIndex = 10;
             this.mySqlPathBrowseButton.Text = "Cari...";
             this.mySqlPathBrowseButton.UseVisualStyleBackColor = true;
+            this.mySqlPathBrowseButton.Visible = false;
             this.mySqlPathBrowseButton.Click += new System.EventHandler(this.mySqlPathBrowseButton_Click);
             // 
             // mySqlPathLabel
@@ -87,6 +88,7 @@
             this.mySqlPathLabel.Size = new System.Drawing.Size(90, 13);
             this.mySqlPathLabel.TabIndex = 9;
             this.mySqlPathLabel.Text = "Lokasi mysql.exe:";
+            this.mySqlPathLabel.Visible = false;
             // 
             // mySqlPathTextBox
             // 
@@ -94,6 +96,7 @@
             this.mySqlPathTextBox.Name = "mySqlPathTextBox";
             this.mySqlPathTextBox.Size = new System.Drawing.Size(173, 20);
             this.mySqlPathTextBox.TabIndex = 8;
+            this.mySqlPathTextBox.Visible = false;
             // 
             // mySqlPassLabel
             // 
@@ -162,7 +165,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(197, 273);
+            this.closeButton.Location = new System.Drawing.Point(197, 195);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 1;
@@ -184,6 +187,7 @@
             this.execModeGroupBox.TabIndex = 2;
             this.execModeGroupBox.TabStop = false;
             this.execModeGroupBox.Text = "Mode Eksekusi";
+            this.execModeGroupBox.Visible = false;
             // 
             // transactionRadioButton
             // 
@@ -213,10 +217,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 306);
+            this.ClientSize = new System.Drawing.Size(284, 233);
+            this.Controls.Add(this.mySqlGroupBox);
             this.Controls.Add(this.execModeGroupBox);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.mySqlGroupBox);
             this.Name = "OptionsForm";
             this.Text = "Opsi";
             this.Load += new System.EventHandler(this.OptionsForm_Load);
